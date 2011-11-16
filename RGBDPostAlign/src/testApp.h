@@ -40,10 +40,13 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	ofxMSAInteractiveObjectWithDelegate* loadVideoButton;
 	ofxMSAInteractiveObjectWithDelegate* loadDepthButton;
 	ofxMSAInteractiveObjectWithDelegate* savePairButton;
-	vector<ofxMSAInteractiveObjectWithDelegate*> alignmentPairs;
+	vector<ofxMSAInteractiveObjectWithDelegate*> alignmentPairButtons;
+	void refreshAlignmentPairButtons();
+	void recalculateVideoRects();
 	
 	ofxXmlSettings settings;
 	
+	int offset;
 	void loadVideoPath(string path);
 	void loadDepthPath(string path);
 	

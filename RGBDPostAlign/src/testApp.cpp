@@ -12,9 +12,10 @@ void testApp::setup(){
 	
 	playerRect = ofRectangle(0,20,640,480);
 	
+	offset = 20+480;
 	timeline = new ofxTimeline();
 	timeline->setup();
-	timeline->setOffset(ofVec2f(0, 20+480));
+	timeline->setOffset(ofVec2f(0, offset));
 	
 	playerElement = NULL;
 	depthSequenceElement = NULL;
@@ -42,16 +43,34 @@ void testApp::setup(){
 	
 	timeline->setDuration(300);
 	
+	recalculateVideoRects();
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 //	timeline->setOffset(ofVec2f(0, ofGetMouseY()));
+
+	
+	if(ofGetKeyPressed('S')){
+		offset = ofGetMouseY();
+		timeline->setOffset(ofVec2f(0, offset));
+		recalculateVideoRects();
+	}
 	
 	loadVideoButton->setPosAndSize(0,0,playerRect.width, 20);
-	loadDepthButton->setPosAndSize(playerRect.width, 0, 640, 20);
+	loadDepthButton->setPosAndSize(playerRect.width, 0, depthRect.width, 20);
 	savePairButton->setPos(loadDepthButton->x+loadDepthButton->width,0);
-	
+	for(int i = 0; i < alignmentPairButtons.size(); i++){
+		alignmentPairButtons[i]->x = savePairButton->x;
+	}
+}
+
+void testApp::recalculateVideoRects(){
+	float frameheight = offset - 20;
+	int naturalPlayerWidth = player.isLoaded() ? player.getWidth() : 640;
+	int naturalPlayerHeight = player.isLoaded() ? player.getHeight() : 480;
+	playerRect = ofRectangle(0, 20, frameheight * naturalPlayerWidth/naturalPlayerHeight, frameheight);
+	depthRect = ofRectangle(playerRect.width, 20, frameheight * 640/480, frameheight);	
 }
 
 //--------------------------------------------------------------
@@ -77,6 +96,12 @@ void testApp::draw(){
 	ofDrawBitmapString( "Load Video Source", ofPoint(loadVideoButton->x+20, loadVideoButton->y+10) );
 	ofDrawBitmapString( "Load Depth Source", ofPoint(loadDepthButton->x+20, loadDepthButton->y+10) );
 	ofDrawBitmapString( "Save Frame Pair", ofPoint(savePairButton->x+20, savePairButton->y+10) );
+	
+	for(int i = 0; i < alignmentPairButtons.size(); i++){
+		ofRect( *alignmentPairButtons[i] );
+		ofDrawBitmapString("vid. " + ofToString(alignmentScrubber->getPairs()[i].videoFrame) + " dep. " + ofToString(alignmentScrubber->getPairs()[i].depthFrame),
+						   ofPoint(alignmentPairButtons[i]->x+20, alignmentPairButtons[i]->y+9));
+	}
 	
 	ofPopStyle();
 	
@@ -110,6 +135,16 @@ void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int 
 			int videoFrame = playerElement->getSelectedFrame();
 			int depthFrame = depthSequenceElement->getSelectedFrame();
 			alignmentScrubber->addAlignedPair(videoFrame, depthFrame);
+			refreshAlignmentPairButtons();
+		}
+	}
+	else {
+		for(int i = 0; i < alignmentPairButtons.size(); i++){
+			if(object == alignmentPairButtons[i]){
+				alignmentScrubber->removeAlignmentPair(i);
+				refreshAlignmentPairButtons();
+				break;
+			}
 		}
 	}
 }
@@ -144,11 +179,34 @@ void testApp::loadVideoPath(string path){
 	alignmentScrubber->setXMLFileName(ofFilePath::removeExt(path) + "_pairings.xml");
 	alignmentScrubber->load();
 	
+	refreshAlignmentPairButtons();
+	
 	//set player rectangle
 	playerRect = ofRectangle(0,20,480 * player.getWidth()/player.getHeight(), 480);
 	settings.setValue("video", path);
 	settings.saveFile("settings.xml");
 	
+	recalculateVideoRects();
+	
+}
+
+void testApp::refreshAlignmentPairButtons(){
+	for(int i = 0; i < alignmentPairButtons.size(); i++){
+		delete alignmentPairButtons[i];
+	}
+	alignmentPairButtons.clear();
+	
+	for(int i = 0; i < alignmentScrubber->getPairs().size(); i++){
+		ofxMSAInteractiveObjectWithDelegate* pairButton;
+		pairButton = new ofxMSAInteractiveObjectWithDelegate();
+		pairButton->disableAppEvents();
+		pairButton->setup();
+		pairButton->setPosAndSize(savePairButton->x, savePairButton->y+savePairButton->height * (i+1), 
+								  savePairButton->width, savePairButton->height);
+		pairButton->setDelegate(this);		
+		alignmentPairButtons.push_back(pairButton);
+	}
+		
 }
 
 void testApp::loadDepthPath(string path){
@@ -171,6 +229,8 @@ void testApp::loadDepthPath(string path){
 	
 	settings.setValue("depth", path);
 	settings.saveFile("settings.xml");	
+	
+	recalculateVideoRects();
 }
 
 //--------------------------------------------------------------
