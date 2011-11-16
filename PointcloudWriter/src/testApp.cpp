@@ -1,0 +1,144 @@
+#include "testApp.h"
+
+//--------------------------------------------------------------
+
+void testApp::setup(){
+
+	ofEnableAlphaBlending();
+	ofSetFrameRate(60);
+	
+	frameRead = false;
+	
+	kinect.setRegistration(true);
+	kinect.init(false);
+	kinect.open();
+	
+	recording = false;
+	
+
+    recorder.setRecordLocation("depthframes", "frame_");
+    recorder.setup();
+	
+}
+
+//--------------------------------------------------------------
+
+void testApp::update(){
+	kinect.update();
+	if(kinect.isFrameNew() && recording){
+		recorder.addImage( kinect.getRawDepthPixels() );
+	}
+	
+}
+
+//--------------------------------------------------------------
+void testApp::draw(){
+
+	if(recording){
+		ofSetColor(255, 0, 0);
+		ofRect(0, 0, 640, 10);
+	}
+	
+	ofSetColor(255);
+	kinect.draw(0, 10);
+
+	if(frameRead){
+		cam.begin();
+		int currentFrame = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, clouds.size(), true);
+		glEnable(GL_DEPTH_TEST);
+		glEnableClientState(GL_VERTEX_ARRAY);
+//		glColorPointer(3, GL_FLOAT, sizeof(ofVec3f), &(cloud[0].x));
+		glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), &(clouds[currentFrame][0].x));
+		glDrawArrays(GL_POINTS, 0, clouds[currentFrame].size());
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisable(GL_DEPTH_TEST);
+		
+		cam.end();
+	}
+}
+
+
+//--------------------------------------------------------------
+void testApp::keyPressed(int key){
+	if(key == ' '){
+		recording = !recording;
+        if(recording){
+            ofImage posterFrame;
+            posterFrame.setFromPixels(kinect.getPixels(), kinect.getWidth(), kinect.getHeight(), OF_IMAGE_COLOR);
+            recorder.incrementFolder(posterFrame);
+        }
+	}
+
+	if(key == 'l'){
+		ofDirectory d("depthframes");
+		d.allowExt("xkcd");
+		int numfiles = d.listDir();
+		frameRead = true;
+		for(int f = 0; f < 30; f++){
+//		for(int f = 0; f < 1; f++){			
+			vector<ofVec3f> cloud;
+			unsigned short* frame = recorder.readDepthFrame( "depthframes/" + d.getName(f) );
+			for(int y = 0; y < 480; y++){
+				for(int x = 0; x < 640; x++){
+					//cout << frame[y*640+x] << endl;
+					ofVec3f v = kinect.getWorldCoordinateAt(x, y, frame[y*640+x] );
+					cloud.push_back( v );
+				}
+			}
+			cout << "read frame depthframes/" <<d.getName(f) << endl;
+			delete frame;
+			clouds.push_back( cloud );
+		}
+	}
+    
+    if(key == 'c'){
+        string filename = "__CalibFile_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + "_" + ofToString(ofGetSeconds()) +".png";
+        ofImage kinectImage;
+        kinectImage.setFromPixels(kinect.getPixels(), 640, 480, OF_IMAGE_COLOR);
+        ofSaveImage( kinectImage, filename);
+    }
+}
+
+void testApp::exit() {
+	kinect.close();
+}
+
+//--------------------------------------------------------------
+void testApp::keyReleased(int key){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mouseMoved(int x, int y ){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mouseDragged(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mousePressed(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void testApp::mouseReleased(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void testApp::windowResized(int w, int h){
+
+}
+
+//--------------------------------------------------------------
+void testApp::gotMessage(ofMessage msg){
+
+}
+
+//--------------------------------------------------------------
+void testApp::dragEvent(ofDragInfo dragInfo){ 
+
+}
