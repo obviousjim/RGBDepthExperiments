@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		A60F682F14742446007E1206 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F682E14742446007E1206 /* ofxTLVideoDepthAlignmentScrubber.cpp */; };
+		A60F69DA1475E6CE007E1206 /* ofxQTKitVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A60F69D71475E6CE007E1206 /* ofxQTKitVideoPlayer.mm */; };
+		A60F69DB1475E6CE007E1206 /* QTKitMovieRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = A60F69D91475E6CE007E1206 /* QTKitMovieRenderer.m */; };
+		A60F69DD1475E6DC007E1206 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DC1475E6DC007E1206 /* QTKit.framework */; };
+		A60F69DF1475E6E1007E1206 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DE1475E6E1007E1206 /* CoreVideo.framework */; };
 		A69D961F1471F945005D9265 /* ofxEasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96011471F945005D9265 /* ofxEasing.cpp */; };
 		A69D96201471F945005D9265 /* ofxEasingBack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96031471F945005D9265 /* ofxEasingBack.cpp */; };
 		A69D96211471F945005D9265 /* ofxEasingBounce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96051471F945005D9265 /* ofxEasingBounce.cpp */; };
@@ -95,6 +99,12 @@
 /* Begin PBXFileReference section */
 		A60F682D14742446007E1206 /* ofxTLVideoDepthAlignmentScrubber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLVideoDepthAlignmentScrubber.h; sourceTree = "<group>"; };
 		A60F682E14742446007E1206 /* ofxTLVideoDepthAlignmentScrubber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLVideoDepthAlignmentScrubber.cpp; sourceTree = "<group>"; };
+		A60F69D61475E6CE007E1206 /* ofxQTKitVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxQTKitVideoPlayer.h; sourceTree = "<group>"; };
+		A60F69D71475E6CE007E1206 /* ofxQTKitVideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxQTKitVideoPlayer.mm; sourceTree = "<group>"; };
+		A60F69D81475E6CE007E1206 /* QTKitMovieRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTKitMovieRenderer.h; sourceTree = "<group>"; };
+		A60F69D91475E6CE007E1206 /* QTKitMovieRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTKitMovieRenderer.m; sourceTree = "<group>"; };
+		A60F69DC1475E6DC007E1206 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
+		A60F69DE1475E6E1007E1206 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A69D96001471F945005D9265 /* easing_terms_of_use.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = easing_terms_of_use.html; sourceTree = "<group>"; };
 		A69D96011471F945005D9265 /* ofxEasing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxEasing.cpp; sourceTree = "<group>"; };
 		A69D96021471F945005D9265 /* ofxEasing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxEasing.h; sourceTree = "<group>"; };
@@ -156,30 +166,7 @@
 		A69D99621471F94D005D9265 /* ofxTLVideoThumb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLVideoThumb.h; sourceTree = "<group>"; };
 		A69D99631471F94D005D9265 /* ofxTLZoomer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLZoomer.cpp; sourceTree = "<group>"; };
 		A69D99641471F94D005D9265 /* ofxTLZoomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLZoomer.h; sourceTree = "<group>"; };
-		A69D99F81471F96D005D9265 /* config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config; sourceTree = "<group>"; };
-		A69D99F91471F96D005D9265 /* description */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = description; sourceTree = "<group>"; };
-		A69D99FA1471F96D005D9265 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		A69D99FC1471F96D005D9265 /* applypatch-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "applypatch-msg.sample"; sourceTree = "<group>"; };
-		A69D99FD1471F96D005D9265 /* commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "commit-msg.sample"; sourceTree = "<group>"; };
-		A69D99FE1471F96D005D9265 /* post-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-commit.sample"; sourceTree = "<group>"; };
-		A69D99FF1471F96D005D9265 /* post-receive.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-receive.sample"; sourceTree = "<group>"; };
-		A69D9A001471F96D005D9265 /* post-update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-update.sample"; sourceTree = "<group>"; };
-		A69D9A011471F96D005D9265 /* pre-applypatch.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-applypatch.sample"; sourceTree = "<group>"; };
-		A69D9A021471F96D005D9265 /* pre-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-commit.sample"; sourceTree = "<group>"; };
-		A69D9A031471F96D005D9265 /* pre-rebase.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-rebase.sample"; sourceTree = "<group>"; };
-		A69D9A041471F96D005D9265 /* prepare-commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "prepare-commit-msg.sample"; sourceTree = "<group>"; };
-		A69D9A051471F96D005D9265 /* update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update.sample; sourceTree = "<group>"; };
-		A69D9A061471F96D005D9265 /* index */ = {isa = PBXFileReference; lastKnownFileType = file; path = index; sourceTree = "<group>"; };
-		A69D9A081471F96D005D9265 /* exclude */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = exclude; sourceTree = "<group>"; };
-		A69D9A0A1471F96D005D9265 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		A69D9A0D1471F96D005D9265 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A69D9A111471F96D005D9265 /* pack-1b2372842880a3813be3445fe142c30a90230899.idx */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pack-1b2372842880a3813be3445fe142c30a90230899.idx"; sourceTree = "<group>"; };
-		A69D9A121471F96D005D9265 /* pack-1b2372842880a3813be3445fe142c30a90230899.pack */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pack-1b2372842880a3813be3445fe142c30a90230899.pack"; sourceTree = "<group>"; };
-		A69D9A131471F96D005D9265 /* packed-refs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "packed-refs"; sourceTree = "<group>"; };
-		A69D9A161471F96D005D9265 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A69D9A191471F96D005D9265 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
 		A69D9A1B1471F96D005D9265 /* ofRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofRange.h; sourceTree = "<group>"; };
-		A69D9A1C1471F96D005D9265 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		A69D9A97147212E0005D9265 /* ofxKinectPointcloudDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxKinectPointcloudDecoder.cpp; sourceTree = "<group>"; };
 		A69D9A98147212E0005D9265 /* ofxKinectPointcloudDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxKinectPointcloudDecoder.h; sourceTree = "<group>"; };
 		A69D9B1314721A81005D9265 /* ofxMSAInteractiveObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxMSAInteractiveObject.cpp; sourceTree = "<group>"; };
@@ -234,12 +221,34 @@
 				E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */,
 				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
+				A60F69DD1475E6DC007E1206 /* QTKit.framework in Frameworks */,
+				A60F69DF1475E6E1007E1206 /* CoreVideo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A60F69D31475E6C7007E1206 /* ofxQTKitVideoPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				A60F69D51475E6CE007E1206 /* src */,
+			);
+			name = ofxQTKitVideoPlayer;
+			sourceTree = "<group>";
+		};
+		A60F69D51475E6CE007E1206 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A60F69D61475E6CE007E1206 /* ofxQTKitVideoPlayer.h */,
+				A60F69D71475E6CE007E1206 /* ofxQTKitVideoPlayer.mm */,
+				A60F69D81475E6CE007E1206 /* QTKitMovieRenderer.h */,
+				A60F69D91475E6CE007E1206 /* QTKitMovieRenderer.m */,
+			);
+			name = src;
+			path = ../../../addons/ofxQTKitVideoPlayer/src;
+			sourceTree = SOURCE_ROOT;
+		};
 		A69D95BE1471F945005D9265 /* ofxTween */ = {
 			isa = PBXGroup;
 			children = (
@@ -335,154 +344,11 @@
 		A69D99F51471F96D005D9265 /* ofxRange */ = {
 			isa = PBXGroup;
 			children = (
-				A69D99F61471F96D005D9265 /* .git */,
 				A69D9A1B1471F96D005D9265 /* ofRange.h */,
-				A69D9A1C1471F96D005D9265 /* README */,
 			);
 			name = ofxRange;
 			path = ../../../addons/ofxRange;
 			sourceTree = SOURCE_ROOT;
-		};
-		A69D99F61471F96D005D9265 /* .git */ = {
-			isa = PBXGroup;
-			children = (
-				A69D99F71471F96D005D9265 /* branches */,
-				A69D99F81471F96D005D9265 /* config */,
-				A69D99F91471F96D005D9265 /* description */,
-				A69D99FA1471F96D005D9265 /* HEAD */,
-				A69D99FB1471F96D005D9265 /* hooks */,
-				A69D9A061471F96D005D9265 /* index */,
-				A69D9A071471F96D005D9265 /* info */,
-				A69D9A091471F96D005D9265 /* logs */,
-				A69D9A0E1471F96D005D9265 /* objects */,
-				A69D9A131471F96D005D9265 /* packed-refs */,
-				A69D9A141471F96D005D9265 /* refs */,
-			);
-			path = .git;
-			sourceTree = "<group>";
-		};
-		A69D99F71471F96D005D9265 /* branches */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = branches;
-			sourceTree = "<group>";
-		};
-		A69D99FB1471F96D005D9265 /* hooks */ = {
-			isa = PBXGroup;
-			children = (
-				A69D99FC1471F96D005D9265 /* applypatch-msg.sample */,
-				A69D99FD1471F96D005D9265 /* commit-msg.sample */,
-				A69D99FE1471F96D005D9265 /* post-commit.sample */,
-				A69D99FF1471F96D005D9265 /* post-receive.sample */,
-				A69D9A001471F96D005D9265 /* post-update.sample */,
-				A69D9A011471F96D005D9265 /* pre-applypatch.sample */,
-				A69D9A021471F96D005D9265 /* pre-commit.sample */,
-				A69D9A031471F96D005D9265 /* pre-rebase.sample */,
-				A69D9A041471F96D005D9265 /* prepare-commit-msg.sample */,
-				A69D9A051471F96D005D9265 /* update.sample */,
-			);
-			path = hooks;
-			sourceTree = "<group>";
-		};
-		A69D9A071471F96D005D9265 /* info */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A081471F96D005D9265 /* exclude */,
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		A69D9A091471F96D005D9265 /* logs */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A0A1471F96D005D9265 /* HEAD */,
-				A69D9A0B1471F96D005D9265 /* refs */,
-			);
-			path = logs;
-			sourceTree = "<group>";
-		};
-		A69D9A0B1471F96D005D9265 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A0C1471F96D005D9265 /* heads */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		A69D9A0C1471F96D005D9265 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A0D1471F96D005D9265 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		A69D9A0E1471F96D005D9265 /* objects */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A0F1471F96D005D9265 /* info */,
-				A69D9A101471F96D005D9265 /* pack */,
-			);
-			path = objects;
-			sourceTree = "<group>";
-		};
-		A69D9A0F1471F96D005D9265 /* info */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		A69D9A101471F96D005D9265 /* pack */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A111471F96D005D9265 /* pack-1b2372842880a3813be3445fe142c30a90230899.idx */,
-				A69D9A121471F96D005D9265 /* pack-1b2372842880a3813be3445fe142c30a90230899.pack */,
-			);
-			path = pack;
-			sourceTree = "<group>";
-		};
-		A69D9A141471F96D005D9265 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A151471F96D005D9265 /* heads */,
-				A69D9A171471F96D005D9265 /* remotes */,
-				A69D9A1A1471F96D005D9265 /* tags */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		A69D9A151471F96D005D9265 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A161471F96D005D9265 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		A69D9A171471F96D005D9265 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A181471F96D005D9265 /* origin */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		A69D9A181471F96D005D9265 /* origin */ = {
-			isa = PBXGroup;
-			children = (
-				A69D9A191471F96D005D9265 /* HEAD */,
-			);
-			path = origin;
-			sourceTree = "<group>";
-		};
-		A69D9A1A1471F96D005D9265 /* tags */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = tags;
-			sourceTree = "<group>";
 		};
 		A69D9A321471FCC2005D9265 /* ImageSequencers */ = {
 			isa = PBXGroup;
@@ -524,6 +390,7 @@
 		A69D9AD514721A81005D9265 /* ofxMSAInteractiveObject */ = {
 			isa = PBXGroup;
 			children = (
+				A60F69D31475E6C7007E1206 /* ofxQTKitVideoPlayer */,
 				A69D9B1214721A81005D9265 /* src */,
 			);
 			name = ofxMSAInteractiveObject;
@@ -556,6 +423,8 @@
 		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A60F69DC1475E6DC007E1206 /* QTKit.framework */,
+				A60F69DE1475E6E1007E1206 /* CoreVideo.framework */,
 				E4C2424410CC5A17004149E2 /* AppKit.framework */,
 				E4C2424510CC5A17004149E2 /* Cocoa.framework */,
 				E4C2424610CC5A17004149E2 /* IOKit.framework */,
@@ -782,6 +651,8 @@
 				A69D9A9E147212E0005D9265 /* ofxKinectPointcloudDecoder.cpp in Sources */,
 				A69D9B1614721A81005D9265 /* ofxMSAInteractiveObject.cpp in Sources */,
 				A60F682F14742446007E1206 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */,
+				A60F69DA1475E6CE007E1206 /* ofxQTKitVideoPlayer.mm in Sources */,
+				A60F69DB1475E6CE007E1206 /* QTKitMovieRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

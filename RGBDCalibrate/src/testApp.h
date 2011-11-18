@@ -2,14 +2,10 @@
 
 #include "ofMain.h"
 
-#include "ofxXmlSettings.h"
+#include "ofxCvCheckerboardPreview.h"
 #include "ofxMSAInteractiveObjectDelegate.h"
-#include "ofxQTKitVideoPlayer.h"
-
-class ofxTLVideoPlayer;
-class ofxTLDepthImageSequence;
-class ofxTLVideoDepthAlignmentScrubber;
-class ofxTimeline;
+#include "ofxRGBDAlignment.h"
+#include "ofxXmlSettings.h"
 
 class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 {
@@ -28,29 +24,31 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+
+	ofxRGBDAlignment alignment;
+	ofxCvCheckerboardPreview leftBoardPreview;
+	ofxCvCheckerboardPreview rightBoardPreview;
+	ofxMSAInteractiveObjectWithDelegate* leftFrame;
+	ofxMSAInteractiveObjectWithDelegate* rightFrame;
+	ofxMSAInteractiveObjectWithDelegate* addPair;
 	
-	ofxTimeline* timeline;
-	ofxTLVideoPlayer* playerElement;
-	ofxTLDepthImageSequence* depthSequenceElement;
-	ofxTLVideoDepthAlignmentScrubber* alignmentScrubber;
+	ofxMSAInteractiveObjectWithDelegate* saveCalibrationButton;
+	ofxMSAInteractiveObjectWithDelegate* leftSubpixelRefine;
+	ofxMSAInteractiveObjectWithDelegate* rightSubpixelRefine;
 	
-	ofVideoPlayer player;
-	//ofxQTKitVideoPlayer player;
-	ofRectangle playerRect;
-	ofRectangle depthRect;
+	int currentIndex;
+	bool leftLoaded;
+	bool rightLoaded;
+	ofDirectory leftDir;
+	ofDirectory rightDir;
+	ofImage leftImage;
+	ofImage rightImage;
 	
-	ofxMSAInteractiveObjectWithDelegate* loadVideoButton;
-	ofxMSAInteractiveObjectWithDelegate* loadDepthButton;
-	ofxMSAInteractiveObjectWithDelegate* savePairButton;
-	vector<ofxMSAInteractiveObjectWithDelegate*> alignmentPairButtons;
-	void refreshAlignmentPairButtons();
-	void recalculateVideoRects();
+	void updateImages();
 	
-	ofxXmlSettings settings;
-	
-	int offset;
-	void loadVideoPath(string path);
-	void loadDepthPath(string path);
+	void saveDirectories();
+	void loadDirectories();
+	void saveCalibration();
 	
 	void objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y);
     void objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y);

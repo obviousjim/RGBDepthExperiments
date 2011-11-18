@@ -57,6 +57,7 @@ void testApp::update(){
 		recalculateVideoRects();
 	}
 	
+	
 	loadVideoButton->setPosAndSize(0,0,playerRect.width, 20);
 	loadDepthButton->setPosAndSize(playerRect.width, 0, depthRect.width, 20);
 	savePairButton->setPos(loadDepthButton->x+loadDepthButton->width,0);
@@ -158,6 +159,7 @@ void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
 }
 
 void testApp::loadVideoPath(string path){
+	//if(!player.loadMovie(path, OFXQTVIDEOPLAYER_MODE_PIXELS_AND_TEXTURE)){
 	if(!player.loadMovie(path)){
 		ofLogError("Couldn't Load video " + path);
 		return;
@@ -241,6 +243,16 @@ void testApp::keyPressed(int key){
 			loadDepthPath(settings.getValue("depth", ""));
 		}		
 	}
+	
+	if(key == 'T'){
+		if(playerElement != NULL){
+			playerElement->toggleThumbs();
+		}
+		if(depthSequenceElement != NULL){
+			depthSequenceElement->toggleThumbs();
+		}
+	}
+	
 }
 
 //--------------------------------------------------------------
