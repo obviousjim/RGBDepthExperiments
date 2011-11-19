@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxQTKitVideoPlayer.h"
+#include "ofxRGBDAlignment.h"
 
 class testApp : public ofBaseApp{
 
@@ -18,5 +20,6 @@ class testApp : public ofBaseApp{
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-		
+	
+	
 };
