@@ -41,7 +41,6 @@
 		A69D99E01471F94D005D9265 /* ofxTLVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D995F1471F94D005D9265 /* ofxTLVideoPlayer.cpp */; };
 		A69D99E11471F94D005D9265 /* ofxTLVideoThumb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D99611471F94D005D9265 /* ofxTLVideoThumb.cpp */; };
 		A69D99E21471F94D005D9265 /* ofxTLZoomer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D99631471F94D005D9265 /* ofxTLZoomer.cpp */; };
-		A69D9A9E147212E0005D9265 /* ofxKinectPointcloudDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D9A97147212E0005D9265 /* ofxKinectPointcloudDecoder.cpp */; };
 		A69D9B1614721A81005D9265 /* ofxMSAInteractiveObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D9B1314721A81005D9265 /* ofxMSAInteractiveObject.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
@@ -60,6 +59,7 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		E7E8ABDC14783C760053509D /* ofxKinectPointcloudRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7E8ABDA14783C760053509D /* ofxKinectPointcloudRecorder.cpp */; };
 		E7FBD0CC13D61DC900938471 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7FBD0C513D61DC900938471 /* tinyxml.cpp */; };
 		E7FBD0CD13D61DC900938471 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7FBD0C713D61DC900938471 /* tinyxmlerror.cpp */; };
 		E7FBD0CE13D61DC900938471 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7FBD0C813D61DC900938471 /* tinyxmlparser.cpp */; };
@@ -167,8 +167,6 @@
 		A69D99631471F94D005D9265 /* ofxTLZoomer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLZoomer.cpp; sourceTree = "<group>"; };
 		A69D99641471F94D005D9265 /* ofxTLZoomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLZoomer.h; sourceTree = "<group>"; };
 		A69D9A1B1471F96D005D9265 /* ofRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofRange.h; sourceTree = "<group>"; };
-		A69D9A97147212E0005D9265 /* ofxKinectPointcloudDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxKinectPointcloudDecoder.cpp; sourceTree = "<group>"; };
-		A69D9A98147212E0005D9265 /* ofxKinectPointcloudDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxKinectPointcloudDecoder.h; sourceTree = "<group>"; };
 		A69D9B1314721A81005D9265 /* ofxMSAInteractiveObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxMSAInteractiveObject.cpp; sourceTree = "<group>"; };
 		A69D9B1414721A81005D9265 /* ofxMSAInteractiveObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMSAInteractiveObject.h; sourceTree = "<group>"; };
 		A69D9B1514721A81005D9265 /* ofxMSAInteractiveObjectDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMSAInteractiveObjectDelegate.h; sourceTree = "<group>"; };
@@ -193,6 +191,8 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E7E8ABDA14783C760053509D /* ofxKinectPointcloudRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxKinectPointcloudRecorder.cpp; sourceTree = "<group>"; };
+		E7E8ABDB14783C760053509D /* ofxKinectPointcloudRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxKinectPointcloudRecorder.h; sourceTree = "<group>"; };
 		E7FBD0C313D61DC900938471 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		E7FBD0C513D61DC900938471 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
 		E7FBD0C613D61DC900938471 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
@@ -380,8 +380,8 @@
 		A69D9A94147212E0005D9265 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				A69D9A98147212E0005D9265 /* ofxKinectPointcloudDecoder.h */,
-				A69D9A97147212E0005D9265 /* ofxKinectPointcloudDecoder.cpp */,
+				E7E8ABDB14783C760053509D /* ofxKinectPointcloudRecorder.h */,
+				E7E8ABDA14783C760053509D /* ofxKinectPointcloudRecorder.cpp */,
 			);
 			name = src;
 			path = ../../../addons/ofxRGBDepth/src;
@@ -648,11 +648,11 @@
 				A69D99E01471F94D005D9265 /* ofxTLVideoPlayer.cpp in Sources */,
 				A69D99E11471F94D005D9265 /* ofxTLVideoThumb.cpp in Sources */,
 				A69D99E21471F94D005D9265 /* ofxTLZoomer.cpp in Sources */,
-				A69D9A9E147212E0005D9265 /* ofxKinectPointcloudDecoder.cpp in Sources */,
 				A69D9B1614721A81005D9265 /* ofxMSAInteractiveObject.cpp in Sources */,
 				A60F682F14742446007E1206 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */,
 				A60F69DA1475E6CE007E1206 /* ofxQTKitVideoPlayer.mm in Sources */,
 				A60F69DB1475E6CE007E1206 /* QTKitMovieRenderer.m in Sources */,
+				E7E8ABDC14783C760053509D /* ofxKinectPointcloudRecorder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
