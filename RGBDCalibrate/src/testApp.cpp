@@ -123,7 +123,7 @@ void testApp::keyReleased(int key){
 		if(key == OF_KEY_LEFT){
 			currentIndex--;
 			if(currentIndex < 0){
-				currentIndex = leftDir.numFiles();
+				currentIndex = leftDir.numFiles()-1;
 			}
 			updateImages();
 		}
