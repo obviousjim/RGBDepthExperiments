@@ -24,6 +24,9 @@ class testApp : public ofBaseApp{
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
+	void drawAsTriangleMesh();
+	void drawAsScanlines();
+	
 	ofVideoPlayer player;
 	ofxQTKitVideoPlayer qtRenderer;
 	
@@ -34,6 +37,6 @@ class testApp : public ofBaseApp{
 	
 	ofDirectory depthImages;
 	bool allLoaded;
-	
+
 	ofxGameCamera cam;
 };

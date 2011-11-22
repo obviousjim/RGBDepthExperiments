@@ -19,7 +19,7 @@ void testApp::setup(){
 			pngDir.create(true);
 		}
 		
-		for(int i = 0; i < dir.numFiles(); i++){
+		for(int i = 19918; i < dir.numFiles(); i++){
 			string path = dir.getPath(i);
 			decoder.readDepthFrame(path, tempbuf);
 			string newPath = pngDirPath + "/" + ofFilePath::getBaseName(path) + ".png";
