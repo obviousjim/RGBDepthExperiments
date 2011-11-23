@@ -26,6 +26,7 @@ class testApp : public ofBaseApp{
 
 	void drawAsTriangleMesh();
 	void drawAsScanlines();
+	void drawWireframe();
 	
 	ofVideoPlayer player;
 	ofxQTKitVideoPlayer qtRenderer;

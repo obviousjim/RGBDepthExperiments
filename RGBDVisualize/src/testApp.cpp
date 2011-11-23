@@ -87,8 +87,29 @@ void testApp::draw(){
 	
 	ofBackground(255*.2);
 	
-	drawAsScanlines();
+	//drawAsTriangleMesh();
+	
+	drawWireframe();
 
+}
+
+void testApp::drawWireframe(){
+	cam.begin();
+	ofPushMatrix();
+	ofScale(1, -1, 1);
+	glEnable(GL_DEPTH_TEST);
+	
+	qtRenderer.bind();
+	alignment.getMesh().drawWireframe();
+
+	
+	qtRenderer.unbind();
+	
+	glDisable(GL_DEPTH_TEST);
+	ofPopMatrix();
+	
+	cam.end();
+	
 }
 
 void testApp::drawAsTriangleMesh(){
@@ -97,7 +118,7 @@ void testApp::drawAsTriangleMesh(){
 	ofScale(1, -1, 1);
 	
 	
-	qtRenderer.draw(0, 0);
+//	qtRenderer.draw(0, 0);
 	
 	qtRenderer.bind();
 	
