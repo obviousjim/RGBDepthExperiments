@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxKinectPointcloudRecorder.h"
+#include "ofxRGBDVideoDepthSequence.h"
 
 class testApp : public ofBaseApp{
 
@@ -21,11 +22,17 @@ class testApp : public ofBaseApp{
 	void gotMessage(ofMessage msg);
 	
 	ofxKinectPointcloudRecorder decoder;
+	bool pairingFileLoaded;
+	ofxRGBDVideoDepthSequence oldPairing;
+	ofxRGBDVideoDepthSequence newPairing;
+	string pairingFileName;
+	
 	unsigned short* rawPix;
 	unsigned char* pngPixs;
 	unsigned char* reloadedPix;
 	unsigned short* decompressedPix;
 	ofImage preview;
+	
 	ofImage compressedPreview;
 	ofImage recomposedPreview;
 	ofImage reloaded;

@@ -29,6 +29,5 @@ class testApp : public ofBaseApp{
 	
 	bool frameRead;
 	unsigned short* frame;
-	vector< vector<ofVec3f> > clouds;
 
 };

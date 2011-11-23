@@ -5,73 +5,104 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	ofSetFrameRate(30);
-	
+//	ofSetFrameRate(30);
+	ofSystemAlertDialog("Load a directory of .xkcd files");
 	ofFileDialogResult r = ofSystemLoadDialog("Load uncompressed xkcd directory", true);
 	if(r.bSuccess){
+		
 		ofDirectory dir(r.getPath());
 		dir.allowExt("xkcd");
 		dir.listDir();
+		
+		unsigned short* lastbuf = new unsigned short[640*480];
 		unsigned short* tempbuf = new unsigned short[640*480];
 		string pngDirPath = r.getPath() + "_pngs";
 		ofDirectory pngDir = ofDirectory(pngDirPath);
 		if(!pngDir.exists()){
 			pngDir.create(true);
 		}
+
+		ofSystemAlertDialog("Optionally load a pairing file to fix");
+		r = ofSystemLoadDialog("Load pairing file to repair", false);
+		if(r.bSuccess){
+			pairingFileLoaded = true;
+			pairingFileName = r.getPath();
+			oldPairing.loadPairingFile(pairingFileName);
+		}
+		else{
+			pairingFileLoaded = false;
+		}
 		
-		for(int i = 19918; i < dir.numFiles(); i++){
+		
+		time_t original = 0;
+		time_t last = 0; 
+		int total;
+		int currentOutputFile = 0;
+		for(int i = 0; i < dir.numFiles(); i++){
+			
 			string path = dir.getPath(i);
+			memcpy(lastbuf, tempbuf, sizeof(unsigned short)*640*480);
 			decoder.readDepthFrame(path, tempbuf);
-			string newPath = pngDirPath + "/" + ofFilePath::getBaseName(path) + ".png";
+			
+			//check if we have a matching pair for this frame
+			int thisDepthFrame = ofToInt(dir.getName(i).substr(dir.getName(i).find(".xkcd")-5,5) );
+			if(pairingFileLoaded){
+				for(int p = 0; p < oldPairing.getPairs().size(); p++){
+					VideoDepthPair pair = oldPairing.getPairs()[p];
+					if(pair.depthFrame == thisDepthFrame){
+						pair.depthFrame = currentOutputFile;
+						newPairing.addAlignedPair(pair);
+						cout << "CONVERTED PAIR: " << thisDepthFrame << " to " << pair.depthFrame << endl;
+						break;
+					}
+				}
+			}
+			
+			//check for duplicate
+			if(i != 0){
+				bool identical = true;
+
+				for (int p = 0; p < 640*480; p++) {
+					if(lastbuf[p] != tempbuf[p]){
+						identical = false;
+						break;
+					}
+				}
+				
+				if(identical) continue;
+			}
+			
+			char framestr[1024];
+			sprintf(framestr, "%05d", currentOutputFile);
+			string newPath = pngDirPath + "/frame__" + string(framestr) + ".png";
+
 			decoder.saveToCompressedPng(newPath, tempbuf);
+			currentOutputFile++;
+			
+			struct stat fileInfo;
+			int r  = stat(path.c_str(), &fileInfo);
+			time_t t = fileInfo.st_mtimespec.tv_sec;
+			if(i == 0){
+				original = t;
+				last = 0;
+			}
+			
+			if( (t-original) != last){
+				cout << "time " << last << " had " << total << " frames " << endl;
+				total = 1;
+				last = t-original;
+			}
+			else{
+				total++;
+			}
+			
+			//cout << "file " << path << " created at " << ( t-original ) << " " << fileInfo.st_mtimespec.tv_nsec << endl;
 			cout << "saved " << path << " to " << newPath << endl;
 		}
+		if(pairingFileLoaded){
+			newPairing.savePairingFile(pairingFileName+".corrected.xml");
+		}
 	}
-	
-	/*
-	rawPix = decoder.readDepthFrame("testframe.xkcd");
-	preview = decoder.readDepthFrametoImage("testframe.xkcd");
-
-	pngPixs = new unsigned char[640*480*3];
-	for(int i = 0; i < 640*480; i++){
-		pngPixs[i*3+0] = rawPix[i] >> 8;
-		pngPixs[i*3+1] = rawPix[i];
-		pngPixs[i*3+2] = 0;
-	}
-	
-	compressedPreview.setFromPixels(pngPixs, 640,480, OF_IMAGE_COLOR);
-	compressedPreview.saveImage("TestCompress.png");
-	reloaded.loadImage("TestCompress.png");
-	reloadedPix = reloaded.getPixels();
-	decompressedPix = new unsigned short[640*480];
-	int totalDif = 0;
-	for(int i = 0; i < 640*480; i++){
-		decompressedPix[i] = (reloadedPix[i*3] << 8) | reloadedPix[i*3+1];;		
-		totalDif += abs(decompressedPix[i] - rawPix[i]);
-	}
-	
-	cout << "total difference is " << totalDif << endl;
-	recomposedPreview = decoder.convertTo8BitImage(decompressedPix);
-
-	
-	struct stat fileInfo;
-	int r  = stat(ofToDataPath("testframe.xkcd").c_str(), &fileInfo);
-	// tim: dunno if that's the best way to deal with a possible error
-	if (r!=0){
-		ofLog(OF_LOG_ERROR, "Error while trying to read file stats");
-	}
- 
-	time_t t = fileInfo.st_mtimespec.tv_sec;
-	cout << "created at " << ofToString( t ) << endl;
-	
-#ifdef OF_TARGET_WIN32
-//	return fileInfo.st_mtime.tv_sec; // spec.tv_sec;
-#elseif
-//	return fileInfo.st_mtimespec.tv_sec;
-#endif
-	 */
-	
-	
 }
 
 

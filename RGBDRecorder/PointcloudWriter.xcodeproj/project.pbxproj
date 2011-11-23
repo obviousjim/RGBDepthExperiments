@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A66FA0E2146F56E400C1B2F2 /* ofxCvCheckerboardPreview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A66FA0DC146F56E400C1B2F2 /* ofxCvCheckerboardPreview.cpp */; };
 		A66FA0E3146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A66FA0DE146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.cpp */; };
-		A66FA0E4146F56E400C1B2F2 /* ofxRGBDAlignment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A66FA0E0146F56E400C1B2F2 /* ofxRGBDAlignment.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -72,37 +70,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A66FA0B0146F56E400C1B2F2 /* COMMIT_EDITMSG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COMMIT_EDITMSG; sourceTree = "<group>"; };
-		A66FA0B1146F56E400C1B2F2 /* config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config; sourceTree = "<group>"; };
-		A66FA0B2146F56E400C1B2F2 /* description */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = description; sourceTree = "<group>"; };
-		A66FA0B3146F56E400C1B2F2 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		A66FA0B5146F56E400C1B2F2 /* applypatch-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "applypatch-msg.sample"; sourceTree = "<group>"; };
-		A66FA0B6146F56E400C1B2F2 /* commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "commit-msg.sample"; sourceTree = "<group>"; };
-		A66FA0B7146F56E400C1B2F2 /* post-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-commit.sample"; sourceTree = "<group>"; };
-		A66FA0B8146F56E400C1B2F2 /* post-receive.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-receive.sample"; sourceTree = "<group>"; };
-		A66FA0B9146F56E400C1B2F2 /* post-update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-update.sample"; sourceTree = "<group>"; };
-		A66FA0BA146F56E400C1B2F2 /* pre-applypatch.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-applypatch.sample"; sourceTree = "<group>"; };
-		A66FA0BB146F56E400C1B2F2 /* pre-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-commit.sample"; sourceTree = "<group>"; };
-		A66FA0BC146F56E400C1B2F2 /* pre-rebase.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-rebase.sample"; sourceTree = "<group>"; };
-		A66FA0BD146F56E400C1B2F2 /* prepare-commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "prepare-commit-msg.sample"; sourceTree = "<group>"; };
-		A66FA0BE146F56E400C1B2F2 /* update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update.sample; sourceTree = "<group>"; };
-		A66FA0BF146F56E400C1B2F2 /* index */ = {isa = PBXFileReference; lastKnownFileType = file; path = index; sourceTree = "<group>"; };
-		A66FA0C1146F56E400C1B2F2 /* exclude */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = exclude; sourceTree = "<group>"; };
-		A66FA0C3146F56E400C1B2F2 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		A66FA0C6146F56E400C1B2F2 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A66FA0C9146F56E400C1B2F2 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A66FA0CC146F56E400C1B2F2 /* 3b9bebdc6bd5c4b22136034a95dd097a57d3dd */ = {isa = PBXFileReference; lastKnownFileType = file; path = 3b9bebdc6bd5c4b22136034a95dd097a57d3dd; sourceTree = "<group>"; };
-		A66FA0CE146F56E400C1B2F2 /* f03e0797a98f714cc83e0190bb81b4ade052d8 */ = {isa = PBXFileReference; lastKnownFileType = file; path = f03e0797a98f714cc83e0190bb81b4ade052d8; sourceTree = "<group>"; };
-		A66FA0D0146F56E400C1B2F2 /* 9de29bb2d1d6434b8b29ae775ad8c2e48c5391 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9de29bb2d1d6434b8b29ae775ad8c2e48c5391; sourceTree = "<group>"; };
-		A66FA0D5146F56E400C1B2F2 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A66FA0D8146F56E400C1B2F2 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A66FA0DA146F56E400C1B2F2 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		A66FA0DC146F56E400C1B2F2 /* ofxCvCheckerboardPreview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCvCheckerboardPreview.cpp; sourceTree = "<group>"; };
-		A66FA0DD146F56E400C1B2F2 /* ofxCvCheckerboardPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCvCheckerboardPreview.h; sourceTree = "<group>"; };
 		A66FA0DE146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxKinectPointcloudRecorder.cpp; sourceTree = "<group>"; };
 		A66FA0DF146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxKinectPointcloudRecorder.h; sourceTree = "<group>"; };
-		A66FA0E0146F56E400C1B2F2 /* ofxRGBDAlignment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDAlignment.cpp; sourceTree = "<group>"; };
-		A66FA0E1146F56E400C1B2F2 /* ofxRGBDAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDAlignment.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -213,206 +182,17 @@
 		A66FA0AD146F56E400C1B2F2 /* ofxRGBDepth */ = {
 			isa = PBXGroup;
 			children = (
-				A66FA0AE146F56E400C1B2F2 /* .git */,
-				A66FA0DA146F56E400C1B2F2 /* README */,
 				A66FA0DB146F56E400C1B2F2 /* src */,
 			);
 			name = ofxRGBDepth;
 			path = ../../../addons/ofxRGBDepth;
 			sourceTree = SOURCE_ROOT;
 		};
-		A66FA0AE146F56E400C1B2F2 /* .git */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0AF146F56E400C1B2F2 /* branches */,
-				A66FA0B0146F56E400C1B2F2 /* COMMIT_EDITMSG */,
-				A66FA0B1146F56E400C1B2F2 /* config */,
-				A66FA0B2146F56E400C1B2F2 /* description */,
-				A66FA0B3146F56E400C1B2F2 /* HEAD */,
-				A66FA0B4146F56E400C1B2F2 /* hooks */,
-				A66FA0BF146F56E400C1B2F2 /* index */,
-				A66FA0C0146F56E400C1B2F2 /* info */,
-				A66FA0C2146F56E400C1B2F2 /* logs */,
-				A66FA0CA146F56E400C1B2F2 /* objects */,
-				A66FA0D3146F56E400C1B2F2 /* refs */,
-			);
-			path = .git;
-			sourceTree = "<group>";
-		};
-		A66FA0AF146F56E400C1B2F2 /* branches */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = branches;
-			sourceTree = "<group>";
-		};
-		A66FA0B4146F56E400C1B2F2 /* hooks */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0B5146F56E400C1B2F2 /* applypatch-msg.sample */,
-				A66FA0B6146F56E400C1B2F2 /* commit-msg.sample */,
-				A66FA0B7146F56E400C1B2F2 /* post-commit.sample */,
-				A66FA0B8146F56E400C1B2F2 /* post-receive.sample */,
-				A66FA0B9146F56E400C1B2F2 /* post-update.sample */,
-				A66FA0BA146F56E400C1B2F2 /* pre-applypatch.sample */,
-				A66FA0BB146F56E400C1B2F2 /* pre-commit.sample */,
-				A66FA0BC146F56E400C1B2F2 /* pre-rebase.sample */,
-				A66FA0BD146F56E400C1B2F2 /* prepare-commit-msg.sample */,
-				A66FA0BE146F56E400C1B2F2 /* update.sample */,
-			);
-			path = hooks;
-			sourceTree = "<group>";
-		};
-		A66FA0C0146F56E400C1B2F2 /* info */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0C1146F56E400C1B2F2 /* exclude */,
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		A66FA0C2146F56E400C1B2F2 /* logs */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0C3146F56E400C1B2F2 /* HEAD */,
-				A66FA0C4146F56E400C1B2F2 /* refs */,
-			);
-			path = logs;
-			sourceTree = "<group>";
-		};
-		A66FA0C4146F56E400C1B2F2 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0C5146F56E400C1B2F2 /* heads */,
-				A66FA0C7146F56E400C1B2F2 /* remotes */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		A66FA0C5146F56E400C1B2F2 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0C6146F56E400C1B2F2 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		A66FA0C7146F56E400C1B2F2 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0C8146F56E400C1B2F2 /* origin */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		A66FA0C8146F56E400C1B2F2 /* origin */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0C9146F56E400C1B2F2 /* master */,
-			);
-			path = origin;
-			sourceTree = "<group>";
-		};
-		A66FA0CA146F56E400C1B2F2 /* objects */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0CB146F56E400C1B2F2 /* 54 */,
-				A66FA0CD146F56E400C1B2F2 /* 57 */,
-				A66FA0CF146F56E400C1B2F2 /* e6 */,
-				A66FA0D1146F56E400C1B2F2 /* info */,
-				A66FA0D2146F56E400C1B2F2 /* pack */,
-			);
-			path = objects;
-			sourceTree = "<group>";
-		};
-		A66FA0CB146F56E400C1B2F2 /* 54 */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0CC146F56E400C1B2F2 /* 3b9bebdc6bd5c4b22136034a95dd097a57d3dd */,
-			);
-			path = 54;
-			sourceTree = "<group>";
-		};
-		A66FA0CD146F56E400C1B2F2 /* 57 */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0CE146F56E400C1B2F2 /* f03e0797a98f714cc83e0190bb81b4ade052d8 */,
-			);
-			path = 57;
-			sourceTree = "<group>";
-		};
-		A66FA0CF146F56E400C1B2F2 /* e6 */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0D0146F56E400C1B2F2 /* 9de29bb2d1d6434b8b29ae775ad8c2e48c5391 */,
-			);
-			path = e6;
-			sourceTree = "<group>";
-		};
-		A66FA0D1146F56E400C1B2F2 /* info */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		A66FA0D2146F56E400C1B2F2 /* pack */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = pack;
-			sourceTree = "<group>";
-		};
-		A66FA0D3146F56E400C1B2F2 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0D4146F56E400C1B2F2 /* heads */,
-				A66FA0D6146F56E400C1B2F2 /* remotes */,
-				A66FA0D9146F56E400C1B2F2 /* tags */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		A66FA0D4146F56E400C1B2F2 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0D5146F56E400C1B2F2 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		A66FA0D6146F56E400C1B2F2 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0D7146F56E400C1B2F2 /* origin */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		A66FA0D7146F56E400C1B2F2 /* origin */ = {
-			isa = PBXGroup;
-			children = (
-				A66FA0D8146F56E400C1B2F2 /* master */,
-			);
-			path = origin;
-			sourceTree = "<group>";
-		};
-		A66FA0D9146F56E400C1B2F2 /* tags */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = tags;
-			sourceTree = "<group>";
-		};
 		A66FA0DB146F56E400C1B2F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				A66FA0DC146F56E400C1B2F2 /* ofxCvCheckerboardPreview.cpp */,
-				A66FA0DD146F56E400C1B2F2 /* ofxCvCheckerboardPreview.h */,
-				A66FA0DE146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.cpp */,
 				A66FA0DF146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.h */,
-				A66FA0E0146F56E400C1B2F2 /* ofxRGBDAlignment.cpp */,
-				A66FA0E1146F56E400C1B2F2 /* ofxRGBDAlignment.h */,
+				A66FA0DE146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -928,9 +708,7 @@
 				E7E5ED02144FDBD400675C9C /* tilt.c in Sources */,
 				E7E5ED03144FDBD400675C9C /* usb_libusb10.c in Sources */,
 				E7E5ED05144FDBD400675C9C /* ofxKinect.cpp in Sources */,
-				A66FA0E2146F56E400C1B2F2 /* ofxCvCheckerboardPreview.cpp in Sources */,
 				A66FA0E3146F56E400C1B2F2 /* ofxKinectPointcloudRecorder.cpp in Sources */,
-				A66FA0E4146F56E400C1B2F2 /* ofxRGBDAlignment.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,6 +747,7 @@
 					"-D__MACOSX_CORE__",
 					"-lpthread",
 				);
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Debug;
 		};

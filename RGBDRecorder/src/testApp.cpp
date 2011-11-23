@@ -42,19 +42,6 @@ void testApp::draw(){
 	ofSetColor(255);
 	kinect.draw(0, 10);
 
-	if(frameRead){
-		cam.begin();
-		int currentFrame = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, clouds.size(), true);
-		glEnable(GL_DEPTH_TEST);
-		glEnableClientState(GL_VERTEX_ARRAY);
-//		glColorPointer(3, GL_FLOAT, sizeof(ofVec3f), &(cloud[0].x));
-		glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), &(clouds[currentFrame][0].x));
-		glDrawArrays(GL_POINTS, 0, clouds[currentFrame].size());
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisable(GL_DEPTH_TEST);
-		
-		cam.end();
-	}
 }
 
 
@@ -67,28 +54,6 @@ void testApp::keyPressed(int key){
             posterFrame.setFromPixels(kinect.getPixels(), kinect.getWidth(), kinect.getHeight(), OF_IMAGE_COLOR);
             recorder.incrementFolder(posterFrame);
         }
-	}
-
-	if(key == 'l'){
-		ofDirectory d("depthframes");
-		d.allowExt("xkcd");
-		int numfiles = d.listDir();
-		frameRead = true;
-		for(int f = 0; f < 30; f++){
-//		for(int f = 0; f < 1; f++){			
-			vector<ofVec3f> cloud;
-			unsigned short* frame = recorder.readDepthFrame( "depthframes/" + d.getName(f) );
-			for(int y = 0; y < 480; y++){
-				for(int x = 0; x < 640; x++){
-					//cout << frame[y*640+x] << endl;
-					ofVec3f v = kinect.getWorldCoordinateAt(x, y, frame[y*640+x] );
-					cloud.push_back( v );
-				}
-			}
-			cout << "read frame depthframes/" <<d.getName(f) << endl;
-			delete frame;
-			clouds.push_back( cloud );
-		}
 	}
     
     if(key == 'c'){

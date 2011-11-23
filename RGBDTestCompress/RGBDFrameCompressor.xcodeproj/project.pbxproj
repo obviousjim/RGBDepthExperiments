@@ -24,6 +24,11 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		E7DF55B3147B6D6500A3A9C7 /* ofxRGBDVideoDepthSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF55B1147B6D6500A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */; };
+		E7DF55BE147B6D7300A3A9C7 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF55B7147B6D7300A3A9C7 /* tinyxml.cpp */; };
+		E7DF55BF147B6D7300A3A9C7 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF55B9147B6D7300A3A9C7 /* tinyxmlerror.cpp */; };
+		E7DF55C0147B6D7300A3A9C7 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF55BA147B6D7300A3A9C7 /* tinyxmlparser.cpp */; };
+		E7DF55C1147B6D7300A3A9C7 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF55BC147B6D7300A3A9C7 /* ofxXmlSettings.cpp */; };
 		E7E8AB90147835780053509D /* ofxKinectPointcloudRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7E8AB8E147835780053509D /* ofxKinectPointcloudRecorder.cpp */; };
 /* End PBXBuildFile section */
 
@@ -69,7 +74,7 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* RGBDTestCompressDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RGBDTestCompressDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* RGBDFrameCompressorDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RGBDFrameCompressorDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = testApp.cpp; path = src/testApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = src/testApp.h; sourceTree = SOURCE_ROOT; };
@@ -79,6 +84,15 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E7DF55B1147B6D6500A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDVideoDepthSequence.cpp; sourceTree = "<group>"; };
+		E7DF55B2147B6D6500A3A9C7 /* ofxRGBDVideoDepthSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDVideoDepthSequence.h; sourceTree = "<group>"; };
+		E7DF55B5147B6D7300A3A9C7 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
+		E7DF55B7147B6D7300A3A9C7 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
+		E7DF55B8147B6D7300A3A9C7 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
+		E7DF55B9147B6D7300A3A9C7 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
+		E7DF55BA147B6D7300A3A9C7 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
+		E7DF55BC147B6D7300A3A9C7 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
+		E7DF55BD147B6D7300A3A9C7 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
 		E7E8AB8E147835780053509D /* ofxKinectPointcloudRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxKinectPointcloudRecorder.cpp; sourceTree = "<group>"; };
 		E7E8AB8F147835780053509D /* ofxKinectPointcloudRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxKinectPointcloudRecorder.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,6 +125,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				E7DF55B4147B6D7300A3A9C7 /* ofxXmlSettings */,
 				E7E8A7E2147813D80053509D /* ofxRGBDepth */,
 			);
 			name = addons;
@@ -169,7 +184,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				E4B69B5B0A3A1756003C02F2 /* RGBDTestCompressDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* RGBDFrameCompressorDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -192,6 +207,37 @@
 			name = openFrameworks;
 			sourceTree = "<group>";
 		};
+		E7DF55B4147B6D7300A3A9C7 /* ofxXmlSettings */ = {
+			isa = PBXGroup;
+			children = (
+				E7DF55B5147B6D7300A3A9C7 /* install.xml */,
+				E7DF55B6147B6D7300A3A9C7 /* libs */,
+				E7DF55BB147B6D7300A3A9C7 /* src */,
+			);
+			name = ofxXmlSettings;
+			path = ../../../addons/ofxXmlSettings;
+			sourceTree = SOURCE_ROOT;
+		};
+		E7DF55B6147B6D7300A3A9C7 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				E7DF55B7147B6D7300A3A9C7 /* tinyxml.cpp */,
+				E7DF55B8147B6D7300A3A9C7 /* tinyxml.h */,
+				E7DF55B9147B6D7300A3A9C7 /* tinyxmlerror.cpp */,
+				E7DF55BA147B6D7300A3A9C7 /* tinyxmlparser.cpp */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		E7DF55BB147B6D7300A3A9C7 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E7DF55BC147B6D7300A3A9C7 /* ofxXmlSettings.cpp */,
+				E7DF55BD147B6D7300A3A9C7 /* ofxXmlSettings.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		E7E8A7E2147813D80053509D /* ofxRGBDepth */ = {
 			isa = PBXGroup;
 			children = (
@@ -204,6 +250,8 @@
 		E7E8A809147813D80053509D /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E7DF55B2147B6D6500A3A9C7 /* ofxRGBDVideoDepthSequence.h */,
+				E7DF55B1147B6D6500A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */,
 				E7E8AB8F147835780053509D /* ofxKinectPointcloudRecorder.h */,
 				E7E8AB8E147835780053509D /* ofxKinectPointcloudRecorder.cpp */,
 			);
@@ -213,9 +261,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* RGBDTestCompress */ = {
+		E4B69B5A0A3A1756003C02F2 /* RGBDFrameCompressor */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDTestCompress" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDFrameCompressor" */;
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
@@ -227,9 +275,9 @@
 			dependencies = (
 				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
 			);
-			name = RGBDTestCompress;
+			name = RGBDFrameCompressor;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* RGBDTestCompressDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* RGBDFrameCompressorDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -237,7 +285,7 @@
 /* Begin PBXProject section */
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDTestCompress" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDFrameCompressor" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -258,7 +306,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* RGBDTestCompress */,
+				E4B69B5A0A3A1756003C02F2 /* RGBDFrameCompressor */,
 			);
 		};
 /* End PBXProject section */
@@ -297,6 +345,11 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				E7E8AB90147835780053509D /* ofxKinectPointcloudRecorder.cpp in Sources */,
+				E7DF55B3147B6D6500A3A9C7 /* ofxRGBDVideoDepthSequence.cpp in Sources */,
+				E7DF55BE147B6D7300A3A9C7 /* tinyxml.cpp in Sources */,
+				E7DF55BF147B6D7300A3A9C7 /* tinyxmlerror.cpp in Sources */,
+				E7DF55C0147B6D7300A3A9C7 /* tinyxmlparser.cpp in Sources */,
+				E7DF55C1147B6D7300A3A9C7 /* ofxXmlSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,7 +504,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = RGBDTestCompressDebug;
+				PRODUCT_NAME = RGBDFrameCompressorDebug;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -537,7 +590,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = RGBDTestCompress;
+				PRODUCT_NAME = RGBDFrameCompressor;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -545,7 +598,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDTestCompress" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDFrameCompressor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -554,7 +607,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDTestCompress" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDFrameCompressor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,
