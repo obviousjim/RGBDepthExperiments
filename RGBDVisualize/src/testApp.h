@@ -34,6 +34,7 @@ class testApp : public ofBaseApp{
 	
 	ofVideoPlayer player;
 	ofxQTKitVideoPlayer qtRenderer;
+	//ofVideoPlayer qtRenderer;
 	
 	ofxRGBDAlignment alignment;
 	ofxKinectPointcloudRecorder decoder;

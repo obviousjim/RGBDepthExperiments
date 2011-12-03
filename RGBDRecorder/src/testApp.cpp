@@ -9,8 +9,8 @@ void testApp::setup(){
 	
 	frameRead = false;
 	
-	kinect.setRegistration(true);
-	kinect.init(false);
+	kinect.setRegistration(false);
+	kinect.init(true);
 	kinect.open();
 	
 	recording = false;
@@ -36,12 +36,12 @@ void testApp::draw(){
 
 	if(recording){
 		ofSetColor(255, 0, 0);
-		ofRect(0, 0, 640, 10);
+		ofRect(0, 0, 640*2, 10);
 	}
 	
 	ofSetColor(255);
-	kinect.draw(0, 10);
-
+	kinect.drawDepth(0, 10);
+	kinect.draw(640, 10);
 }
 
 

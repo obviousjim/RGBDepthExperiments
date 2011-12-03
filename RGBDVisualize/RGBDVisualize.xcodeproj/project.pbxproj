@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A6063A25148AC6DF00D154C3 /* rgbd.frag in Sources */ = {isa = PBXBuildFile; fileRef = A6063A22148AC6DF00D154C3 /* rgbd.frag */; };
+		A6063A26148AC6DF00D154C3 /* rgbd.vert in Sources */ = {isa = PBXBuildFile; fileRef = A6063A24148AC6DF00D154C3 /* rgbd.vert */; };
 		A60F6BE41475FFA5007E1206 /* ofxRGBDAlignment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F6BDF1475FFA5007E1206 /* ofxRGBDAlignment.cpp */; };
 		A60F74261477206A007E1206 /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F73F81477206A007E1206 /* Calibration.cpp */; };
 		A60F74271477206A007E1206 /* ContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F73F91477206A007E1206 /* ContourFinder.cpp */; };
@@ -25,6 +27,7 @@
 		A60F753F14772397007E1206 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F753914772397007E1206 /* tinyxmlerror.cpp */; };
 		A60F754014772397007E1206 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F753A14772397007E1206 /* tinyxmlparser.cpp */; };
 		A60F754114772397007E1206 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F753C14772397007E1206 /* ofxXmlSettings.cpp */; };
+		A659ED12148A7CA9002E8A1C /* ofxTLColors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A659ED10148A7CA9002E8A1C /* ofxTLColors.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -108,6 +111,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A6063A22148AC6DF00D154C3 /* rgbd.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = rgbd.frag; sourceTree = "<group>"; };
+		A6063A23148AC6DF00D154C3 /* rgbd.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rgbd.geom; sourceTree = "<group>"; };
+		A6063A24148AC6DF00D154C3 /* rgbd.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = rgbd.vert; sourceTree = "<group>"; };
 		A60F6BDF1475FFA5007E1206 /* ofxRGBDAlignment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDAlignment.cpp; sourceTree = "<group>"; };
 		A60F6BE01475FFA5007E1206 /* ofxRGBDAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDAlignment.h; sourceTree = "<group>"; };
 		A60F73EF1477206A007E1206 /* Calibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calibration.h; sourceTree = "<group>"; };
@@ -144,6 +150,8 @@
 		A60F753A14772397007E1206 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		A60F753C14772397007E1206 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
 		A60F753D14772397007E1206 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
+		A659ED10148A7CA9002E8A1C /* ofxTLColors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLColors.cpp; sourceTree = "<group>"; };
+		A659ED11148A7CA9002E8A1C /* ofxTLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLColors.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -364,9 +372,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A6063A21148AC6DF00D154C3 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				A6063A22148AC6DF00D154C3 /* rgbd.frag */,
+				A6063A23148AC6DF00D154C3 /* rgbd.geom */,
+				A6063A24148AC6DF00D154C3 /* rgbd.vert */,
+			);
+			path = assets;
+			sourceTree = "<group>";
+		};
 		A60F6B821475FFA5007E1206 /* ofxRGBDepth */ = {
 			isa = PBXGroup;
 			children = (
+				A6063A21148AC6DF00D154C3 /* assets */,
 				E7DF56AC147CA3A800A3A9C7 /* couples */,
 				A60F6BD81475FFA5007E1206 /* src */,
 			);
@@ -863,34 +882,36 @@
 			children = (
 				E7DF5678147CA28300A3A9C7 /* ofxTimeline.h */,
 				E7DF5677147CA28300A3A9C7 /* ofxTimeline.cpp */,
-				E7DF567C147CA28300A3A9C7 /* ofxTLElement.cpp */,
 				E7DF567D147CA28300A3A9C7 /* ofxTLElement.h */,
-				E7DF567E147CA28300A3A9C7 /* ofxTLElementHeader.cpp */,
+				E7DF567C147CA28300A3A9C7 /* ofxTLElement.cpp */,
 				E7DF567F147CA28300A3A9C7 /* ofxTLElementHeader.h */,
-				E7DF5680147CA28300A3A9C7 /* ofxTLEvents.cpp */,
+				E7DF567E147CA28300A3A9C7 /* ofxTLElementHeader.cpp */,
 				E7DF5681147CA28300A3A9C7 /* ofxTLEvents.h */,
-				E7DF5682147CA28300A3A9C7 /* ofxTLImageSequence.cpp */,
+				E7DF5680147CA28300A3A9C7 /* ofxTLEvents.cpp */,
 				E7DF5683147CA28300A3A9C7 /* ofxTLImageSequence.h */,
-				E7DF5684147CA28300A3A9C7 /* ofxTLImageSequenceFrame.cpp */,
+				E7DF5682147CA28300A3A9C7 /* ofxTLImageSequence.cpp */,
 				E7DF5685147CA28300A3A9C7 /* ofxTLImageSequenceFrame.h */,
-				E7DF5686147CA28300A3A9C7 /* ofxTLKeyframer.cpp */,
+				E7DF5684147CA28300A3A9C7 /* ofxTLImageSequenceFrame.cpp */,
 				E7DF5687147CA28300A3A9C7 /* ofxTLKeyframer.h */,
-				E7DF5688147CA28300A3A9C7 /* ofxTLPage.cpp */,
+				E7DF5686147CA28300A3A9C7 /* ofxTLKeyframer.cpp */,
 				E7DF5689147CA28300A3A9C7 /* ofxTLPage.h */,
-				E7DF568A147CA28300A3A9C7 /* ofxTLPageTabs.cpp */,
+				E7DF5688147CA28300A3A9C7 /* ofxTLPage.cpp */,
 				E7DF568B147CA28300A3A9C7 /* ofxTLPageTabs.h */,
-				E7DF568C147CA28300A3A9C7 /* ofxTLSwitcher.cpp */,
+				E7DF568A147CA28300A3A9C7 /* ofxTLPageTabs.cpp */,
 				E7DF568D147CA28300A3A9C7 /* ofxTLSwitcher.h */,
-				E7DF568E147CA28300A3A9C7 /* ofxTLTicker.cpp */,
+				E7DF568C147CA28300A3A9C7 /* ofxTLSwitcher.cpp */,
 				E7DF568F147CA28300A3A9C7 /* ofxTLTicker.h */,
-				E7DF5690147CA28300A3A9C7 /* ofxTLTrigger.cpp */,
+				E7DF568E147CA28300A3A9C7 /* ofxTLTicker.cpp */,
 				E7DF5691147CA28300A3A9C7 /* ofxTLTrigger.h */,
-				E7DF5694147CA28300A3A9C7 /* ofxTLVideoPlayer.cpp */,
+				E7DF5690147CA28300A3A9C7 /* ofxTLTrigger.cpp */,
 				E7DF5695147CA28300A3A9C7 /* ofxTLVideoPlayer.h */,
-				E7DF5696147CA28300A3A9C7 /* ofxTLVideoThumb.cpp */,
+				E7DF5694147CA28300A3A9C7 /* ofxTLVideoPlayer.cpp */,
 				E7DF5697147CA28300A3A9C7 /* ofxTLVideoThumb.h */,
+				E7DF5696147CA28300A3A9C7 /* ofxTLVideoThumb.cpp */,
 				E7DF5699147CA28300A3A9C7 /* ofxTLZoomer.h */,
 				E7DF5698147CA28300A3A9C7 /* ofxTLZoomer.cpp */,
+				A659ED11148A7CA9002E8A1C /* ofxTLColors.h */,
+				A659ED10148A7CA9002E8A1C /* ofxTLColors.cpp */,
 			);
 			name = src;
 			path = ../../../addons/ofxTimeline/src;
@@ -1299,6 +1320,9 @@
 				E7DF5727147CA58A00A3A9C7 /* ofxEasingQuint.cpp in Sources */,
 				E7DF5728147CA58A00A3A9C7 /* ofxEasingSine.cpp in Sources */,
 				E7DF5729147CA58A00A3A9C7 /* ofxTween.cpp in Sources */,
+				A659ED12148A7CA9002E8A1C /* ofxTLColors.cpp in Sources */,
+				A6063A25148AC6DF00D154C3 /* rgbd.frag in Sources */,
+				A6063A26148AC6DF00D154C3 /* rgbd.vert in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

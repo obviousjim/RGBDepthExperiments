@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
+	ofSetFrameRate(60);
+	ofSetVerticalSync(true);
+	
 	allLoaded = false;
 
 	alignment.setup(10, 7, 2.5);
@@ -23,6 +26,7 @@ void testApp::setup(){
 	if(r.bSuccess){
 		videoPath = r.getPath();
 		qtRenderer.loadMovie(videoPath, OFXQTVIDEOPLAYER_MODE_TEXTURE_ONLY);
+		//qtRenderer.loadMovie(videoPath);
 		sequencer.loadPairingFile(ofFilePath::removeExt(r.getPath()) + "_pairings.xml");
 	}
 	else{
@@ -41,15 +45,6 @@ void testApp::setup(){
 		return;
 	}
 	
-	
-//	ofSystemAlertDialog("Select Pairing File");
-//	r = ofSystemLoadDialog("Select Pairing File", false);
-//	if(r.bSuccess){
-//		sequencer.loadPairingFile(r.getPath());
-//	}
-//	else{
-//		return;
-//	}
 		
 	allLoaded = true;
 	
@@ -77,17 +72,21 @@ void testApp::setup(){
 	
 	timeline.setDurationInFrames(player.getTotalNumFrames());
 	timeline.addElement("Video", &videoTimelineElement);
+	
+	videoTimelineElement.toggleThumbs();
 	videoTimelineElement.setVideoPlayer(player, videoThumbsPath);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 	if(!allLoaded) return;
-	if(player.isPaused()){
-		player.setFrame(ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, player.getTotalNumFrames(), true));
-	}
-	player.update();
-	if(player.isFrameNew()){
+	
+	//player.update();
+	qtRenderer.update();
+	if(qtRenderer.isFrameNew()){
+		
+		//cout << "current frame number " << player.getCurrentFrame() << endl;
+		
 		int depthFrame = sequencer.getDepthFrameForVideoFrame(player.getCurrentFrame());
 		depthFrame = ofClamp(depthFrame, 0, depthImages.numFiles()-1);
 		//cout << "loading depth frame " << depthFrame << " for video frame " << player.getCurrentFrame() << endl;
@@ -99,7 +98,7 @@ void testApp::update(){
 
 void testApp::processDepthFrame(){
 	
-	for(int y = 0; y < 480; y++){
+	for(int y = 0; y <	480; y++){
 		for(int x = 0; x < 640; x++){
 			int index = y*640+x;
 			if(depthPixelDecodeBuffer[index] == 0){
@@ -113,25 +112,40 @@ void testApp::processDepthFrame(){
 void testApp::draw(){
 	if(!allLoaded) return;
 	
-	timeline.draw();
 	
 	ofBackground(255*.2);
 	
-	//drawAsTriangleMesh();
+	cam.begin();
+	glEnable(GL_DEPTH_TEST);
+	ofScale(1, -1, 1);
 	
-	drawWireframe();
+	alignment.rgbdShader.begin();
+	qtRenderer.bind();
+	alignment.getMesh().drawFaces();
+	qtRenderer.unbind();
+	alignment.rgbdShader.end();
+	
+	glDisable(GL_DEPTH_TEST);
+	cam.end();
+	
+	//drawAsTriangleMesh();
+	//drawWireframe();
+	//qtRenderer.draw(0, 0);
+
+	timeline.draw();
 
 	ofSetColor(255);
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), ofPoint(20,20));
-	
 }
 
 void testApp::drawWireframe(){
+	
 	cam.begin();
+	
 	ofPushMatrix();
 	ofScale(1, -1, 1);
 	glEnable(GL_DEPTH_TEST);
-	
+
 	qtRenderer.bind();
 	alignment.getMesh().drawWireframe();
 	qtRenderer.unbind();
@@ -150,8 +164,8 @@ void testApp::drawAsTriangleMesh(){
 	
 	
 //	qtRenderer.draw(0, 0);
-	
 	qtRenderer.bind();
+//	player.getTextureReference().bind();
 	
 	vector<ofVec3f> & vertices = alignment.getMesh().getVertices();
 	vector<ofIndexType> & indices = alignment.getMesh().getIndices();
@@ -182,6 +196,7 @@ void testApp::drawAsTriangleMesh(){
 	glDisable(GL_DEPTH_TEST);
 	
 	qtRenderer.unbind();
+	//player.getTextureReference().unbind();
 	
 	//	alignment.drawMesh();
 	//	alignment.drawPointCloud();
@@ -200,6 +215,7 @@ void testApp::drawAsScanlines(){
 	qtRenderer.draw(0, 0);
 	
 	qtRenderer.bind();
+//	player.getTextureReference().bind();
 	
 	vector<ofVec3f> & vertices = alignment.getMesh().getVertices();
 	vector<ofIndexType> & indices = alignment.getMesh().getIndices();
@@ -242,6 +258,7 @@ void testApp::drawAsScanlines(){
 	glDisable(GL_DEPTH_TEST);
 	
 	qtRenderer.unbind();
+//	player.getTextureReference().unbind();
 	
 	ofPopMatrix();
 	
@@ -261,26 +278,31 @@ void testApp::keyPressed(int key){
 		}
 		
 	}
-}
-
-//--------------------------------------------------------------
-void testApp::keyReleased(int key){
 	if(key == OF_KEY_UP){
 		alignment.yshift++;
 		alignment.update();
+		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
 	}
 	if(key == OF_KEY_DOWN){
 		alignment.yshift--;
 		alignment.update();
+		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
 	}
 	if(key == OF_KEY_RIGHT){
 		alignment.xshift++;
 		alignment.update();
+		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
 	}
 	if(key == OF_KEY_LEFT){
 		alignment.xshift--;
 		alignment.update();
+		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
 	}
+	
+}
+
+//--------------------------------------------------------------
+void testApp::keyReleased(int key){
 	
 	
 }
@@ -306,7 +328,7 @@ void testApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
-
+	timeline.setWidth(w);
 }
 
 //--------------------------------------------------------------
