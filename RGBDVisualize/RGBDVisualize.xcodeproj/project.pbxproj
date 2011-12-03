@@ -242,7 +242,6 @@
 		E7D0C60414796DA600510013 /* win_cb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = win_cb; sourceTree = "<group>"; };
 		E7DF5677147CA28300A3A9C7 /* ofxTimeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTimeline.cpp; sourceTree = "<group>"; };
 		E7DF5678147CA28300A3A9C7 /* ofxTimeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTimeline.h; sourceTree = "<group>"; };
-		E7DF5679147CA28300A3A9C7 /* ofxTimelineUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTimelineUtils.h; sourceTree = "<group>"; };
 		E7DF567C147CA28300A3A9C7 /* ofxTLElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLElement.cpp; sourceTree = "<group>"; };
 		E7DF567D147CA28300A3A9C7 /* ofxTLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLElement.h; sourceTree = "<group>"; };
 		E7DF567E147CA28300A3A9C7 /* ofxTLElementHeader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLElementHeader.cpp; sourceTree = "<group>"; };
@@ -592,6 +591,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E716D50C147EB5C200E38802 /* scanEffects */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
@@ -624,6 +624,13 @@
 				E704A2C7147AACF9002064D0 /* ofxGameCamera.h */,
 			);
 			path = src;
+			sourceTree = "<group>";
+		};
+		E716D50C147EB5C200E38802 /* scanEffects */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = scanEffects;
 			sourceTree = "<group>";
 		};
 		E7D0C5AA14796DA600510013 /* opencv */ = {
@@ -856,7 +863,6 @@
 			children = (
 				E7DF5678147CA28300A3A9C7 /* ofxTimeline.h */,
 				E7DF5677147CA28300A3A9C7 /* ofxTimeline.cpp */,
-				E7DF5679147CA28300A3A9C7 /* ofxTimelineUtils.h */,
 				E7DF567C147CA28300A3A9C7 /* ofxTLElement.cpp */,
 				E7DF567D147CA28300A3A9C7 /* ofxTLElement.h */,
 				E7DF567E147CA28300A3A9C7 /* ofxTLElementHeader.cpp */,
@@ -883,8 +889,8 @@
 				E7DF5695147CA28300A3A9C7 /* ofxTLVideoPlayer.h */,
 				E7DF5696147CA28300A3A9C7 /* ofxTLVideoThumb.cpp */,
 				E7DF5697147CA28300A3A9C7 /* ofxTLVideoThumb.h */,
-				E7DF5698147CA28300A3A9C7 /* ofxTLZoomer.cpp */,
 				E7DF5699147CA28300A3A9C7 /* ofxTLZoomer.h */,
+				E7DF5698147CA28300A3A9C7 /* ofxTLZoomer.cpp */,
 			);
 			name = src;
 			path = ../../../addons/ofxTimeline/src;

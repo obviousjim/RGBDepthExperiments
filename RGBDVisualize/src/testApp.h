@@ -6,6 +6,8 @@
 #include "ofxRGBDVideoDepthSequence.h"
 #include "ofxKinectPointcloudRecorder.h"
 #include "ofxGameCamera.h"
+#include "ofxTimeline.h"
+#include "ofxTLVideoPlayer.h"
 
 class testApp : public ofBaseApp{
 
@@ -28,6 +30,8 @@ class testApp : public ofBaseApp{
 	void drawAsScanlines();
 	void drawWireframe();
 	
+	void processDepthFrame();
+	
 	ofVideoPlayer player;
 	ofxQTKitVideoPlayer qtRenderer;
 	
@@ -40,4 +44,8 @@ class testApp : public ofBaseApp{
 	bool allLoaded;
 
 	ofxGameCamera cam;
+	
+	string videoPath;
+	ofxTimeline timeline;
+	ofxTLVideoPlayer videoTimelineElement;
 };

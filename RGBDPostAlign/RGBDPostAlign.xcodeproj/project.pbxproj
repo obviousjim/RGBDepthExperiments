@@ -134,7 +134,6 @@
 		A69D99401471F94D005D9265 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		A69D99421471F94D005D9265 /* ofxTimeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTimeline.cpp; sourceTree = "<group>"; };
 		A69D99431471F94D005D9265 /* ofxTimeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTimeline.h; sourceTree = "<group>"; };
-		A69D99441471F94D005D9265 /* ofxTimelineUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTimelineUtils.h; sourceTree = "<group>"; };
 		A69D99491471F94D005D9265 /* ofxTLElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLElement.cpp; sourceTree = "<group>"; };
 		A69D994A1471F94D005D9265 /* ofxTLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLElement.h; sourceTree = "<group>"; };
 		A69D994B1471F94D005D9265 /* ofxTLElementHeader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLElementHeader.cpp; sourceTree = "<group>"; };
@@ -319,7 +318,6 @@
 				A69D9A321471FCC2005D9265 /* ImageSequencers */,
 				A69D99431471F94D005D9265 /* ofxTimeline.h */,
 				A69D99421471F94D005D9265 /* ofxTimeline.cpp */,
-				A69D99441471F94D005D9265 /* ofxTimelineUtils.h */,
 				A69D994A1471F94D005D9265 /* ofxTLElement.h */,
 				A69D99491471F94D005D9265 /* ofxTLElement.cpp */,
 				A69D994C1471F94D005D9265 /* ofxTLElementHeader.h */,

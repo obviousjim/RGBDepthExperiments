@@ -6,7 +6,7 @@ void testApp::setup(){
 	allLoaded = false;
 
 	alignment.setup(10, 7, 2.5);
-	
+	player.setPlayer(ofPtr<ofBaseVideoPlayer>(&qtRenderer));
 	ofFileDialogResult r;
 	ofSystemAlertDialog("Select Calibration Directory");
 	
@@ -21,7 +21,8 @@ void testApp::setup(){
 	ofSystemAlertDialog("Select Video File");
 	r = ofSystemLoadDialog("Video File", false);
 	if(r.bSuccess){
-		qtRenderer.loadMovie(r.getPath(), OFXQTVIDEOPLAYER_MODE_TEXTURE_ONLY);
+		videoPath = r.getPath();
+		qtRenderer.loadMovie(videoPath, OFXQTVIDEOPLAYER_MODE_TEXTURE_ONLY);
 		sequencer.loadPairingFile(ofFilePath::removeExt(r.getPath()) + "_pairings.xml");
 	}
 	else{
@@ -52,7 +53,7 @@ void testApp::setup(){
 		
 	allLoaded = true;
 	
-	player.setPlayer(ofPtr<ofBaseVideoPlayer>(&qtRenderer));
+	
 	alignment.setColorTexture(player);
 	
 	player.play();
@@ -64,6 +65,19 @@ void testApp::setup(){
 	cam.loadCameraPosition();
 	
 	depthPixelDecodeBuffer = new unsigned short[640*480];
+	
+	
+	string videoThumbsPath = ofFilePath::removeExt(videoPath);
+	if(!ofDirectory(videoThumbsPath).exists()){
+		ofDirectory(videoThumbsPath).create(true);
+	}
+
+	timeline.setup();
+	videoTimelineElement.setup();
+	
+	timeline.setDurationInFrames(player.getTotalNumFrames());
+	timeline.addElement("Video", &videoTimelineElement);
+	videoTimelineElement.setVideoPlayer(player, videoThumbsPath);
 }
 
 //--------------------------------------------------------------
@@ -77,13 +91,29 @@ void testApp::update(){
 		int depthFrame = sequencer.getDepthFrameForVideoFrame(player.getCurrentFrame());
 		depthFrame = ofClamp(depthFrame, 0, depthImages.numFiles()-1);
 		//cout << "loading depth frame " << depthFrame << " for video frame " << player.getCurrentFrame() << endl;
-		alignment.update( decoder.readCompressedPng(depthImages.getPath(depthFrame), depthPixelDecodeBuffer) );
+		decoder.readCompressedPng(depthImages.getPath(depthFrame), depthPixelDecodeBuffer);
+		processDepthFrame();
+		alignment.update( depthPixelDecodeBuffer );
 	}
 }
 
+void testApp::processDepthFrame(){
+	
+	for(int y = 0; y < 480; y++){
+		for(int x = 0; x < 640; x++){
+			int index = y*640+x;
+			if(depthPixelDecodeBuffer[index] == 0){
+				depthPixelDecodeBuffer[index] = 5000;
+			}
+			depthPixelDecodeBuffer[index] *= 1.0 - .0*(sin(y/10.0 + ofGetFrameNum()/10.0)*.5+.5); 
+		}
+	}
+}
 //--------------------------------------------------------------
 void testApp::draw(){
 	if(!allLoaded) return;
+	
+	timeline.draw();
 	
 	ofBackground(255*.2);
 	
@@ -91,6 +121,9 @@ void testApp::draw(){
 	
 	drawWireframe();
 
+	ofSetColor(255);
+	ofDrawBitmapString(ofToString(ofGetFrameRate()), ofPoint(20,20));
+	
 }
 
 void testApp::drawWireframe(){
@@ -101,8 +134,6 @@ void testApp::drawWireframe(){
 	
 	qtRenderer.bind();
 	alignment.getMesh().drawWireframe();
-
-	
 	qtRenderer.unbind();
 	
 	glDisable(GL_DEPTH_TEST);

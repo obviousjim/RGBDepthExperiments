@@ -41,7 +41,7 @@ void testApp::setup(){
 	alignmentScrubber = new ofxTLVideoDepthAlignmentScrubber();
 	timeline->addElement("alignment", alignmentScrubber);
 	
-	timeline->setDuration(300);
+	timeline->setDurationInFrames(300);
 	
 	recalculateVideoRects();
 }
@@ -173,7 +173,7 @@ void testApp::loadVideoPath(string path){
 	playerElement = new ofxTLVideoPlayer();
 	playerElement->setup();
 	
-	timeline->setDuration(player.getTotalNumFrames());
+	timeline->setDurationInFrames(player.getTotalNumFrames());
 	timeline->addElement("Video", playerElement);
 	playerElement->setVideoPlayer(player, ofFilePath::removeExt( path ) + "/thumbs");
 	
