@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A6063A25148AC6DF00D154C3 /* rgbd.frag in Sources */ = {isa = PBXBuildFile; fileRef = A6063A22148AC6DF00D154C3 /* rgbd.frag */; };
 		A6063A26148AC6DF00D154C3 /* rgbd.vert in Sources */ = {isa = PBXBuildFile; fileRef = A6063A24148AC6DF00D154C3 /* rgbd.vert */; };
+		A6063F85148B1BCF00D154C3 /* ofxTextInputField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6063F83148B1BCF00D154C3 /* ofxTextInputField.cpp */; };
 		A60F6BE41475FFA5007E1206 /* ofxRGBDAlignment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F6BDF1475FFA5007E1206 /* ofxRGBDAlignment.cpp */; };
 		A60F74261477206A007E1206 /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F73F81477206A007E1206 /* Calibration.cpp */; };
 		A60F74271477206A007E1206 /* ContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F73F91477206A007E1206 /* ContourFinder.cpp */; };
@@ -114,6 +115,8 @@
 		A6063A22148AC6DF00D154C3 /* rgbd.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = rgbd.frag; sourceTree = "<group>"; };
 		A6063A23148AC6DF00D154C3 /* rgbd.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rgbd.geom; sourceTree = "<group>"; };
 		A6063A24148AC6DF00D154C3 /* rgbd.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = rgbd.vert; sourceTree = "<group>"; };
+		A6063F83148B1BCF00D154C3 /* ofxTextInputField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTextInputField.cpp; sourceTree = "<group>"; };
+		A6063F84148B1BCF00D154C3 /* ofxTextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTextInputField.h; sourceTree = "<group>"; };
 		A60F6BDF1475FFA5007E1206 /* ofxRGBDAlignment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDAlignment.cpp; sourceTree = "<group>"; };
 		A60F6BE01475FFA5007E1206 /* ofxRGBDAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDAlignment.h; sourceTree = "<group>"; };
 		A60F73EF1477206A007E1206 /* Calibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calibration.h; sourceTree = "<group>"; };
@@ -382,6 +385,24 @@
 			path = assets;
 			sourceTree = "<group>";
 		};
+		A6063F47148B1BCF00D154C3 /* ofxTextInputField */ = {
+			isa = PBXGroup;
+			children = (
+				A6063F82148B1BCF00D154C3 /* src */,
+			);
+			name = ofxTextInputField;
+			path = ../../../addons/ofxTextInputField;
+			sourceTree = SOURCE_ROOT;
+		};
+		A6063F82148B1BCF00D154C3 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A6063F83148B1BCF00D154C3 /* ofxTextInputField.cpp */,
+				A6063F84148B1BCF00D154C3 /* ofxTextInputField.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		A60F6B821475FFA5007E1206 /* ofxRGBDepth */ = {
 			isa = PBXGroup;
 			children = (
@@ -536,6 +557,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				A6063F47148B1BCF00D154C3 /* ofxTextInputField */,
 				E7DF5739147CA59D00A3A9C7 /* ofxRange */,
 				E7DF56C1147CA58800A3A9C7 /* ofxTween */,
 				E7DF5672147CA27600A3A9C7 /* ofxTimeline */,
@@ -1323,6 +1345,7 @@
 				A659ED12148A7CA9002E8A1C /* ofxTLColors.cpp in Sources */,
 				A6063A25148AC6DF00D154C3 /* rgbd.frag in Sources */,
 				A6063A26148AC6DF00D154C3 /* rgbd.vert in Sources */,
+				A6063F85148B1BCF00D154C3 /* ofxTextInputField.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

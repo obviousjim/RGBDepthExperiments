@@ -118,12 +118,16 @@ void testApp::draw(){
 	cam.begin();
 	glEnable(GL_DEPTH_TEST);
 	ofScale(1, -1, 1);
+	if(alignment.applyShader){
+		alignment.rgbdShader.begin();
+	}
 	
-	alignment.rgbdShader.begin();
 	qtRenderer.bind();
 	alignment.getMesh().drawFaces();
 	qtRenderer.unbind();
-	alignment.rgbdShader.end();
+	if(alignment.applyShader){
+		alignment.rgbdShader.end();
+	}
 	
 	glDisable(GL_DEPTH_TEST);
 	cam.end();
@@ -278,6 +282,11 @@ void testApp::keyPressed(int key){
 		}
 		
 	}
+	
+	if(key == '='){
+		alignment.applyShader = !alignment.applyShader;
+	}
+	
 	if(key == OF_KEY_UP){
 		alignment.yshift++;
 		alignment.update();

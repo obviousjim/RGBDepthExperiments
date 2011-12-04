@@ -27,6 +27,8 @@ void testApp::update(){
 	kinect.update();
 	if(kinect.isFrameNew() && recording){
 		recorder.addImage( kinect.getRawDepthPixels() );
+		cout << " currently " << recorder.numFramesWaitingSave() << " waiting " << endl;
+
 	}
 	
 }
@@ -51,7 +53,7 @@ void testApp::keyPressed(int key){
 		recording = !recording;
         if(recording){
             ofImage posterFrame;
-            posterFrame.setFromPixels(kinect.getPixels(), kinect.getWidth(), kinect.getHeight(), OF_IMAGE_COLOR);
+            posterFrame.setFromPixels(kinect.getPixels(), kinect.getWidth(), kinect.getHeight(), OF_IMAGE_GRAYSCALE);
             recorder.incrementFolder(posterFrame);
         }
 	}
