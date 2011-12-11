@@ -10,7 +10,7 @@ void testApp::setup(){
 	frameRead = false;
 	
 	kinect.setRegistration(false);
-	kinect.init(true);
+	kinect.init(true, false);
 	kinect.open();
 	
 	recording = false;
@@ -28,9 +28,7 @@ void testApp::update(){
 	if(kinect.isFrameNew() && recording){
 		recorder.addImage( kinect.getRawDepthPixels() );
 		cout << " currently " << recorder.numFramesWaitingSave() << " waiting " << endl;
-
 	}
-	
 }
 
 //--------------------------------------------------------------
