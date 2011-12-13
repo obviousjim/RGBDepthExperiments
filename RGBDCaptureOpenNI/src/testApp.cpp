@@ -7,33 +7,70 @@ void testApp::setup(){
 	ofEnableAlphaBlending();
 	ofSetFrameRate(60);
 	
-	frameRead = false;
 	
-	kinect.setRegistration(false);
-	kinect.init(true);
-	kinect.open();
+	recordContext.setup();	// all nodes created by code -> NOT using the xml config file at all
+	recordDepth.setup(&recordContext);
+	recordImage.setup(&recordContext);
 	
 	recording = false;
 	
-
     recorder.setRecordLocation("depthframes", "frame_");
     recorder.setup();
+	
+	currentTab = TabCalibrate;
 	
 }
 
 //--------------------------------------------------------------
 
 void testApp::update(){
-	kinect.update();
-	if(kinect.isFrameNew() && recording){
-		recorder.addImage( kinect.getRawDepthPixels() );
-		cout << " currently " << recorder.numFramesWaitingSave() << " waiting " << endl;
+	recordContext.update();
+	if(currentTab == TabCalibrate){
+		recordImage.update();
+	}
+	else if(currentTab == TabRecord){
+		recordDepth.update();	
 	}
 	
+	
+	
+//	if(kinect.isFrameNew() && recording){
+//		recorder.addImage( kinect.getRawDepthPixels() );
+//		cout << " currently " << recorder.numFramesWaitingSave() << " waiting " << endl;
+//	}
+	
+}
+
+void testApp::objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y){
+}
+
+void testApp::objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y){
+}
+void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int button){
+
+}
+void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button){
+
+}
+void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
+
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	
+	if(currentTab == TabCalibrate){
+		recordImage.draw(640, 0, 640, 480);
+	}
+	else if(currentTab == TabRecord){
+		//TODO render modes
+		recordDepth.draw(0,0,640,480);
+		calibrationImage.setFromPixels(recordImage.getIrPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
+	}
+	else {
+		//draw timeline
+	}
+
 
 	if(recording){
 		ofSetColor(255, 0, 0);
@@ -41,32 +78,33 @@ void testApp::draw(){
 	}
 	
 	ofSetColor(255);
-	kinect.drawDepth(0, 10);
-	kinect.draw(640, 10);
 }
 
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	if(key == ' '){
-		recording = !recording;
-        if(recording){
-            ofImage posterFrame;
-            posterFrame.setFromPixels(kinect.getPixels(), kinect.getWidth(), kinect.getHeight(), OF_IMAGE_GRAYSCALE);
-            recorder.incrementFolder(posterFrame);
-        }
+		if(currentTab == TabRecord){
+			recording = !recording;
+//			if(recording){
+//				ofImage posterFrame;
+//				posterFrame.setFromPixels(kinect.getPixels(), kinect.getWidth(), kinect.getHeight(), OF_IMAGE_GRAYSCALE);
+//				recorder.incrementFolder(posterFrame);
+//			}
+		}
+		else if(currentTab == TabCalibrate){
+			string filename = "__CalibFile_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + "_" + ofToString(ofGetSeconds()) +".png";
+			
+			ofSaveImage( calibrationImage, filename);			
+		}
 	}
     
     if(key == 'c'){
-        string filename = "__CalibFile_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + "_" + ofToString(ofGetSeconds()) +".png";
-        ofImage kinectImage;
-        kinectImage.setFromPixels(kinect.getPixels(), 640, 480, OF_IMAGE_COLOR);
-        ofSaveImage( kinectImage, filename);
     }
 }
 
 void testApp::exit() {
-	kinect.close();
+//	kinect.close();
 }
 
 //--------------------------------------------------------------

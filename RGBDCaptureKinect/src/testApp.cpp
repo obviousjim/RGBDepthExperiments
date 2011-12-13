@@ -7,7 +7,6 @@ void testApp::setup(){
 	ofEnableAlphaBlending();
 	ofSetFrameRate(60);
 	
-	frameRead = false;
 	
 	kinect.setRegistration(false);
 	kinect.init(true, false);
@@ -15,14 +14,12 @@ void testApp::setup(){
 	
 	recording = false;
 	
-
     recorder.setRecordLocation("depthframes", "frame_");
     recorder.setup();
 	
 }
 
 //--------------------------------------------------------------
-
 void testApp::update(){
 	kinect.update();
 	if(kinect.isFrameNew() && recording){
@@ -59,7 +56,7 @@ void testApp::keyPressed(int key){
     if(key == 'c'){
         string filename = "__CalibFile_" + ofToString(ofGetDay()) + "_" + ofToString(ofGetHours()) + "_" + ofToString(ofGetMinutes()) + "_" + ofToString(ofGetSeconds()) +".png";
         ofImage kinectImage;
-        kinectImage.setFromPixels(kinect.getPixels(), 640, 480, OF_IMAGE_COLOR);
+        kinectImage.setFromPixels(kinect.getPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
         ofSaveImage( kinectImage, filename);
     }
 }

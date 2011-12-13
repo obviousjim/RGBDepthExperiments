@@ -4,7 +4,7 @@
 #include "ofxQTKitVideoPlayer.h"
 #include "ofxRGBDAlignment.h"
 #include "ofxRGBDVideoDepthSequence.h"
-#include "ofxKinectPointcloudRecorder.h"
+#include "ofxDepthImageRecorder.h"
 #include "ofxGameCamera.h"
 #include "ofxTimeline.h"
 #include "ofxTLVideoPlayer.h"
@@ -37,7 +37,7 @@ class testApp : public ofBaseApp{
 	//ofVideoPlayer qtRenderer;
 	
 	ofxRGBDAlignment alignment;
-	ofxKinectPointcloudRecorder decoder;
+	ofxDepthImageRecorder decoder;
 	ofxRGBDVideoDepthSequence sequencer;
 	unsigned short* depthPixelDecodeBuffer;
 	
