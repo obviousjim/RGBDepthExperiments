@@ -5,6 +5,8 @@
 #include "ofxOpenNI.h"
 #include "ofxMSAInteractiveObjectDelegate.h"
 #include "ofxCvCheckerboardPreview.h"
+#include "ofxTimeline.h"
+#include "ofxTLDepthImageSequence.h"
 
 typedef enum {
 	TabCalibrate,
@@ -14,7 +16,7 @@ typedef enum {
 
 typedef enum {
 	RenderBW,
-	RenderColor,
+	RenderRainbow,
 	RenderPointCloud
 } DepthRenderMode;
 
@@ -43,8 +45,44 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button);
 	void objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y);
 	
+	void loadDirectory();
+	void loadDirectory(string path);
+	void loadSequenceForPlayback( int index );
+	void updateTakeButtons();
 	
-	RecorderTab currentTab;
+	void toggleRecord();
+	void captureCalibrationImage();
+
+	bool cameraFound;
+	
+	ofColor downColor;
+	ofColor idleColor;
+	ofColor hoverColor;
+	
+	float framewidth;
+	float frameheight;
+	float thirdWidth;
+	float btnheight;
+	float takeWidth;
+	
+	ofxMSAInteractiveObjectWithDelegate* btnSetDirectory;
+	
+	ofxMSAInteractiveObjectWithDelegate* btnCalibrateTab;
+	ofxMSAInteractiveObjectWithDelegate* btnRecordTab;
+	ofxMSAInteractiveObjectWithDelegate* btnPlaybackTab;
+	
+	ofxMSAInteractiveObjectWithDelegate* btnRecordBtn;
+	
+	ofxMSAInteractiveObjectWithDelegate* btnRenderBW;
+	ofxMSAInteractiveObjectWithDelegate* btnRenderRainbow;
+	ofxMSAInteractiveObjectWithDelegate* btnRenderPointCloud;
+	
+	vector<ofxMSAInteractiveObjectWithDelegate*> btnTakes;
+	
+	ofxTimeline timeline;
+	ofxTLDepthImageSequence depthSequence;
+	
+	RecorderTab currentTab;	
 	DepthRenderMode currentRenderMode;
 	
 	ofxOpenNIContext	recordContext;
