@@ -63,16 +63,8 @@ void testApp::setup(){
 	btnPlaybackTab->setHoverColor(hoverColor);
 	btnPlaybackTab->setDelegate(this);
 	
-	btnRecordBtn = new ofxMSAInteractiveObjectWithDelegate();
-	btnRecordBtn->setPosAndSize(0, btnheight*2+frameheight, framewidth, btnheight);
-	btnRecordBtn->setLabel("Record");
-	btnRecordBtn->setIdleColor(idleColor);
-	btnRecordBtn->setDownColor(downColor);
-	btnRecordBtn->setHoverColor(hoverColor);
-	btnRecordBtn->setDelegate(this);
-	
 	btnRenderBW = new ofxMSAInteractiveObjectWithDelegate();
-	btnRenderBW->setPosAndSize(0, btnheight*3+frameheight, thirdWidth, btnheight);
+	btnRenderBW->setPosAndSize(0, btnheight*2+frameheight, thirdWidth, btnheight);
 	btnRenderBW->setLabel("Blaick&White");
 	btnRenderBW->setIdleColor(idleColor);
 	btnRenderBW->setDownColor(downColor);
@@ -80,7 +72,7 @@ void testApp::setup(){
 	btnRenderBW->setDelegate(this);
 	
 	btnRenderRainbow = new ofxMSAInteractiveObjectWithDelegate();
-	btnRenderRainbow->setPosAndSize(thirdWidth, btnheight*3+frameheight, thirdWidth, btnheight);
+	btnRenderRainbow->setPosAndSize(thirdWidth, btnheight*2+frameheight, thirdWidth, btnheight);
 	btnRenderRainbow->setLabel("Rainbow");
 	btnRenderRainbow->setIdleColor(idleColor);
 	btnRenderRainbow->setDownColor(downColor);
@@ -88,13 +80,20 @@ void testApp::setup(){
 	btnRenderRainbow->setDelegate(this);
 	
 	btnRenderPointCloud = new ofxMSAInteractiveObjectWithDelegate();
-	btnRenderPointCloud->setPosAndSize(thirdWidth*2, btnheight*3+frameheight, thirdWidth, btnheight);
+	btnRenderPointCloud->setPosAndSize(thirdWidth*2, btnheight*2+frameheight, thirdWidth, btnheight);
 	btnRenderPointCloud->setLabel("Pointcloud");
 	btnRenderPointCloud->setIdleColor(idleColor);
 	btnRenderPointCloud->setDownColor(downColor);
 	btnRenderPointCloud->setHoverColor(hoverColor);
 	btnRenderPointCloud->setDelegate(this);
 	
+	btnRecordBtn = new ofxMSAInteractiveObjectWithDelegate();
+	btnRecordBtn->setPosAndSize(0, btnheight*3+frameheight, framewidth, btnheight);
+	btnRecordBtn->setLabel("Record");
+	btnRecordBtn->setIdleColor(idleColor);
+	btnRecordBtn->setDownColor(downColor);
+	btnRecordBtn->setHoverColor(hoverColor);
+	btnRecordBtn->setDelegate(this);
 
 	updateTakeButtons();
 	
@@ -112,8 +111,6 @@ void testApp::setup(){
 	}
 	else{
 		loadDirectory("depthframes");
-		//recorder.setRecordLocation("depthframes", "frame");
-		
 	}
 	recorder.setup();	
 }
@@ -170,7 +167,7 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 			captureCalibrationImage();
 		}
 		else if(currentTab == TabPlayback){
-			//TODO
+			//no need to do anything atm
 		}
 	}
 	else if(object == btnRenderBW){
@@ -183,14 +180,11 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 		currentRenderMode = RenderPointCloud;
 	}
 	else {
-		if (currentTab == TabPlayback) {
-			for(int i = 0; i < btnTakes.size(); i++){
-				if(object == btnTakes[i]){
-					loadSequenceForPlayback( i );
-				}
+		for(int i = 0; i < btnTakes.size(); i++){
+			if(object == btnTakes[i]){
+				loadSequenceForPlayback( i );
 			}
 		}
-
 	}
 }
 
@@ -204,8 +198,8 @@ void testApp::loadDirectory(){
 	if(r.bSuccess){
 		loadDirectory(r.getPath());
 	}
-
 }
+
 void testApp::loadDirectory(string path){
 	recorder.setRecordLocation(path, "frame");
 	btnSetDirectory->setLabel(path);
