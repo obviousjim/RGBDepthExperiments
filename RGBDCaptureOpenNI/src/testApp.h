@@ -7,6 +7,7 @@
 #include "ofxCvCheckerboardPreview.h"
 #include "ofxTimeline.h"
 #include "ofxTLDepthImageSequence.h"
+#include "ofxGrabCam.h"
 
 typedef enum {
 	TabCalibrate,
@@ -78,6 +79,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	ofxMSAInteractiveObjectWithDelegate* btnRenderPointCloud;
 	
 	vector<ofxMSAInteractiveObjectWithDelegate*> btnTakes;
+	
+	ofxGrabCam cam;
 	
 	ofxTimeline timeline;
 	ofxTLDepthImageSequence depthSequence;

@@ -6,7 +6,7 @@
 void testApp::setup(){
 
 	ofEnableAlphaBlending();
-	ofSetFrameRate(60);
+	ofSetFrameRate(30);
 	
 	ofBackground(255*.2);
 	
@@ -146,6 +146,7 @@ void testApp::objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y){
 void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int button){
 
 }
+
 void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button){
 	if(object == btnSetDirectory){
 		loadDirectory();
@@ -262,10 +263,36 @@ void testApp::draw(){
 	}
 	else if(currentTab == TabRecord){
 		//TODO render modes
+
 		recordDepth.draw(0,btnheight*2,640,480);
 	}
 	else {
-		depthSequence.currentDepthImage.draw(0, btnheight*2, 640, 480);
+		if(currentRenderMode == RenderBW){
+			depthSequence.currentDepthImage.draw(0, btnheight*2, 640, 480);
+		}
+		else {
+			if(depthSequence.currentDepthRaw != NULL){
+				glEnable(GL_DEPTH_TEST);
+				cam.begin(ofRectangle(0, btnheight*2, 640, 480));
+				glBegin(GL_POINTS);
+				glPointSize(4);
+				for(int y = 0; y < 480; y++){
+					for(int x = 0; x < 640; x++){
+						double ref_pix_size = 1;
+						double ref_distance = 1000;
+						double wz = depthSequence.currentDepthRaw[y*640+x];
+						double factor = 2 * ref_pix_size * wz / ref_distance;
+						double wx = (double)(x - 640/2) * factor;
+						double wy = (double)(y - 480/2) * factor;
+						glColor3f(1.0,1.0,1.0);
+						glVertex3f(wx,-wy,-wz);
+					}
+				}
+				glEnd();
+				cam.end();
+				glDisable(GL_DEPTH_TEST);
+			}
+		}
 		//draw timeline
 		timeline.draw();
 	}
