@@ -8,6 +8,7 @@
 #include "ofxTimeline.h"
 #include "ofxTLDepthImageSequence.h"
 #include "ofxGrabCam.h"
+#include "ofxGameCamera.h"
 
 typedef enum {
 	TabCalibrate,
@@ -54,7 +55,12 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void toggleRecord();
 	void captureCalibrationImage();
 
+	void drawPointcloud(bool fullscreen);
+	
+	string workingDirectory;
+	
 	bool cameraFound;
+	bool fullscreenPoints;
 	
 	ofColor downColor;
 	ofColor idleColor;
@@ -65,6 +71,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	float thirdWidth;
 	float btnheight;
 	float takeWidth;
+	
+	ofSoundPlayer highbeeper;
+	ofSoundPlayer lowbeeper;
 	
 	ofxMSAInteractiveObjectWithDelegate* btnSetDirectory;
 	
@@ -78,9 +87,14 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	ofxMSAInteractiveObjectWithDelegate* btnRenderRainbow;
 	ofxMSAInteractiveObjectWithDelegate* btnRenderPointCloud;
 	
+	ofxMSAInteractiveObjectWithDelegate* btnCaptureMode;
+	
 	vector<ofxMSAInteractiveObjectWithDelegate*> btnTakes;
 	
-	ofxGrabCam cam;
+	ofxCvCheckerboardPreview calibrationPreview;
+	
+
+	ofxGameCamera cam;
 	
 	ofxTimeline timeline;
 	ofxTLDepthImageSequence depthSequence;
@@ -91,6 +105,10 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	ofxOpenNIContext	recordContext;
 	ofxDepthGenerator	recordDepth;
 	ofxIRGenerator		recordImage;
+
+	bool inCaptureMode;
+	float lastClickTime;
+	int clicks;
 	
 	ofxDepthImageRecorder recorder;
 	ofxCvCheckerboardPreview calibrationFinder;
