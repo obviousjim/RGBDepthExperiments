@@ -115,6 +115,8 @@ void testApp::setup(){
 	btnCaptureMode->setDelegate(this);
 	
 	calibrationPreview.setup(10, 7, 2.5);
+	alignment.setup(10, 7, 2.5);
+	alignment.setupGui(0, btnheight*4+frameheight, ofGetWidth());
 	
 	timeline.setup();
 	timeline.setOffset(ofVec2f(0,btnRecordBtn->y+btnRecordBtn->height));
@@ -134,7 +136,6 @@ void testApp::setup(){
 	
 	updateTakeButtons();
 	
-//		cam.autosavePosition = true;
 	cam.loadCameraPosition();
 	
 	cam.speed = 25;
@@ -154,7 +155,6 @@ void testApp::update(){
 	if(currentTab == TabCalibrate){
 		recordImage.update();
 		calibrationImage.setFromPixels(recordImage.getIRPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
-		//irpix.setFromPixels(recordImage.getIRPixels(), 640, 480, OF_PIXELS_MONO);
 		calibrationPreview.setTestImage(calibrationImage);
 	}
 	else if(currentTab == TabRecord){
@@ -245,6 +245,7 @@ void testApp::loadDirectory(string path){
 	if(!dir.exists()){
 		dir.create(true);
 	}
+	alignment.loadState(workingDirectory+"calibration/alignmentsave.xml");
 	
 	btnSetDirectory->setLabel(path);
 	updateTakeButtons();
@@ -276,6 +277,9 @@ void testApp::captureCalibrationImage(){
 		char filename[1024];
 		sprintf(filename, "%s/calibration/calibration_image_%02d_%02d_%02d_%02d_%02d.png", workingDirectory.c_str(), ofGetMonth(), ofGetDay(), ofGetHours(), ofGetMinutes(), ofGetSeconds());
 		ofSaveImage( calibrationImage, filename);
+		alignment.addDepthCalibrationImage(filename);
+		alignment.saveState();
+		
 	}
 }
 
@@ -311,8 +315,7 @@ void testApp::draw(){
 	if(currentTab == TabCalibrate){
 		recordImage.draw(0, btnheight*2, 640, 480);
 		calibrationPreview.draw(0, btnheight*2);
-		//draw reprojection error
-		//float reprojectionError = calibrationPreview.getCalibration().getReprojectionError(0);
+		alignment.drawDepthImages();
 	}
 	else if(currentTab == TabRecord){
 		//TODO render modes

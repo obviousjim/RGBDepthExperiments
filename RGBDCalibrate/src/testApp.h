@@ -28,28 +28,26 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	ofxRGBDAlignment alignment;
 	ofxCvCheckerboardPreview leftBoardPreview;
 	ofxCvCheckerboardPreview rightBoardPreview;
-	ofxMSAInteractiveObjectWithDelegate* leftFrame;
-	ofxMSAInteractiveObjectWithDelegate* rightFrame;
-	ofxMSAInteractiveObjectWithDelegate* addPair;
 	
-	ofxMSAInteractiveObjectWithDelegate* saveCalibrationButton;
-	ofxMSAInteractiveObjectWithDelegate* leftSubpixelRefine;
-	ofxMSAInteractiveObjectWithDelegate* rightSubpixelRefine;
+	ofColor downColor;
+	ofColor idleColor;
+	ofColor hoverColor;
+	float topButtonWidth;
+	float topButtonHeight;
 	
-	int currentIndex;
-	bool leftLoaded;
-	bool rightLoaded;
-	ofDirectory leftDir;
-	ofDirectory rightDir;
-	ofImage leftImage;
-	ofImage rightImage;
+	ofxMSAInteractiveObjectWithDelegate* btnLoadWorkingDirectory;
+	ofxMSAInteractiveObjectWithDelegate* btnLoadRGBDirectory;
+	ofxMSAInteractiveObjectWithDelegate* btnLoadDepthDiectory;
+	ofxMSAInteractiveObjectWithDelegate* btnDiscardCurrentPair;
+	ofxMSAInteractiveObjectWithDelegate* btnSaveCalibration;
 	
-	void updateImages();
-	
-	void saveDirectories();
-	void loadDirectories();
-	void saveCalibration();
-	
+	string workingDirectory;
+	void loadWorkingDirectory();
+	void setWorkingDirectory(string path);
+
+	void loadRGBDirectory();
+	void loadDepthDirectory();
+		
 	void objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y);
     void objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y);
 	

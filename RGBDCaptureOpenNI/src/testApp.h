@@ -7,8 +7,8 @@
 #include "ofxCvCheckerboardPreview.h"
 #include "ofxTimeline.h"
 #include "ofxTLDepthImageSequence.h"
-#include "ofxGrabCam.h"
 #include "ofxGameCamera.h"
+#include "ofxRGBDAlignment.h"
 
 typedef enum {
 	TabCalibrate,
@@ -91,14 +91,15 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	
 	vector<ofxMSAInteractiveObjectWithDelegate*> btnTakes;
 	
-	ofxCvCheckerboardPreview calibrationPreview;
-	
 
 	ofxGameCamera cam;
 	
 	ofxTimeline timeline;
 	ofxTLDepthImageSequence depthSequence;
-	
+	ofxRGBDAlignment alignment;
+	ofxDepthImageRecorder recorder;
+	ofxCvCheckerboardPreview calibrationPreview;
+
 	RecorderTab currentTab;	
 	DepthRenderMode currentRenderMode;
 	
@@ -109,10 +110,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	bool inCaptureMode;
 	float lastClickTime;
 	int clicks;
-	
-	ofxDepthImageRecorder recorder;
-	ofxCvCheckerboardPreview calibrationFinder;
-	
+
 	bool recording;
 	unsigned short* frame;
 	ofImage calibrationImage;
