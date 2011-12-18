@@ -40,7 +40,10 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	ofxMSAInteractiveObjectWithDelegate* btnLoadDepthDiectory;
 	ofxMSAInteractiveObjectWithDelegate* btnDiscardCurrentPair;
 	ofxMSAInteractiveObjectWithDelegate* btnSaveCalibration;
-	
+
+	ofxMSAInteractiveObjectWithDelegate* btnTestRGBImage;
+	ofxMSAInteractiveObjectWithDelegate* btnTestDepthImage;
+
 	string workingDirectory;
 	void loadWorkingDirectory();
 	void setWorkingDirectory(string path);

@@ -75,47 +75,9 @@
 /* Begin PBXFileReference section */
 		A60F6C5314760040007E1206 /* ofxCvCheckerboardPreview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCvCheckerboardPreview.cpp; sourceTree = "<group>"; };
 		A60F6C5414760040007E1206 /* ofxCvCheckerboardPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCvCheckerboardPreview.h; sourceTree = "<group>"; };
-		A60F6C6514760064007E1206 /* config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config; sourceTree = "<group>"; };
-		A60F6C6614760064007E1206 /* description */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = description; sourceTree = "<group>"; };
-		A60F6C6714760064007E1206 /* FETCH_HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FETCH_HEAD; sourceTree = "<group>"; };
-		A60F6C6814760064007E1206 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		A60F6C6A14760064007E1206 /* applypatch-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "applypatch-msg.sample"; sourceTree = "<group>"; };
-		A60F6C6B14760064007E1206 /* commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "commit-msg.sample"; sourceTree = "<group>"; };
-		A60F6C6C14760064007E1206 /* post-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-commit.sample"; sourceTree = "<group>"; };
-		A60F6C6D14760064007E1206 /* post-receive.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-receive.sample"; sourceTree = "<group>"; };
-		A60F6C6E14760064007E1206 /* post-update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-update.sample"; sourceTree = "<group>"; };
-		A60F6C6F14760064007E1206 /* pre-applypatch.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-applypatch.sample"; sourceTree = "<group>"; };
-		A60F6C7014760064007E1206 /* pre-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-commit.sample"; sourceTree = "<group>"; };
-		A60F6C7114760064007E1206 /* pre-rebase.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-rebase.sample"; sourceTree = "<group>"; };
-		A60F6C7214760064007E1206 /* prepare-commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "prepare-commit-msg.sample"; sourceTree = "<group>"; };
-		A60F6C7314760064007E1206 /* update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update.sample; sourceTree = "<group>"; };
-		A60F6C7414760064007E1206 /* index */ = {isa = PBXFileReference; lastKnownFileType = file; path = index; sourceTree = "<group>"; };
-		A60F6C7614760064007E1206 /* exclude */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = exclude; sourceTree = "<group>"; };
-		A60F6C7814760064007E1206 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		A60F6C7B14760064007E1206 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A60F6C7E14760064007E1206 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A60F6C8114760064007E1206 /* df680b51988687ecad5b882df2faff0fb2905d */ = {isa = PBXFileReference; lastKnownFileType = file; path = df680b51988687ecad5b882df2faff0fb2905d; sourceTree = "<group>"; };
-		A60F6C8314760064007E1206 /* ee4630f6f93ea951892fbfad4f71520dfe1b77 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ee4630f6f93ea951892fbfad4f71520dfe1b77; sourceTree = "<group>"; };
-		A60F6C8514760064007E1206 /* c7fa9dae2b4f2c69c7786542f8bf899a484064 */ = {isa = PBXFileReference; lastKnownFileType = file; path = c7fa9dae2b4f2c69c7786542f8bf899a484064; sourceTree = "<group>"; };
-		A60F6C8714760064007E1206 /* 645ee96be629623deeabe6369fc807664fa97f */ = {isa = PBXFileReference; lastKnownFileType = file; path = 645ee96be629623deeabe6369fc807664fa97f; sourceTree = "<group>"; };
-		A60F6C8914760064007E1206 /* f0e28e4fc022699e096fe8f9c8e973e3ce3c10 */ = {isa = PBXFileReference; lastKnownFileType = file; path = f0e28e4fc022699e096fe8f9c8e973e3ce3c10; sourceTree = "<group>"; };
-		A60F6C8B14760064007E1206 /* 6bbdda4a59adb7b6e47f4c1d2405ee2c725172 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 6bbdda4a59adb7b6e47f4c1d2405ee2c725172; sourceTree = "<group>"; };
-		A60F6C8E14760064007E1206 /* pack-8351b34f325f7e44716e35048a67edb5647ca5c4.idx */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pack-8351b34f325f7e44716e35048a67edb5647ca5c4.idx"; sourceTree = "<group>"; };
-		A60F6C8F14760064007E1206 /* pack-8351b34f325f7e44716e35048a67edb5647ca5c4.pack */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pack-8351b34f325f7e44716e35048a67edb5647ca5c4.pack"; sourceTree = "<group>"; };
-		A60F6C9014760064007E1206 /* ORIG_HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ORIG_HEAD; sourceTree = "<group>"; };
-		A60F6C9114760064007E1206 /* packed-refs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "packed-refs"; sourceTree = "<group>"; };
-		A60F6C9414760064007E1206 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A60F6C9714760064007E1206 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		A60F6C9814760064007E1206 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		A60F6C9A14760064007E1206 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		A60F6C9B14760064007E1206 /* changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = changelog.txt; sourceTree = "<group>"; };
-		A60F6C9C14760064007E1206 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
-		A60F6C9D14760064007E1206 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
-		A60F6C9E14760064007E1206 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		A60F6CA014760064007E1206 /* ofxMSAInteractiveObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxMSAInteractiveObject.cpp; sourceTree = "<group>"; };
 		A60F6CA114760064007E1206 /* ofxMSAInteractiveObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMSAInteractiveObject.h; sourceTree = "<group>"; };
 		A60F6CA214760064007E1206 /* ofxMSAInteractiveObjectDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMSAInteractiveObjectDelegate.h; sourceTree = "<group>"; };
-		A60F6D8F14760070007E1206 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A60F6D9314760070007E1206 /* Calibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calibration.h; sourceTree = "<group>"; };
 		A60F6D9414760070007E1206 /* ContourFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourFinder.h; sourceTree = "<group>"; };
 		A60F6D9514760070007E1206 /* Distance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Distance.h; sourceTree = "<group>"; };
@@ -282,232 +244,11 @@
 		A60F6C6214760064007E1206 /* ofxMSAInteractiveObject */ = {
 			isa = PBXGroup;
 			children = (
-				A60F6C6314760064007E1206 /* .git */,
-				A60F6C9A14760064007E1206 /* .gitignore */,
-				A60F6C9B14760064007E1206 /* changelog.txt */,
-				A60F6C9C14760064007E1206 /* install.xml */,
-				A60F6C9D14760064007E1206 /* LICENSE.txt */,
-				A60F6C9E14760064007E1206 /* README */,
 				A60F6C9F14760064007E1206 /* src */,
 			);
 			name = ofxMSAInteractiveObject;
 			path = ../../../addons/ofxMSAInteractiveObject;
 			sourceTree = SOURCE_ROOT;
-		};
-		A60F6C6314760064007E1206 /* .git */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C6414760064007E1206 /* branches */,
-				A60F6C6514760064007E1206 /* config */,
-				A60F6C6614760064007E1206 /* description */,
-				A60F6C6714760064007E1206 /* FETCH_HEAD */,
-				A60F6C6814760064007E1206 /* HEAD */,
-				A60F6C6914760064007E1206 /* hooks */,
-				A60F6C7414760064007E1206 /* index */,
-				A60F6C7514760064007E1206 /* info */,
-				A60F6C7714760064007E1206 /* logs */,
-				A60F6C7F14760064007E1206 /* objects */,
-				A60F6C9014760064007E1206 /* ORIG_HEAD */,
-				A60F6C9114760064007E1206 /* packed-refs */,
-				A60F6C9214760064007E1206 /* refs */,
-			);
-			path = .git;
-			sourceTree = "<group>";
-		};
-		A60F6C6414760064007E1206 /* branches */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = branches;
-			sourceTree = "<group>";
-		};
-		A60F6C6914760064007E1206 /* hooks */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C6A14760064007E1206 /* applypatch-msg.sample */,
-				A60F6C6B14760064007E1206 /* commit-msg.sample */,
-				A60F6C6C14760064007E1206 /* post-commit.sample */,
-				A60F6C6D14760064007E1206 /* post-receive.sample */,
-				A60F6C6E14760064007E1206 /* post-update.sample */,
-				A60F6C6F14760064007E1206 /* pre-applypatch.sample */,
-				A60F6C7014760064007E1206 /* pre-commit.sample */,
-				A60F6C7114760064007E1206 /* pre-rebase.sample */,
-				A60F6C7214760064007E1206 /* prepare-commit-msg.sample */,
-				A60F6C7314760064007E1206 /* update.sample */,
-			);
-			path = hooks;
-			sourceTree = "<group>";
-		};
-		A60F6C7514760064007E1206 /* info */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C7614760064007E1206 /* exclude */,
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		A60F6C7714760064007E1206 /* logs */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C7814760064007E1206 /* HEAD */,
-				A60F6C7914760064007E1206 /* refs */,
-			);
-			path = logs;
-			sourceTree = "<group>";
-		};
-		A60F6C7914760064007E1206 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C7A14760064007E1206 /* heads */,
-				A60F6C7C14760064007E1206 /* remotes */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		A60F6C7A14760064007E1206 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C7B14760064007E1206 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		A60F6C7C14760064007E1206 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C7D14760064007E1206 /* origin */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		A60F6C7D14760064007E1206 /* origin */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C7E14760064007E1206 /* master */,
-			);
-			path = origin;
-			sourceTree = "<group>";
-		};
-		A60F6C7F14760064007E1206 /* objects */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8014760064007E1206 /* 30 */,
-				A60F6C8214760064007E1206 /* 87 */,
-				A60F6C8414760064007E1206 /* 8c */,
-				A60F6C8614760064007E1206 /* a0 */,
-				A60F6C8814760064007E1206 /* a3 */,
-				A60F6C8A14760064007E1206 /* af */,
-				A60F6C8C14760064007E1206 /* info */,
-				A60F6C8D14760064007E1206 /* pack */,
-			);
-			path = objects;
-			sourceTree = "<group>";
-		};
-		A60F6C8014760064007E1206 /* 30 */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8114760064007E1206 /* df680b51988687ecad5b882df2faff0fb2905d */,
-			);
-			path = 30;
-			sourceTree = "<group>";
-		};
-		A60F6C8214760064007E1206 /* 87 */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8314760064007E1206 /* ee4630f6f93ea951892fbfad4f71520dfe1b77 */,
-			);
-			path = 87;
-			sourceTree = "<group>";
-		};
-		A60F6C8414760064007E1206 /* 8c */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8514760064007E1206 /* c7fa9dae2b4f2c69c7786542f8bf899a484064 */,
-			);
-			path = 8c;
-			sourceTree = "<group>";
-		};
-		A60F6C8614760064007E1206 /* a0 */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8714760064007E1206 /* 645ee96be629623deeabe6369fc807664fa97f */,
-			);
-			path = a0;
-			sourceTree = "<group>";
-		};
-		A60F6C8814760064007E1206 /* a3 */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8914760064007E1206 /* f0e28e4fc022699e096fe8f9c8e973e3ce3c10 */,
-			);
-			path = a3;
-			sourceTree = "<group>";
-		};
-		A60F6C8A14760064007E1206 /* af */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8B14760064007E1206 /* 6bbdda4a59adb7b6e47f4c1d2405ee2c725172 */,
-			);
-			path = af;
-			sourceTree = "<group>";
-		};
-		A60F6C8C14760064007E1206 /* info */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		A60F6C8D14760064007E1206 /* pack */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C8E14760064007E1206 /* pack-8351b34f325f7e44716e35048a67edb5647ca5c4.idx */,
-				A60F6C8F14760064007E1206 /* pack-8351b34f325f7e44716e35048a67edb5647ca5c4.pack */,
-			);
-			path = pack;
-			sourceTree = "<group>";
-		};
-		A60F6C9214760064007E1206 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C9314760064007E1206 /* heads */,
-				A60F6C9514760064007E1206 /* remotes */,
-				A60F6C9914760064007E1206 /* tags */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		A60F6C9314760064007E1206 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C9414760064007E1206 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		A60F6C9514760064007E1206 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C9614760064007E1206 /* origin */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		A60F6C9614760064007E1206 /* origin */ = {
-			isa = PBXGroup;
-			children = (
-				A60F6C9714760064007E1206 /* HEAD */,
-				A60F6C9814760064007E1206 /* master */,
-			);
-			path = origin;
-			sourceTree = "<group>";
-		};
-		A60F6C9914760064007E1206 /* tags */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = tags;
-			sourceTree = "<group>";
 		};
 		A60F6C9F14760064007E1206 /* src */ = {
 			isa = PBXGroup;
@@ -534,7 +275,6 @@
 			isa = PBXGroup;
 			children = (
 				A60F6F33147607AC007E1206 /* opencv */,
-				A60F6D8F14760070007E1206 /* .gitignore */,
 				A60F6D9014760070007E1206 /* ofxCv */,
 			);
 			path = libs;

@@ -7,7 +7,7 @@ void testApp::setup(){
 
 	ofEnableAlphaBlending();
 	ofSetFrameRate(60);
-	ofToggleFullscreen();
+	//ofToggleFullscreen();
 	
 	//ofBackground(255*.2);
 	ofBackground(255*0);
@@ -30,7 +30,7 @@ void testApp::setup(){
 	lowbeeper.setVolume(100);
 	highbeeper.setVolume(100);
 	
-	currentTab = TabRecord;
+	currentTab = TabCalibrate;
 
 	downColor = ofColor(255, 120, 0);
 	idleColor = ofColor(220, 200, 200);
@@ -141,6 +141,8 @@ void testApp::setup(){
 	cam.speed = 25;
 	cam.setFarClip(50000);
 	recorder.setup();	
+		
+	
 }
 
 
@@ -158,12 +160,10 @@ void testApp::update(){
 		calibrationPreview.setTestImage(calibrationImage);
 	}
 	else if(currentTab == TabRecord){
-//		recordImage.update();
 		recordDepth.update();	
 	}
 	
 	if(recordDepth.isFrameNew() && recording){
-		//recorder.addImage( (unsigned short*)recordDepth.getRawDepthPixels(), recordImage.getIRPixels() );
 		recorder.addImage( (unsigned short*)recordDepth.getRawDepthPixels());
 	}
 }
@@ -245,7 +245,7 @@ void testApp::loadDirectory(string path){
 	if(!dir.exists()){
 		dir.create(true);
 	}
-	alignment.loadState(workingDirectory+"calibration/alignmentsave.xml");
+	alignment.loadState(workingDirectory+"/calibration/alignmentsave.xml");
 	
 	btnSetDirectory->setLabel(path);
 	updateTakeButtons();
@@ -273,11 +273,13 @@ void testApp::toggleRecord(){
 //--------------------------------------------------------------
 void testApp::captureCalibrationImage(){
 	if(recordImage.getIRPixels() != NULL){
+		
 		calibrationImage.setFromPixels(recordImage.getIRPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
 		char filename[1024];
 		sprintf(filename, "%s/calibration/calibration_image_%02d_%02d_%02d_%02d_%02d.png", workingDirectory.c_str(), ofGetMonth(), ofGetDay(), ofGetHours(), ofGetMinutes(), ofGetSeconds());
 		ofSaveImage( calibrationImage, filename);
 		alignment.addDepthCalibrationImage(filename);
+		alignment.generateAlignment();
 		alignment.saveState();
 		
 	}
@@ -396,11 +398,11 @@ void testApp::drawPointcloud(bool fullscreen){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	if(key == ' '){
-		if(currentTab == TabRecord){
-			toggleRecord();
-		}
-		else if(currentTab == TabCalibrate){
+		if(currentTab == TabCalibrate){
 			captureCalibrationImage();
+		}
+		else if(currentTab == TabRecord){
+			toggleRecord();
 		}
 		else if(currentTab == TabPlayback){
 			timeline.togglePlay();
@@ -411,6 +413,11 @@ void testApp::keyPressed(int key){
 		captureCalibrationImage();
     }
 	
+	if(key == OF_KEY_DEL && currentTab == TabCalibrate){
+		alignment.discardCurrentPair();
+		alignment.saveState();
+	}
+	   
 	if(key == 'f'){
 		fullscreenPoints = !fullscreenPoints;
 		if(fullscreenPoints){
@@ -505,6 +512,7 @@ void testApp::mouseReleased(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
 	timeline.setWidth(w);
+	alignment.setMaxDrawWidth(w);
 }
 
 //--------------------------------------------------------------

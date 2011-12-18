@@ -54,41 +54,6 @@ void testApp::setup(){
 	btnSaveCalibration->setHoverColor(hoverColor);
 	btnSaveCalibration->setPosAndSize(topButtonWidth*4, 0, topButtonWidth, topButtonHeight);
 	
-	/*
-	leftLoaded = false;
-	rightLoaded = false;
-	
-	leftFrame = new ofxMSAInteractiveObjectWithDelegate();
-	leftFrame->disableAppEvents();
-	leftFrame->setup();
-	leftFrame->setDelegate(this);
-	
-	rightFrame = new ofxMSAInteractiveObjectWithDelegate();
-	rightFrame->disableAppEvents();
-	rightFrame->setup();
-	rightFrame->setDelegate(this);
-	
-	addPair = new ofxMSAInteractiveObjectWithDelegate();
-	addPair->disableAppEvents();
-	addPair->setup();
-	addPair->setDelegate(this);	
-
-	saveCalibrationButton = new ofxMSAInteractiveObjectWithDelegate();;
-	saveCalibrationButton->disableAppEvents();
-	saveCalibrationButton->setup();
-	saveCalibrationButton->setDelegate(this);	
-	
-	leftSubpixelRefine = new ofxMSAInteractiveObjectWithDelegate();
-	leftSubpixelRefine->disableAppEvents();
-	leftSubpixelRefine->setup();
-	leftSubpixelRefine->setDelegate(this);	
-	
-	rightSubpixelRefine = new ofxMSAInteractiveObjectWithDelegate();
-	rightSubpixelRefine->disableAppEvents();
-	rightSubpixelRefine->setup();
-	rightSubpixelRefine->setDelegate(this);	
-	*/
-	
 	leftBoardPreview.setup(10, 7, 2.5);
 	rightBoardPreview.setup(10, 7, 2.5);
 	alignment.setup(10, 7, 2.5);
@@ -98,8 +63,7 @@ void testApp::setup(){
 	if(curdir.loadFile("settings.xml")){
 		setWorkingDirectory(curdir.getValue("workingDirectory", ""));
 	}
-	
-//	loadDirectories();
+
 }
 
 //--------------------------------------------------------------
@@ -112,52 +76,6 @@ void testApp::draw(){
 	ofBackground(0);
 	ofSetColor(255);
 	alignment.drawGui();
-	
-	
-//	if(leftLoaded){
-//		leftImage.draw(*leftFrame);
-//		leftBoardPreview.draw(*leftFrame);
-//	}
-//	
-//	if(rightLoaded){
-//		rightImage.draw(*rightFrame);
-//		rightBoardPreview.draw(*rightFrame);
-//	}
-	
-//	ofNoFill();
-//	ofSetColor(255, 0, 0);
-
-//	ofRect( *addPair );
-//	ofRect( *leftFrame );
-//	ofRect( *rightFrame );
-	
-//	ofRect( *leftSubpixelRefine );
-//	ofRect( *rightSubpixelRefine );
-	
-//	ofDrawBitmapString("Save Pair", ofPoint(20,9));
-//	ofDrawBitmapString("Export Calibration File", ofPoint(ofGetWidth()/2+20,9));
-//	ofDrawBitmapString("Load Kinect Checkerboard Image", ofPoint(20,29));
-//	ofDrawBitmapString("Load External Checkerboard Image", ofPoint(ofGetWidth()/2+20,29));
-//	
-//	ofDrawBitmapString("Left Subpixel Refine: " + ofToString(leftBoardPreview.getSmallestSquarePixelsize()), ofPoint(20,ofGetHeight()-9));
-//	ofDrawBitmapString("Right Subpixel Refine: " + ofToString(rightBoardPreview.getSmallestSquarePixelsize()), ofPoint(ofGetWidth()/2+20,ofGetHeight()-9));
-	
-	
-//	if(leftLoaded && rightLoaded){
-//		//draw an error rectangle
-//		if(leftDir.numFiles() != rightDir.numFiles()){
-//			ofSetColor(255, 100, 0, 50);
-//			ofRect(0,20, ofGetWidth(), ofGetHeight()-40);
-//			ofSetColor(255, 0, 0);
-//			ofDrawBitmapString("WARNING: Directory sizes do not match", ofVec2f(40, ofGetHeight()/2));
-//		}
-//		ofSetColor(255);
-//		ofDrawBitmapString("Reprojection Error: " + ofToString(alignment.getKinectCalibration().getReprojectionError(), 4), 
-//						   20, ofGetHeight()-40);
-//		ofDrawBitmapString("Reprojection Error: " + ofToString(alignment.getExternalCalibration().getReprojectionError(), 4), 
-//						   ofGetWidth()/2+20, ofGetHeight()-40);
-//	}
-	
 }
 
 //--------------------------------------------------------------
@@ -166,30 +84,11 @@ void testApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
-	
+	if(key == OF_KEY_DEL){
+		alignment.discardCurrentPair();
+		alignment.saveState();
+	}
 }
-
-//void testApp::updateImages(){
-//	bool success;
-//	success = leftImage.loadImage(leftDir.getPath(currentIndex));
-//	success = success && rightImage.loadImage(rightDir.getPath(currentIndex));
-//	if(success){
-//		leftImage.setImageType(OF_IMAGE_GRAYSCALE);
-//		rightImage.setImageType(OF_IMAGE_GRAYSCALE);
-//		leftBoardPreview.setTestImage(leftImage.getPixelsRef());
-//		rightBoardPreview.setTestImage(rightImage.getPixelsRef());
-//	}
-//}
-
-//--------------------------------------------------------------
-//void testApp::saveDirectories(){
-//	ofxXmlSettings settings;
-//	settings.addValue("left", leftDir.getOriginalDirectory());
-//	settings.addValue("right", rightDir.getOriginalDirectory());
-//	settings.saveFile("settings.xml");
-//}
-
-//--------------------------------------------------------------
 
 //--------------------------------------------------------------
 void testApp::loadWorkingDirectory(){
@@ -199,6 +98,7 @@ void testApp::loadWorkingDirectory(){
 	}
 }
 
+//--------------------------------------------------------------
 void testApp::setWorkingDirectory(string path){
 	workingDirectory = path;
 	alignment.loadState(path+"/alignment_config.xml");
@@ -209,46 +109,26 @@ void testApp::setWorkingDirectory(string path){
 	
 }
 
+//--------------------------------------------------------------
 void testApp::loadRGBDirectory(){
 	ofFileDialogResult r = ofSystemLoadDialog("Load RGB Directory", true);
 	if(r.bSuccess){
 		alignment.clearRGBImages();
 		alignment.addRGBCalibrationDirectory(r.getPath());
+		alignment.saveState();
 		
 	}		
 }	
 
+//--------------------------------------------------------------
 void testApp::loadDepthDirectory(){
-	ofFileDialogResult r = ofSystemLoadDialog("Load RGB Directory", true);
+	ofFileDialogResult r = ofSystemLoadDialog("Load Depth Directory", true);
 	if(r.bSuccess){
 		alignment.clearDepthImages();
 		alignment.addDepthCalibrationDirectory(r.getPath());		
-	}		
-	
+		alignment.saveState();
+	}
 }
-
-	
-//	ofxXmlSettings settings;
-//	if(settings.loadFile("settings.xml")){
-//		leftDir.open(settings.getValue("left", ""));
-//		rightDir.open(settings.getValue("right", ""));
-//		if(leftDir.exists() && rightDir.exists()){
-//			
-//			leftDir.allowExt("png");
-//			leftDir.allowExt("jpg");
-//			leftDir.listDir();
-//			leftLoaded = true;
-//			
-//			rightDir.allowExt("png");
-//			rightDir.allowExt("jpg");
-//			rightDir.listDir();
-//			rightLoaded = true;
-//			currentIndex = 0;
-//			
-//			updateImages();
-//		}
-//	}
-//}
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
@@ -296,6 +176,7 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 		loadDepthDirectory();
 	}
 	else if(object == btnDiscardCurrentPair){
+		alignment.discardCurrentPair();
 		alignment.saveState();
 	}
 	else if(object == btnSaveCalibration){
