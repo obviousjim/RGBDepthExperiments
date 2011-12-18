@@ -8,14 +8,16 @@ void testApp::setup(){
 	
 	allLoaded = false;
 
-	alignment.setup(10, 7, 2.5);
+	//renderer.setup(10, 7, 2.5);
 	player.setPlayer(ofPtr<ofBaseVideoPlayer>(&qtRenderer));
 	ofFileDialogResult r;
 	ofSystemAlertDialog("Select Calibration Directory");
 	
 	r = ofSystemLoadDialog("Calibration Directory", true);
 	if(r.bSuccess){
-		alignment.loadCalibration(r.getPath());
+		//renderer.loadCalibration(r.getPath());
+		renderer.setup(r.getPath());
+
 	}
 	else{
 		return;
@@ -49,7 +51,8 @@ void testApp::setup(){
 	allLoaded = true;
 	
 	
-	alignment.setColorTexture(player);
+	//renderer.setColorTexture(player);
+	renderer.setRGBTexture(player);
 	
 	player.play();
 	
@@ -85,14 +88,15 @@ void testApp::update(){
 	qtRenderer.update();
 	if(qtRenderer.isFrameNew()){
 		
-		//cout << "current frame number " << player.getCurrentFrame() << endl;
+//		cout << "current frame number " << player.getCurrentFrame() << endl;
 		
 		int depthFrame = sequencer.getDepthFrameForVideoFrame(player.getCurrentFrame());
 		depthFrame = ofClamp(depthFrame, 0, depthImages.numFiles()-1);
 		//cout << "loading depth frame " << depthFrame << " for video frame " << player.getCurrentFrame() << endl;
 		decoder.readCompressedPng(depthImages.getPath(depthFrame), depthPixelDecodeBuffer);
-		processDepthFrame();
-		alignment.update( depthPixelDecodeBuffer );
+		//processDepthFrame();
+		renderer.setDepthImage(depthPixelDecodeBuffer);
+		renderer.update();
 	}
 }
 
@@ -118,24 +122,20 @@ void testApp::draw(){
 	cam.begin();
 	glEnable(GL_DEPTH_TEST);
 	ofScale(1, -1, 1);
-	if(alignment.applyShader){
-		alignment.rgbdShader.begin();
+	if(renderer.applyShader){
+		renderer.rgbdShader.begin();
 	}
 	
 	qtRenderer.bind();
-	alignment.getMesh().drawFaces();
+	renderer.getMesh().drawFaces();
 	qtRenderer.unbind();
-	if(alignment.applyShader){
-		alignment.rgbdShader.end();
+	if(renderer.applyShader){
+		renderer.rgbdShader.end();
 	}
 	
 	glDisable(GL_DEPTH_TEST);
 	cam.end();
 	
-	//drawAsTriangleMesh();
-	//drawWireframe();
-	//qtRenderer.draw(0, 0);
-
 	timeline.draw();
 
 	ofSetColor(255);
@@ -151,7 +151,7 @@ void testApp::drawWireframe(){
 	glEnable(GL_DEPTH_TEST);
 
 	qtRenderer.bind();
-	alignment.getMesh().drawWireframe();
+	renderer.getMesh().drawWireframe();
 	qtRenderer.unbind();
 	
 	glDisable(GL_DEPTH_TEST);
@@ -171,9 +171,9 @@ void testApp::drawAsTriangleMesh(){
 	qtRenderer.bind();
 //	player.getTextureReference().bind();
 	
-	vector<ofVec3f> & vertices = alignment.getMesh().getVertices();
-	vector<ofIndexType> & indices = alignment.getMesh().getIndices();
-	vector<ofVec2f> & texcoords = alignment.getMesh().getTexCoords();
+	vector<ofVec3f> & vertices = renderer.getMesh().getVertices();
+	vector<ofIndexType> & indices = renderer.getMesh().getIndices();
+	vector<ofVec2f> & texcoords = renderer.getMesh().getTexCoords();
 	
 	glEnable(GL_DEPTH_TEST);
 	
@@ -202,8 +202,8 @@ void testApp::drawAsTriangleMesh(){
 	qtRenderer.unbind();
 	//player.getTextureReference().unbind();
 	
-	//	alignment.drawMesh();
-	//	alignment.drawPointCloud();
+	//	renderer.drawMesh();
+	//	renderer.drawPointCloud();
 	
 	ofPopMatrix();
 	
@@ -221,9 +221,9 @@ void testApp::drawAsScanlines(){
 	qtRenderer.bind();
 //	player.getTextureReference().bind();
 	
-	vector<ofVec3f> & vertices = alignment.getMesh().getVertices();
-	vector<ofIndexType> & indices = alignment.getMesh().getIndices();
-	vector<ofVec2f> & texcoords = alignment.getMesh().getTexCoords();
+	vector<ofVec3f> & vertices = renderer.getMesh().getVertices();
+	vector<ofIndexType> & indices = renderer.getMesh().getIndices();
+	vector<ofVec2f> & texcoords = renderer.getMesh().getTexCoords();
 	
 	glEnable(GL_DEPTH_TEST);
 	
@@ -284,28 +284,28 @@ void testApp::keyPressed(int key){
 	}
 	
 	if(key == '='){
-		alignment.applyShader = !alignment.applyShader;
+		renderer.applyShader = !renderer.applyShader;
 	}
 	
 	if(key == OF_KEY_UP){
-		alignment.yshift++;
-		alignment.update();
-		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
+		renderer.yshift++;
+		renderer.update();
+		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
 	}
 	if(key == OF_KEY_DOWN){
-		alignment.yshift--;
-		alignment.update();
-		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
+		renderer.yshift--;
+		renderer.update();
+		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
 	}
 	if(key == OF_KEY_RIGHT){
-		alignment.xshift++;
-		alignment.update();
-		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
+		renderer.xshift++;
+		renderer.update();
+		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
 	}
 	if(key == OF_KEY_LEFT){
-		alignment.xshift--;
-		alignment.update();
-		cout << "shifts: " << alignment.xshift << " " << alignment.yshift << endl;
+		renderer.xshift--;
+		renderer.update();
+		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
 	}
 	
 }

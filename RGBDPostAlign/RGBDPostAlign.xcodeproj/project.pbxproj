@@ -12,6 +12,8 @@
 		A60F69DD1475E6DC007E1206 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DC1475E6DC007E1206 /* QTKit.framework */; };
 		A60F69DF1475E6E1007E1206 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DE1475E6E1007E1206 /* CoreVideo.framework */; };
 		A628E1E1148A796400F2AC7A /* ofxTLColors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A628E1DF148A796400F2AC7A /* ofxTLColors.cpp */; };
+		A6477E34149D7E2800908B2B /* ofxDepthImageRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */; };
+		A6477E7B149D7E5500908B2B /* ofxTextInputField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6477E79149D7E5500908B2B /* ofxTextInputField.cpp */; };
 		A69D961F1471F945005D9265 /* ofxEasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96011471F945005D9265 /* ofxEasing.cpp */; };
 		A69D96201471F945005D9265 /* ofxEasingBack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96031471F945005D9265 /* ofxEasingBack.cpp */; };
 		A69D96211471F945005D9265 /* ofxEasingBounce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96051471F945005D9265 /* ofxEasingBounce.cpp */; };
@@ -61,7 +63,6 @@
 		E7DF56BD147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF56B9147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp */; };
 		E7DF56BE147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF56BB147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp */; };
 		E7DF5789147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF5787147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */; };
-		E7E8ABDC14783C760053509D /* ofxKinectPointcloudRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7E8ABDA14783C760053509D /* ofxKinectPointcloudRecorder.cpp */; };
 		E7FBD0CC13D61DC900938471 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7FBD0C513D61DC900938471 /* tinyxml.cpp */; };
 		E7FBD0CD13D61DC900938471 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7FBD0C713D61DC900938471 /* tinyxmlerror.cpp */; };
 		E7FBD0CE13D61DC900938471 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7FBD0C813D61DC900938471 /* tinyxmlparser.cpp */; };
@@ -107,6 +108,10 @@
 		A60F69DE1475E6E1007E1206 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A628E1DF148A796400F2AC7A /* ofxTLColors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLColors.cpp; sourceTree = "<group>"; };
 		A628E1E0148A796400F2AC7A /* ofxTLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLColors.h; sourceTree = "<group>"; };
+		A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageRecorder.cpp; sourceTree = "<group>"; };
+		A6477E33149D7E2800908B2B /* ofxDepthImageRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDepthImageRecorder.h; sourceTree = "<group>"; };
+		A6477E79149D7E5500908B2B /* ofxTextInputField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTextInputField.cpp; sourceTree = "<group>"; };
+		A6477E7A149D7E5500908B2B /* ofxTextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTextInputField.h; sourceTree = "<group>"; };
 		A69D96001471F945005D9265 /* easing_terms_of_use.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = easing_terms_of_use.html; sourceTree = "<group>"; };
 		A69D96011471F945005D9265 /* ofxEasing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxEasing.cpp; sourceTree = "<group>"; };
 		A69D96021471F945005D9265 /* ofxEasing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxEasing.h; sourceTree = "<group>"; };
@@ -196,8 +201,6 @@
 		E7DF56BC147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLVideoDepthAlignmentScrubber.h; sourceTree = "<group>"; };
 		E7DF5787147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDVideoDepthSequence.cpp; sourceTree = "<group>"; };
 		E7DF5788147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDVideoDepthSequence.h; sourceTree = "<group>"; };
-		E7E8ABDA14783C760053509D /* ofxKinectPointcloudRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxKinectPointcloudRecorder.cpp; sourceTree = "<group>"; };
-		E7E8ABDB14783C760053509D /* ofxKinectPointcloudRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxKinectPointcloudRecorder.h; sourceTree = "<group>"; };
 		E7FBD0C313D61DC900938471 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		E7FBD0C513D61DC900938471 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
 		E7FBD0C613D61DC900938471 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
@@ -253,6 +256,24 @@
 			name = src;
 			path = ../../../addons/ofxQTKitVideoPlayer/src;
 			sourceTree = SOURCE_ROOT;
+		};
+		A6477E37149D7E5500908B2B /* ofxTextInputField */ = {
+			isa = PBXGroup;
+			children = (
+				A6477E78149D7E5500908B2B /* src */,
+			);
+			name = ofxTextInputField;
+			path = ../../../addons/ofxTextInputField;
+			sourceTree = SOURCE_ROOT;
+		};
+		A6477E78149D7E5500908B2B /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A6477E79149D7E5500908B2B /* ofxTextInputField.cpp */,
+				A6477E7A149D7E5500908B2B /* ofxTextInputField.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
 		};
 		A69D95BE1471F945005D9265 /* ofxTween */ = {
 			isa = PBXGroup;
@@ -385,8 +406,8 @@
 			children = (
 				E7DF5787147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */,
 				E7DF5788147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.h */,
-				E7E8ABDB14783C760053509D /* ofxKinectPointcloudRecorder.h */,
-				E7E8ABDA14783C760053509D /* ofxKinectPointcloudRecorder.cpp */,
+				A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */,
+				A6477E33149D7E2800908B2B /* ofxDepthImageRecorder.h */,
 			);
 			name = src;
 			path = ../../../addons/ofxRGBDepth/src;
@@ -415,6 +436,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				A6477E37149D7E5500908B2B /* ofxTextInputField */,
 				A69D9AD514721A81005D9265 /* ofxMSAInteractiveObject */,
 				A69D9A92147212D4005D9265 /* ofxRGBDepth */,
 				A69D99F51471F96D005D9265 /* ofxRange */,
@@ -675,11 +697,12 @@
 				A69D9B1614721A81005D9265 /* ofxMSAInteractiveObject.cpp in Sources */,
 				A60F69DA1475E6CE007E1206 /* ofxQTKitVideoPlayer.mm in Sources */,
 				A60F69DB1475E6CE007E1206 /* QTKitMovieRenderer.m in Sources */,
-				E7E8ABDC14783C760053509D /* ofxKinectPointcloudRecorder.cpp in Sources */,
 				E7DF56BD147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp in Sources */,
 				E7DF56BE147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */,
 				E7DF5789147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp in Sources */,
 				A628E1E1148A796400F2AC7A /* ofxTLColors.cpp in Sources */,
+				A6477E34149D7E2800908B2B /* ofxDepthImageRecorder.cpp in Sources */,
+				A6477E7B149D7E5500908B2B /* ofxTextInputField.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
