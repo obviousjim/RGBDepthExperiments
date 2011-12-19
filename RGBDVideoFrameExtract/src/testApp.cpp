@@ -3,52 +3,65 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
+	moviesLoaded = false;
 	ofSystemAlertDialog("Select directory of calibration clips");
 	ofFileDialogResult r = ofSystemLoadDialog("Calibration Directory", true);
 	if(r.bSuccess){
 		movieDirectory = ofDirectory(r.getPath());
 		movieDirectory.allowExt("mov");
+		movieDirectory.allowExt("mp4");
 		movieDirectory.listDir();
-		
+		for(int i = 0; i < movieDirectory.numFiles(); i++){
+			ofVideoPlayer p;
+			p.loadMovie( movieDirectory.getPath(i) );
+			videoplayers.push_back( p );
+		}
 		currentMovie = 0;
-		videoplayer.loadMovie(movieDirectory.getPath(currentMovie));
-		videoplayer.play();
-	}
-		
+		moviesLoaded = true;
+	}		
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	videoplayer.update();
+	if(moviesLoaded){
+		videoplayers[currentMovie].setFrame(ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, videoplayers[currentMovie].getTotalNumFrames(), true));
+		videoplayers[currentMovie].update();
+	}
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	videoplayer.draw(0,0);
+	ofBackground(0);
+	if(moviesLoaded){
+		videoplayers[currentMovie].draw(0,0);
+		ofDrawBitmapString("Movie #"+ofToString(currentMovie+1) + " " + movieDirectory.getPath(currentMovie), 10, videoplayers[currentMovie].getHeight() + 10);
+	}
+	else{
+		ofSetColor(255);
+		ofDrawBitmapString("No Movies Loaded", 10, 10);
+	}
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	if(key == OF_KEY_LEFT){
-		videoplayer.close();
+		//videoplayer.close();
 		currentMovie--;
 		if(currentMovie < 0){
 			currentMovie = movieDirectory.numFiles()-1;
 		}		
-		videoplayer.loadMovie(movieDirectory.getPath(currentMovie));
-		videoplayer.play();
 	}
 	else if(key == OF_KEY_RIGHT){
+		//videoplayer.close();
 		currentMovie++;
 		if(currentMovie == movieDirectory.numFiles()){
 			currentMovie = 0;
 		}
-		videoplayer.loadMovie(movieDirectory.getPath(currentMovie));
 	}
 	
-	if(key == ' '){
+	if(key == ' ' && moviesLoaded){
 		ofImage frame;
-		frame.setFromPixels(videoplayer.getPixelsRef());
+		frame.setFromPixels(videoplayers[currentMovie].getPixelsRef());
 		frame.saveImage(ofFilePath::removeExt(movieDirectory.getPath(currentMovie)) + "_calib.png");
 	}
 }

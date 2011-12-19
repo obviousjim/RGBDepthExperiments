@@ -56,6 +56,7 @@
 		A638C752149439F90060809C /* ofxEasingSine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A638C73F149439F90060809C /* ofxEasingSine.cpp */; };
 		A638C753149439F90060809C /* ofxTween.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A638C741149439F90060809C /* ofxTween.cpp */; };
 		A638C7AF14943A270060809C /* ofxTextInputField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A638C7AD14943A270060809C /* ofxTextInputField.cpp */; };
+		A6477C71149D678500908B2B /* ofxRGBDAlignment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6477C6F149D678500908B2B /* ofxRGBDAlignment.cpp */; };
 		A69BC953149D47930062338F /* libnimCodecs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A69BC942149D47930062338F /* libnimCodecs.dylib */; };
 		A69BC954149D47930062338F /* libnimMockNodes.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A69BC943149D47930062338F /* libnimMockNodes.dylib */; };
 		A69BC955149D47930062338F /* libnimRecorder.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A69BC944149D47930062338F /* libnimRecorder.dylib */; };
@@ -89,7 +90,6 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		E70160CA149A240C00BD488A /* ofxRGBDAlignment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E70160C8149A240C00BD488A /* ofxRGBDAlignment.cpp */; };
 		E77D88F01497D6A200713F52 /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77D88911497D6A200713F52 /* Calibration.cpp */; };
 		E77D88F11497D6A200713F52 /* ContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77D88921497D6A200713F52 /* ContourFinder.cpp */; };
 		E77D88F21497D6A200713F52 /* Distance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77D88931497D6A200713F52 /* Distance.cpp */; };
@@ -392,6 +392,8 @@
 		A638C742149439F90060809C /* ofxTween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTween.h; sourceTree = "<group>"; };
 		A638C7AD14943A270060809C /* ofxTextInputField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTextInputField.cpp; sourceTree = "<group>"; };
 		A638C7AE14943A270060809C /* ofxTextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTextInputField.h; sourceTree = "<group>"; };
+		A6477C6F149D678500908B2B /* ofxRGBDAlignment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDAlignment.cpp; sourceTree = "<group>"; };
+		A6477C70149D678500908B2B /* ofxRGBDAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDAlignment.h; sourceTree = "<group>"; };
 		A69BC941149D47930062338F /* change_exec_paths.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = change_exec_paths.sh; sourceTree = "<group>"; };
 		A69BC942149D47930062338F /* libnimCodecs.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libnimCodecs.dylib; sourceTree = "<group>"; };
 		A69BC943149D47930062338F /* libnimMockNodes.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libnimMockNodes.dylib; sourceTree = "<group>"; };
@@ -431,8 +433,6 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
-		E70160C8149A240C00BD488A /* ofxRGBDAlignment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDAlignment.cpp; sourceTree = "<group>"; };
-		E70160C9149A240C00BD488A /* ofxRGBDAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDAlignment.h; sourceTree = "<group>"; };
 		E77D88731497D5FC00713F52 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		E77D88881497D6A200713F52 /* Calibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calibration.h; sourceTree = "<group>"; };
 		E77D88891497D6A200713F52 /* ContourFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourFinder.h; sourceTree = "<group>"; };
@@ -860,8 +860,8 @@
 		A638BD61149438DE0060809C /* src */ = {
 			isa = PBXGroup;
 			children = (
-				E70160C9149A240C00BD488A /* ofxRGBDAlignment.h */,
-				E70160C8149A240C00BD488A /* ofxRGBDAlignment.cpp */,
+				A6477C70149D678500908B2B /* ofxRGBDAlignment.h */,
+				A6477C6F149D678500908B2B /* ofxRGBDAlignment.cpp */,
 				A638BD63149438DE0060809C /* ofxCvCheckerboardPreview.h */,
 				A638BD62149438DE0060809C /* ofxCvCheckerboardPreview.cpp */,
 				A638BD65149438DE0060809C /* ofxDepthImageRecorder.h */,
@@ -1818,8 +1818,8 @@
 				E77D88F51497D6A200713F52 /* Tracker.cpp in Sources */,
 				E77D88F61497D6A200713F52 /* Utilities.cpp in Sources */,
 				E77D88F71497D6A200713F52 /* Wrappers.cpp in Sources */,
-				E70160CA149A240C00BD488A /* ofxRGBDAlignment.cpp in Sources */,
 				E78D615F149A8784004806BF /* ofxGameCamera.cpp in Sources */,
+				A6477C71149D678500908B2B /* ofxRGBDAlignment.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

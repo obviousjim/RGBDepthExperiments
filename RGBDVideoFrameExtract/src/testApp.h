@@ -21,5 +21,6 @@ class testApp : public ofBaseApp{
 
 	ofDirectory movieDirectory;
 	int currentMovie;
-	ofVideoPlayer videoplayer;
+	vector<ofVideoPlayer> videoplayers;
+	bool moviesLoaded;
 };
