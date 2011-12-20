@@ -8,6 +8,7 @@
 #include "ofxGameCamera.h"
 #include "ofxTimeline.h"
 #include "ofxTLVideoPlayer.h"
+#include "ofxTLDepthImageSequence.h";
 
 class testApp : public ofBaseApp{
 
@@ -32,15 +33,20 @@ class testApp : public ofBaseApp{
 	
 	void processDepthFrame();
 	
+	bool loadNewProject();
+	bool loadDepthSequence(string path);
+	bool loadVideoFile(string path);
+	bool loadAlignmentMatrices(string path);
+		
 	ofVideoPlayer player;
 	ofxQTKitVideoPlayer qtRenderer;
 	
 	ofxRGBDRenderer renderer;
-	ofxDepthImageRecorder decoder;
 	ofxRGBDVideoDepthSequence sequencer;
+	
 	unsigned short* depthPixelDecodeBuffer;
 	
-	ofDirectory depthImages;
+//	ofDirectory depthImages;
 	bool allLoaded;
 
 	ofxGameCamera cam;
@@ -48,4 +54,8 @@ class testApp : public ofBaseApp{
 	string videoPath;
 	ofxTimeline timeline;
 	ofxTLVideoPlayer videoTimelineElement;
+	ofxTLDepthImageSequence depthSequence;
+	
+	ofxXmlSettings projectsettings;
+
 };

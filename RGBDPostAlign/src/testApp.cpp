@@ -100,7 +100,10 @@ void testApp::draw(){
 	
 	for(int i = 0; i < alignmentPairButtons.size(); i++){
 		ofRect( *alignmentPairButtons[i] );
-		ofDrawBitmapString("vid. " + ofToString(alignmentScrubber->getPairs()[i].videoFrame) + " dep. " + ofToString(alignmentScrubber->getPairs()[i].depthFrame),
+		int videoTime = alignmentScrubber->getPairs()[i].videoFrame;
+		int depthTime = alignmentScrubber->getPairs()[i].depthFrame;
+		
+		ofDrawBitmapString("vid. " + ofToString(videoTime) + " dep. " + ofToString(depthTime),
 						   ofPoint(alignmentPairButtons[i]->x+20, alignmentPairButtons[i]->y+9));
 	}
 	
@@ -133,9 +136,10 @@ void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int 
 	}	
 	else if(object == savePairButton){
 		if(playerElement != NULL && depthSequenceElement != NULL){
-			int videoFrame = playerElement->getSelectedFrame();
-			int depthFrame = depthSequenceElement->getSelectedFrame();
-			alignmentScrubber->addAlignedPair(videoFrame, depthFrame);
+//			int videoFrame = playerElement->getSelectedFrame();
+//			int depthFrame = depthSequenceElement->getSelectedFrame();
+//			alignmentScrubber->addAlignedPair(videoFrame, depthFrame);
+			alignmentScrubber->registerCurrentAlignment();
 			refreshAlignmentPairButtons();
 		}
 	}

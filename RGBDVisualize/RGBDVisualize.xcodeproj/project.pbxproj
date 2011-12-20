@@ -421,8 +421,8 @@
 				A6477C78149D679300908B2B /* ofxRGBDRenderer.cpp */,
 				A60F752D147721FC007E1206 /* ofxRGBDVideoDepthSequence.h */,
 				A60F752E147721FC007E1206 /* ofxRGBDVideoDepthSequence.cpp */,
-				A638C7F5149441B70060809C /* ofxDepthImageRecorder.cpp */,
 				A638C7F6149441B70060809C /* ofxDepthImageRecorder.h */,
+				A638C7F5149441B70060809C /* ofxDepthImageRecorder.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";

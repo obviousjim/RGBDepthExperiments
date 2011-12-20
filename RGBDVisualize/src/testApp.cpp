@@ -5,65 +5,38 @@ void testApp::setup(){
 	
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
+	ofEnableAlphaBlending();
+	ofBackground(0);
 	
-	allLoaded = false;
-
-	//renderer.setup(10, 7, 2.5);
-	player.setPlayer(ofPtr<ofBaseVideoPlayer>(&qtRenderer));
-	ofFileDialogResult r;
-	ofSystemAlertDialog("Select Calibration Directory");
-	
-	r = ofSystemLoadDialog("Calibration Directory", true);
-	if(r.bSuccess){
-		//renderer.loadCalibration(r.getPath());
-		renderer.setup(r.getPath());
-
-	}
-	else{
-		return;
-	}
-
-	ofSystemAlertDialog("Select Video File");
-	r = ofSystemLoadDialog("Video File", false);
-	if(r.bSuccess){
-		videoPath = r.getPath();
-		qtRenderer.loadMovie(videoPath, OFXQTVIDEOPLAYER_MODE_TEXTURE_ONLY);
-		//qtRenderer.loadMovie(videoPath);
-		sequencer.loadPairingFile(ofFilePath::removeExt(r.getPath()) + "_pairings.xml");
-	}
-	else{
-		return;
-	}
-	
-	ofSystemAlertDialog("Select Depth Directory");
-	r = ofSystemLoadDialog("Depth Directory", true);
-	if(r.bSuccess){
-		depthImages = ofDirectory(r.getPath());
-		depthImages.allowExt("png");
-		//depthImages.allowExt("xkcd");
-		depthImages.listDir();
-	}
-	else{
-		return;
-	}
-	
+	if(projectsettings.loadFile("projectsettings.xml")){
+		if(!loadAlignmentMatrices(projectsettings.getValue("alignmentDir", ""))){
+			loadNewProject();
+		}
 		
-	allLoaded = true;
+		if(!loadVideoFile(projectsettings.getValue("videoFile", ""))){
+			loadNewProject();
+		}
+		
+		if(!loadDepthSequence(projectsettings.getValue("depthSequence", ""))){
+			loadNewProject();
+		}
+		allLoaded = true;
+	}
+	else {
+		loadNewProject();
+	}
 	
-	
-	//renderer.setColorTexture(player);
 	renderer.setRGBTexture(player);
-	
-	player.play();
-	
-	cam.speed = 10;
+		
+	cam.speed = 40;
 	cam.autosavePosition = true;
 	cam.usemouse = true;
 	cam.useArrowKeys = false;
 	cam.loadCameraPosition();
+	cam.setFarClip(30000);
 	
-	depthPixelDecodeBuffer = new unsigned short[640*480];
-	
+	depthPixelDecodeBuffer = depthSequence.currentDepthRaw;
+	//depthPixelDecodeBuffer = new unsigned short[640*480];
 	
 	string videoThumbsPath = ofFilePath::removeExt(videoPath);
 	if(!ofDirectory(videoThumbsPath).exists()){
@@ -78,23 +51,92 @@ void testApp::setup(){
 	
 	videoTimelineElement.toggleThumbs();
 	videoTimelineElement.setVideoPlayer(player, videoThumbsPath);
+	
+	player.play();
+
+}
+
+bool testApp::loadNewProject(){
+	allLoaded = false;
+
+	//Alignment matrices
+	ofFileDialogResult r;
+	ofSystemAlertDialog("Select Alignment Directory");
+	r = ofSystemLoadDialog("Alignment Directory", true);
+	if(!r.bSuccess || !loadAlignmentMatrices(r.getPath())){
+		return false;
+	}
+	
+	//Video file
+	ofSystemAlertDialog("Select Video File");
+	r = ofSystemLoadDialog("Video File", false);
+	if(!r.bSuccess || !loadVideoFile(r.getPath())){
+		return false;
+	}
+	
+	//depth sequence
+	ofSystemAlertDialog("Select Depth Directory");
+	r = ofSystemLoadDialog("Depth Directory", true);
+	if(!r.bSuccess || !loadDepthSequence(r.getPath())){
+		return false;
+	}
+	
+	allLoaded = true;
+}
+
+bool testApp::loadDepthSequence(string path){
+	projectsettings.setValue("depthSequence", path);
+	projectsettings.saveFile();
+	
+	depthSequence.setup();
+	depthSequence.disable();
+	return depthSequence.loadSequence(path);
+}
+
+bool testApp::loadVideoFile(string path){
+	projectsettings.setValue("videoFile", path);
+	projectsettings.saveFile();
+
+	videoPath = path;
+	//qtRenderer.loadMovie(videoPath, OFXQTVIDEOPLAYER_MODE_TEXTURE_ONLY);
+	player.loadMovie(videoPath);
+	//qtRenderer.loadMovie(videoPath);
+	return sequencer.loadPairingFile(ofFilePath::removeExt(path) + "_pairings.xml");
+}
+
+bool testApp::loadAlignmentMatrices(string path){
+	projectsettings.setValue("alignmentDir", path);
+	projectsettings.saveFile();
+	
+	return renderer.setup(path);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 	if(!allLoaded) return;
 	
-	//player.update();
-	qtRenderer.update();
-	if(qtRenderer.isFrameNew()){
+	player.update();
+	
+	if(player.isFrameNew()){
+		//cout << "new frame?" << endl;
+	//qtRenderer.update();
+	//if(qtRenderer.isFrameNew()){
 		
 //		cout << "current frame number " << player.getCurrentFrame() << endl;
+		long depthFrame;
+		if(sequencer.isSequenceTimebased()){
+			long movieMillis = player.getPosition() * player.getDuration()*1000;
+			depthFrame = sequencer.getDepthFrameForVideoFrame(movieMillis);
+			//cout << "time based getting frame " << depthFrame << " for movie millis " << movieMillis << endl; 
+			depthSequence.selectTime(depthFrame);
+		}
+		else{
+			depthFrame = sequencer.getDepthFrameForVideoFrame(player.getCurrentFrame());
+			depthSequence.selectFrame(depthFrame);
+		}
 		
-		int depthFrame = sequencer.getDepthFrameForVideoFrame(player.getCurrentFrame());
-		depthFrame = ofClamp(depthFrame, 0, depthImages.numFiles()-1);
-		//cout << "loading depth frame " << depthFrame << " for video frame " << player.getCurrentFrame() << endl;
-		decoder.readCompressedPng(depthImages.getPath(depthFrame), depthPixelDecodeBuffer);
-		//processDepthFrame();
+		processDepthFrame();
+		
 		renderer.setDepthImage(depthPixelDecodeBuffer);
 		renderer.update();
 	}
@@ -105,10 +147,10 @@ void testApp::processDepthFrame(){
 	for(int y = 0; y <	480; y++){
 		for(int x = 0; x < 640; x++){
 			int index = y*640+x;
-			if(depthPixelDecodeBuffer[index] == 0){
-				depthPixelDecodeBuffer[index] = 5000;
-			}
-			depthPixelDecodeBuffer[index] *= 1.0 - .0*(sin(y/10.0 + ofGetFrameNum()/10.0)*.5+.5); 
+//			if(depthPixelDecodeBuffer[index] == 0){
+//				depthPixelDecodeBuffer[index] = 5000;
+//			}
+			//depthPixelDecodeBuffer[index] *= 1.0 - .0*(sin(y/10.0 + ofGetFrameNum()/10.0)*.5+.5); 
 		}
 	}
 }
@@ -117,18 +159,22 @@ void testApp::draw(){
 	if(!allLoaded) return;
 	
 	
-	ofBackground(255*.2);
+	//ofBackground(255*.2);
+	ofBackground(255*.0);
 	
 	cam.begin();
 	glEnable(GL_DEPTH_TEST);
-	ofScale(1, -1, 1);
+//	ofScale(1, -1, 1);
 	if(renderer.applyShader){
 		renderer.rgbdShader.begin();
 	}
 	
-	qtRenderer.bind();
-	renderer.getMesh().drawFaces();
-	qtRenderer.unbind();
+	//qtRenderer.bind();
+	player.getTextureReference().bind();
+	//renderer.getMesh().drawFaces();
+	renderer.drawPointCloud();
+	player.getTextureReference().unbind();
+	//qtRenderer.unbind();
 	if(renderer.applyShader){
 		renderer.rgbdShader.end();
 	}
@@ -274,17 +320,21 @@ void testApp::drawAsScanlines(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	if(key == ' '){
-		if(qtRenderer.isPlaying()){
-			qtRenderer.stop();
+		if(player.isPlaying()){
+			player.stop();
 		}
 		else{
-			qtRenderer.play();
+			player.play();
 		}
 		
 	}
 	
 	if(key == '='){
 		renderer.applyShader = !renderer.applyShader;
+	}
+	
+	if(key == 'l'){
+		loadNewProject();
 	}
 	
 	if(key == OF_KEY_UP){

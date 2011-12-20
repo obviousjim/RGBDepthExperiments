@@ -243,6 +243,7 @@
 				A60F69D51475E6CE007E1206 /* src */,
 			);
 			name = ofxQTKitVideoPlayer;
+			path = ../../../addons/ofxMSAInteractiveObject;
 			sourceTree = "<group>";
 		};
 		A60F69D51475E6CE007E1206 /* src */ = {
@@ -382,8 +383,8 @@
 			children = (
 				A69D99501471F94D005D9265 /* ofxTLImageSequence.h */,
 				A69D994F1471F94D005D9265 /* ofxTLImageSequence.cpp */,
-				A69D99511471F94D005D9265 /* ofxTLImageSequenceFrame.cpp */,
 				A69D99521471F94D005D9265 /* ofxTLImageSequenceFrame.h */,
+				A69D99511471F94D005D9265 /* ofxTLImageSequenceFrame.cpp */,
 				A69D99621471F94D005D9265 /* ofxTLVideoThumb.h */,
 				A69D99611471F94D005D9265 /* ofxTLVideoThumb.cpp */,
 				A69D99601471F94D005D9265 /* ofxTLVideoPlayer.h */,
@@ -404,10 +405,10 @@
 		A69D9A94147212E0005D9265 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				E7DF5787147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */,
 				E7DF5788147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.h */,
-				A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */,
+				E7DF5787147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */,
 				A6477E33149D7E2800908B2B /* ofxDepthImageRecorder.h */,
+				A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */,
 			);
 			name = src;
 			path = ../../../addons/ofxRGBDepth/src;
@@ -416,7 +417,6 @@
 		A69D9AD514721A81005D9265 /* ofxMSAInteractiveObject */ = {
 			isa = PBXGroup;
 			children = (
-				A60F69D31475E6C7007E1206 /* ofxQTKitVideoPlayer */,
 				A69D9B1214721A81005D9265 /* src */,
 			);
 			name = ofxMSAInteractiveObject;
@@ -436,6 +436,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				A60F69D31475E6C7007E1206 /* ofxQTKitVideoPlayer */,
 				A6477E37149D7E5500908B2B /* ofxTextInputField */,
 				A69D9AD514721A81005D9265 /* ofxMSAInteractiveObject */,
 				A69D9A92147212D4005D9265 /* ofxRGBDepth */,
@@ -537,10 +538,10 @@
 		E7DF56B8147CA40500A3A9C7 /* ofxTimeline */ = {
 			isa = PBXGroup;
 			children = (
-				E7DF56B9147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp */,
 				E7DF56BA147CA40600A3A9C7 /* ofxTLDepthImageSequence.h */,
-				E7DF56BB147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp */,
+				E7DF56B9147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp */,
 				E7DF56BC147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.h */,
+				E7DF56BB147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp */,
 			);
 			path = ofxTimeline;
 			sourceTree = "<group>";
