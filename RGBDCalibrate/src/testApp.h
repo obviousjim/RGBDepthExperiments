@@ -58,4 +58,5 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	void objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button);
 	void objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y);
 	
+	ofImage undistortionTest;
 };

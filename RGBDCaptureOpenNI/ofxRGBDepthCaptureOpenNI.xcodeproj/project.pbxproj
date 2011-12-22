@@ -90,6 +90,7 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		E71EB42914A17E7400D23DE5 /* ofxDepthImageCompressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E71EB42814A17E7400D23DE5 /* ofxDepthImageCompressor.cpp */; };
 		E77D88F01497D6A200713F52 /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77D88911497D6A200713F52 /* Calibration.cpp */; };
 		E77D88F11497D6A200713F52 /* ContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77D88921497D6A200713F52 /* ContourFinder.cpp */; };
 		E77D88F21497D6A200713F52 /* Distance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77D88931497D6A200713F52 /* Distance.cpp */; };
@@ -286,7 +287,6 @@
 		A638BC5A149438730060809C /* ofxMSAInteractiveObjectDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMSAInteractiveObjectDelegate.h; sourceTree = "<group>"; };
 		A638BD5C149438DE0060809C /* ofxTLDepthImageSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLDepthImageSequence.cpp; sourceTree = "<group>"; };
 		A638BD5D149438DE0060809C /* ofxTLDepthImageSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLDepthImageSequence.h; sourceTree = "<group>"; };
-		A638BD60149438DE0060809C /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		A638BD62149438DE0060809C /* ofxCvCheckerboardPreview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCvCheckerboardPreview.cpp; sourceTree = "<group>"; };
 		A638BD63149438DE0060809C /* ofxCvCheckerboardPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCvCheckerboardPreview.h; sourceTree = "<group>"; };
 		A638BD64149438DE0060809C /* ofxDepthImageRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageRecorder.cpp; sourceTree = "<group>"; };
@@ -433,6 +433,8 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E71EB42714A17E7400D23DE5 /* ofxDepthImageCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDepthImageCompressor.h; sourceTree = "<group>"; };
+		E71EB42814A17E7400D23DE5 /* ofxDepthImageCompressor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageCompressor.cpp; sourceTree = "<group>"; };
 		E77D88731497D5FC00713F52 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		E77D88881497D6A200713F52 /* Calibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calibration.h; sourceTree = "<group>"; };
 		E77D88891497D6A200713F52 /* ContourFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContourFinder.h; sourceTree = "<group>"; };
@@ -833,7 +835,6 @@
 			isa = PBXGroup;
 			children = (
 				A638BD5A149438DE0060809C /* couples */,
-				A638BD60149438DE0060809C /* README */,
 				A638BD61149438DE0060809C /* src */,
 			);
 			name = ofxRGBDepth;
@@ -866,6 +867,8 @@
 				A638BD62149438DE0060809C /* ofxCvCheckerboardPreview.cpp */,
 				A638BD65149438DE0060809C /* ofxDepthImageRecorder.h */,
 				A638BD64149438DE0060809C /* ofxDepthImageRecorder.cpp */,
+				E71EB42714A17E7400D23DE5 /* ofxDepthImageCompressor.h */,
+				E71EB42814A17E7400D23DE5 /* ofxDepthImageCompressor.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1820,6 +1823,7 @@
 				E77D88F71497D6A200713F52 /* Wrappers.cpp in Sources */,
 				E78D615F149A8784004806BF /* ofxGameCamera.cpp in Sources */,
 				A6477C71149D678500908B2B /* ofxRGBDAlignment.cpp in Sources */,
+				E71EB42914A17E7400D23DE5 /* ofxDepthImageCompressor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

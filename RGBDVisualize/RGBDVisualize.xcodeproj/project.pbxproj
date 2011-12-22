@@ -27,7 +27,6 @@
 		A60F753F14772397007E1206 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F753914772397007E1206 /* tinyxmlerror.cpp */; };
 		A60F754014772397007E1206 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F753A14772397007E1206 /* tinyxmlparser.cpp */; };
 		A60F754114772397007E1206 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A60F753C14772397007E1206 /* ofxXmlSettings.cpp */; };
-		A638C7F7149441B70060809C /* ofxDepthImageRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A638C7F5149441B70060809C /* ofxDepthImageRecorder.cpp */; };
 		A6477C7A149D679300908B2B /* ofxRGBDRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6477C78149D679300908B2B /* ofxRGBDRenderer.cpp */; };
 		A659ED12148A7CA9002E8A1C /* ofxTLColors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A659ED10148A7CA9002E8A1C /* ofxTLColors.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
@@ -48,6 +47,7 @@
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E704A2CA147AACF9002064D0 /* ofxGameCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E704A2C6147AACF9002064D0 /* ofxGameCamera.cpp */; };
+		E73BE0B314A3B784004FE0E5 /* ofxDepthImageCompressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E73BE0B114A3B784004FE0E5 /* ofxDepthImageCompressor.cpp */; };
 		E7D0C60514796DA600510013 /* opencv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D0C60214796DA600510013 /* opencv.a */; };
 		E7DF569A147CA28300A3A9C7 /* ofxTimeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF5677147CA28300A3A9C7 /* ofxTimeline.cpp */; };
 		E7DF569C147CA28300A3A9C7 /* ofxTLElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF567C147CA28300A3A9C7 /* ofxTLElement.cpp */; };
@@ -151,8 +151,6 @@
 		A60F753A14772397007E1206 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		A60F753C14772397007E1206 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
 		A60F753D14772397007E1206 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
-		A638C7F5149441B70060809C /* ofxDepthImageRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageRecorder.cpp; sourceTree = "<group>"; };
-		A638C7F6149441B70060809C /* ofxDepthImageRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDepthImageRecorder.h; sourceTree = "<group>"; };
 		A6477C78149D679300908B2B /* ofxRGBDRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDRenderer.cpp; sourceTree = "<group>"; };
 		A6477C79149D679300908B2B /* ofxRGBDRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDRenderer.h; sourceTree = "<group>"; };
 		A659ED10148A7CA9002E8A1C /* ofxTLColors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLColors.cpp; sourceTree = "<group>"; };
@@ -180,6 +178,8 @@
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		E704A2C6147AACF9002064D0 /* ofxGameCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGameCamera.cpp; sourceTree = "<group>"; };
 		E704A2C7147AACF9002064D0 /* ofxGameCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGameCamera.h; sourceTree = "<group>"; };
+		E73BE0B114A3B784004FE0E5 /* ofxDepthImageCompressor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageCompressor.cpp; sourceTree = "<group>"; };
+		E73BE0B214A3B784004FE0E5 /* ofxDepthImageCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDepthImageCompressor.h; sourceTree = "<group>"; };
 		E7D0C5AD14796DA600510013 /* cv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cv.h; sourceTree = "<group>"; };
 		E7D0C5AE14796DA600510013 /* cv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cv.hpp; sourceTree = "<group>"; };
 		E7D0C5AF14796DA600510013 /* cvaux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cvaux.h; sourceTree = "<group>"; };
@@ -417,12 +417,12 @@
 		A60F6BD81475FFA5007E1206 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E73BE0B214A3B784004FE0E5 /* ofxDepthImageCompressor.h */,
+				E73BE0B114A3B784004FE0E5 /* ofxDepthImageCompressor.cpp */,
 				A6477C79149D679300908B2B /* ofxRGBDRenderer.h */,
 				A6477C78149D679300908B2B /* ofxRGBDRenderer.cpp */,
 				A60F752D147721FC007E1206 /* ofxRGBDVideoDepthSequence.h */,
 				A60F752E147721FC007E1206 /* ofxRGBDVideoDepthSequence.cpp */,
-				A638C7F6149441B70060809C /* ofxDepthImageRecorder.h */,
-				A638C7F5149441B70060809C /* ofxDepthImageRecorder.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1344,8 +1344,8 @@
 				A6063A25148AC6DF00D154C3 /* rgbd.frag in Sources */,
 				A6063A26148AC6DF00D154C3 /* rgbd.vert in Sources */,
 				A6063F85148B1BCF00D154C3 /* ofxTextInputField.cpp in Sources */,
-				A638C7F7149441B70060809C /* ofxDepthImageRecorder.cpp in Sources */,
 				A6477C7A149D679300908B2B /* ofxRGBDRenderer.cpp in Sources */,
+				E73BE0B314A3B784004FE0E5 /* ofxDepthImageCompressor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

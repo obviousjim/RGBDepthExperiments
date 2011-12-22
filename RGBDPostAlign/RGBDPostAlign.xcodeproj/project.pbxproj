@@ -12,7 +12,6 @@
 		A60F69DD1475E6DC007E1206 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DC1475E6DC007E1206 /* QTKit.framework */; };
 		A60F69DF1475E6E1007E1206 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DE1475E6E1007E1206 /* CoreVideo.framework */; };
 		A628E1E1148A796400F2AC7A /* ofxTLColors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A628E1DF148A796400F2AC7A /* ofxTLColors.cpp */; };
-		A6477E34149D7E2800908B2B /* ofxDepthImageRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */; };
 		A6477E7B149D7E5500908B2B /* ofxTextInputField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6477E79149D7E5500908B2B /* ofxTextInputField.cpp */; };
 		A69D961F1471F945005D9265 /* ofxEasing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96011471F945005D9265 /* ofxEasing.cpp */; };
 		A69D96201471F945005D9265 /* ofxEasingBack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A69D96031471F945005D9265 /* ofxEasingBack.cpp */; };
@@ -60,6 +59,7 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		E73BE0CD14A3B7CA004FE0E5 /* ofxDepthImageCompressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E73BE0CB14A3B7CA004FE0E5 /* ofxDepthImageCompressor.cpp */; };
 		E7DF56BD147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF56B9147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp */; };
 		E7DF56BE147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF56BB147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp */; };
 		E7DF5789147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF5787147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */; };
@@ -108,8 +108,6 @@
 		A60F69DE1475E6E1007E1206 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A628E1DF148A796400F2AC7A /* ofxTLColors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLColors.cpp; sourceTree = "<group>"; };
 		A628E1E0148A796400F2AC7A /* ofxTLColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLColors.h; sourceTree = "<group>"; };
-		A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageRecorder.cpp; sourceTree = "<group>"; };
-		A6477E33149D7E2800908B2B /* ofxDepthImageRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDepthImageRecorder.h; sourceTree = "<group>"; };
 		A6477E79149D7E5500908B2B /* ofxTextInputField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTextInputField.cpp; sourceTree = "<group>"; };
 		A6477E7A149D7E5500908B2B /* ofxTextInputField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTextInputField.h; sourceTree = "<group>"; };
 		A69D96001471F945005D9265 /* easing_terms_of_use.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = easing_terms_of_use.html; sourceTree = "<group>"; };
@@ -195,6 +193,8 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E73BE0CB14A3B7CA004FE0E5 /* ofxDepthImageCompressor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageCompressor.cpp; sourceTree = "<group>"; };
+		E73BE0CC14A3B7CA004FE0E5 /* ofxDepthImageCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDepthImageCompressor.h; sourceTree = "<group>"; };
 		E7DF56B9147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLDepthImageSequence.cpp; sourceTree = "<group>"; };
 		E7DF56BA147CA40600A3A9C7 /* ofxTLDepthImageSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTLDepthImageSequence.h; sourceTree = "<group>"; };
 		E7DF56BB147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLVideoDepthAlignmentScrubber.cpp; sourceTree = "<group>"; };
@@ -405,10 +405,10 @@
 		A69D9A94147212E0005D9265 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E73BE0CC14A3B7CA004FE0E5 /* ofxDepthImageCompressor.h */,
+				E73BE0CB14A3B7CA004FE0E5 /* ofxDepthImageCompressor.cpp */,
 				E7DF5788147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.h */,
 				E7DF5787147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp */,
-				A6477E33149D7E2800908B2B /* ofxDepthImageRecorder.h */,
-				A6477E32149D7E2800908B2B /* ofxDepthImageRecorder.cpp */,
 			);
 			name = src;
 			path = ../../../addons/ofxRGBDepth/src;
@@ -702,8 +702,8 @@
 				E7DF56BE147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */,
 				E7DF5789147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp in Sources */,
 				A628E1E1148A796400F2AC7A /* ofxTLColors.cpp in Sources */,
-				A6477E34149D7E2800908B2B /* ofxDepthImageRecorder.cpp in Sources */,
 				A6477E7B149D7E5500908B2B /* ofxTextInputField.cpp in Sources */,
+				E73BE0CD14A3B7CA004FE0E5 /* ofxDepthImageCompressor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
