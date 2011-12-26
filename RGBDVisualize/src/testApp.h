@@ -26,10 +26,6 @@ class testApp : public ofBaseApp{
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-
-	void drawAsTriangleMesh();
-	void drawAsScanlines();
-	void drawWireframe();
 	
 	void processDepthFrame();
 	
@@ -45,12 +41,13 @@ class testApp : public ofBaseApp{
 	ofxRGBDVideoDepthSequence sequencer;
 	
 	unsigned short* depthPixelDecodeBuffer;
-	
-//	ofDirectory depthImages;
+
+	bool doUndistort;
+	ofImage undistortedImage;
 	bool allLoaded;
 
 	ofxGameCamera cam;
-	
+		
 	string videoPath;
 	ofxTimeline timeline;
 	ofxTLVideoPlayer videoTimelineElement;

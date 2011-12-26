@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
+	doUndistort = false;
+	
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
@@ -26,8 +28,9 @@ void testApp::setup(){
 		loadNewProject();
 	}
 	
-	renderer.setRGBTexture(player);
-		
+	//renderer.setRGBTexture(player);
+	renderer.setRGBTexture(undistortedImage);
+	
 	cam.speed = 40;
 	cam.autosavePosition = true;
 	cam.usemouse = true;
@@ -121,19 +124,24 @@ void testApp::update(){
 		//cout << "new frame?" << endl;
 	//qtRenderer.update();
 	//if(qtRenderer.isFrameNew()){
+		if(doUndistort){
+			renderer.getDepthCalibration().undistort(toCv(player), toCv(undistortedImage));
+			undistortedImage.update();
+		}
+		else{
+			undistortedImage.setFromPixels(player.getPixelsRef());
+		}
 		
 //		cout << "current frame number " << player.getCurrentFrame() << endl;
 		long depthFrame;
 		if(sequencer.isSequenceTimebased()){
 			long movieMillis = player.getPosition() * player.getDuration()*1000;
 			depthFrame = sequencer.getDepthFrameForVideoFrame(movieMillis);
-			//cout << "time based getting frame " << depthFrame << " for movie millis " << movieMillis << endl; 
-			depthSequence.selectTime(depthFrame);
 		}
 		else{
 			depthFrame = sequencer.getDepthFrameForVideoFrame(player.getCurrentFrame());
-			depthSequence.selectFrame(depthFrame);
 		}
+		depthSequence.selectTime(depthFrame);
 		
 		processDepthFrame();
 		
@@ -164,15 +172,18 @@ void testApp::draw(){
 	
 	cam.begin();
 	glEnable(GL_DEPTH_TEST);
-//	ofScale(1, -1, 1);
+	glPushMatrix();
+	ofScale(1, -1, 1);
 	if(renderer.applyShader){
 		renderer.rgbdShader.begin();
 	}
 	
 	//qtRenderer.bind();
+	//undistortedImage.getTextureReference().bind();
 	player.getTextureReference().bind();
-	//renderer.getMesh().drawFaces();
-	renderer.drawPointCloud();
+	renderer.getMesh().drawFaces();
+	//renderer.drawPointCloud();
+	undistortedImage.getTextureReference().unbind();
 	player.getTextureReference().unbind();
 	//qtRenderer.unbind();
 	if(renderer.applyShader){
@@ -180,6 +191,8 @@ void testApp::draw(){
 	}
 	
 	glDisable(GL_DEPTH_TEST);
+	glPopMatrix();
+	
 	cam.end();
 	
 	timeline.draw();
@@ -188,134 +201,6 @@ void testApp::draw(){
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), ofPoint(20,20));
 }
 
-void testApp::drawWireframe(){
-	
-	cam.begin();
-	
-	ofPushMatrix();
-	ofScale(1, -1, 1);
-	glEnable(GL_DEPTH_TEST);
-
-	qtRenderer.bind();
-	renderer.getMesh().drawWireframe();
-	qtRenderer.unbind();
-	
-	glDisable(GL_DEPTH_TEST);
-	ofPopMatrix();
-	
-	cam.end();
-	
-}
-
-void testApp::drawAsTriangleMesh(){
-	cam.begin();
-	ofPushMatrix();
-	ofScale(1, -1, 1);
-	
-	
-//	qtRenderer.draw(0, 0);
-	qtRenderer.bind();
-//	player.getTextureReference().bind();
-	
-	vector<ofVec3f> & vertices = renderer.getMesh().getVertices();
-	vector<ofIndexType> & indices = renderer.getMesh().getIndices();
-	vector<ofVec2f> & texcoords = renderer.getMesh().getTexCoords();
-	
-	glEnable(GL_DEPTH_TEST);
-	
-	glBegin(GL_TRIANGLES);
-	for(int i = 0; i < indices.size(); i+=3){
-		ofVec3f& a = vertices[ indices[i+0] ];
-		ofVec3f& b = vertices[ indices[i+1] ];
-		ofVec3f& c = vertices[ indices[i+2] ];
-		if(a.z > 5 && b.z > 5 && c.z > 5){
-			ofVec2f& ta = texcoords[ indices[i+0] ];
-			ofVec2f& tb = texcoords[ indices[i+1] ];
-			ofVec2f& tc = texcoords[ indices[i+2] ];
-			
-			glTexCoord2f(ta.x, ta.y);
-			glVertex3f(a.x,a.y,a.z);
-			glTexCoord2f(tb.x, tb.y);
-			glVertex3f(b.x,b.y,b.z);
-			glTexCoord2f(tc.x, tc.y);
-			glVertex3f(c.x,c.y,c.z);
-		}
-	}
-	
-	glEnd();
-	glDisable(GL_DEPTH_TEST);
-	
-	qtRenderer.unbind();
-	//player.getTextureReference().unbind();
-	
-	//	renderer.drawMesh();
-	//	renderer.drawPointCloud();
-	
-	ofPopMatrix();
-	
-	cam.end();
-}
-
-void testApp::drawAsScanlines(){
-	cam.begin();
-	ofPushMatrix();
-	ofScale(1, -1, 1);
-	
-	
-	qtRenderer.draw(0, 0);
-	
-	qtRenderer.bind();
-//	player.getTextureReference().bind();
-	
-	vector<ofVec3f> & vertices = renderer.getMesh().getVertices();
-	vector<ofIndexType> & indices = renderer.getMesh().getIndices();
-	vector<ofVec2f> & texcoords = renderer.getMesh().getTexCoords();
-	
-	glEnable(GL_DEPTH_TEST);
-	
-	glBegin(GL_TRIANGLES);
-	for(int i = 0; i < indices.size(); i+=3){
-		
-		ofVec3f& a = vertices[ indices[i+0] ];
-		ofVec3f& b = vertices[ indices[i+1] ];
-		ofVec3f& c = vertices[ indices[i+2] ];
-		
-		if(a.z > 5 && b.z > 5 && c.z > 5 &&
-		   a.z < 1500 && b.z < 1500 && b.z < 1500){
-//		if(a.z > 5 && b.z > 5 && c.z > 5 &&
-//		   (int(a.y) % 10) > 5 &&
-//		   (int(b.y) % 10) > 5 &&
-//		   (int(c.y) % 10) > 5){
-			
-			ofVec2f& ta = texcoords[ indices[i+0] ];
-			ofVec2f& tb = texcoords[ indices[i+1] ];
-			ofVec2f& tc = texcoords[ indices[i+2] ];
-			
-			glTexCoord2f(ta.x, ta.y);
-			glVertex3f(a.x,a.y,a.z);
-			
-			glTexCoord2f(tb.x, tb.y);
-			glVertex3f(b.x,b.y,b.z);
-			
-			glTexCoord2f(tc.x, tc.y);
-			glVertex3f(c.x,c.y,c.z);
-		}
-	}
-	
-	cout << ofGetMouseY()*3 << endl;
-	
-	glEnd();
-	glDisable(GL_DEPTH_TEST);
-	
-	qtRenderer.unbind();
-//	player.getTextureReference().unbind();
-	
-	ofPopMatrix();
-	
-	cam.end();
-	
-}
-						
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
@@ -329,6 +214,17 @@ void testApp::keyPressed(int key){
 		
 	}
 	
+	if(key == 'u'){
+		doUndistort = !doUndistort;
+//		if(doUndistort){
+//			renderer.getRGBCalibration().undistort(toCv(player), toCv(undistortedImage));
+//			undistortedImage.update();
+//		}
+//		else{
+//			undistortedImage.setFromPixels(player.getPixelsRef());
+//		}
+		
+	}
 	if(key == '='){
 		renderer.applyShader = !renderer.applyShader;
 	}
