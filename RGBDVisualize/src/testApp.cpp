@@ -3,12 +3,22 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-	doUndistort = false;
-	
+
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
 	ofBackground(0);
+
+	doUndistort = false;
+	saveCurrentFrame = false;
+	onRenderMode = false;
+	
+	savingImage.setUseTexture(false);
+	savingImage.allocate(1920,1080, OF_IMAGE_COLOR);
+	
+
+	
+	fbo.allocate(1920, 1080, GL_RGB, 4);
 	
 	if(projectsettings.loadFile("projectsettings.xml")){
 		if(!loadAlignmentMatrices(projectsettings.getValue("alignmentDir", ""))){
@@ -55,7 +65,19 @@ void testApp::setup(){
 	videoTimelineElement.toggleThumbs();
 	videoTimelineElement.setVideoPlayer(player, videoThumbsPath);
 	
-	player.play();
+	gui.addSlider("X Linear Shift", renderer.xshift, -20, 20);
+	gui.addSlider("Y Linear Shift", renderer.yshift, -150, 15);
+	gui.addToggle("Use Distorted bits", renderer.useDistorted);
+	gui.addToggle("Start Render", onRenderMode);
+	
+	gui.loadFromXML();
+	gui.toggleDraw();
+	
+	cam.setScale(1, -1, 1);
+	
+
+	
+//	player.play();
 
 }
 
@@ -103,6 +125,13 @@ bool testApp::loadVideoFile(string path){
 	videoPath = path;
 	//qtRenderer.loadMovie(videoPath, OFXQTVIDEOPLAYER_MODE_TEXTURE_ONLY);
 	player.loadMovie(videoPath);
+	saveFolder = "saveout_" + ofFilePath::getBaseName(path);
+	//seed();
+	uniqueRand = ofGetMonth()+ofGetDay()+ofGetMinutes()+ofGetSeconds();
+	ofDirectory savdir(saveFolder);
+	if(!savdir.exists()){
+		savdir.create(true);
+	}
 	//qtRenderer.loadMovie(videoPath);
 	return sequencer.loadPairingFile(ofFilePath::removeExt(path) + "_pairings.xml");
 }
@@ -118,19 +147,31 @@ bool testApp::loadAlignmentMatrices(string path){
 void testApp::update(){
 	if(!allLoaded) return;
 	
+	if(onRenderMode){
+		if(player.isPlaying())
+			player.stop();
+		
+		//player.setFrame(player.getCurrentFrame()+1);
+		videoTimelineElement.selectFrame(videoTimelineElement.getSelectedFrame()+1);
+
+		cout << "current frame is " << player.getCurrentFrame() << endl;
+	}
+	
 	player.update();
 	
-	if(player.isFrameNew()){
+	if(player.isFrameNew() || onRenderMode){
+		saveCurrentFrame = onRenderMode;
+		
 		//cout << "new frame?" << endl;
 	//qtRenderer.update();
 	//if(qtRenderer.isFrameNew()){
-		if(doUndistort){
-			renderer.getDepthCalibration().undistort(toCv(player), toCv(undistortedImage));
-			undistortedImage.update();
-		}
-		else{
-			undistortedImage.setFromPixels(player.getPixelsRef());
-		}
+//		if(doUndistort){
+//			renderer.getDepthCalibration().undistort(toCv(player), toCv(undistortedImage));
+//			undistortedImage.update();
+//		}
+//		else{
+//			undistortedImage.setFromPixels(player.getPixelsRef());
+//		}
 		
 //		cout << "current frame number " << player.getCurrentFrame() << endl;
 		long depthFrame;
@@ -168,12 +209,15 @@ void testApp::draw(){
 	
 	
 	//ofBackground(255*.2);
-	ofBackground(255*.0);
+	ofBackground(255*.2);
 	
-	cam.begin();
+	fbo.begin();
+	ofClear(0, 0, 0);
+	
+	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
 	glEnable(GL_DEPTH_TEST);
 	glPushMatrix();
-	ofScale(1, -1, 1);
+//	ofScale(1, -1, 1);
 	if(renderer.applyShader){
 		renderer.rgbdShader.begin();
 	}
@@ -183,7 +227,7 @@ void testApp::draw(){
 	player.getTextureReference().bind();
 	renderer.getMesh().drawFaces();
 	//renderer.drawPointCloud();
-	undistortedImage.getTextureReference().unbind();
+//	undistortedImage.getTextureReference().unbind();
 	player.getTextureReference().unbind();
 	//qtRenderer.unbind();
 	if(renderer.applyShader){
@@ -195,10 +239,27 @@ void testApp::draw(){
 	
 	cam.end();
 	
+	fbo.end();
+	
+	if(saveCurrentFrame){
+		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
+		char filename[512];
+		sprintf(filename, "%s/save_%d_%05d.png", saveFolder.c_str(), uniqueRand, ofGetFrameNum());
+		savingImage.saveImage(filename);
+		saveCurrentFrame = false;
+	}
+	fbo.draw(300, 75, 1280*.75, 720*.75);
+	
+	timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
+	
 	timeline.draw();
-
+	gui.draw();
+	
 	ofSetColor(255);
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), ofPoint(20,20));
+	
+	renderer.update();
+
 }
 
 
@@ -233,26 +294,26 @@ void testApp::keyPressed(int key){
 		loadNewProject();
 	}
 	
-	if(key == OF_KEY_UP){
-		renderer.yshift++;
-		renderer.update();
-		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-	}
-	if(key == OF_KEY_DOWN){
-		renderer.yshift--;
-		renderer.update();
-		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-	}
-	if(key == OF_KEY_RIGHT){
-		renderer.xshift++;
-		renderer.update();
-		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-	}
-	if(key == OF_KEY_LEFT){
-		renderer.xshift--;
-		renderer.update();
-		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-	}
+//	if(key == OF_KEY_UP){
+//		renderer.yshift++;
+//		renderer.update();
+//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
+//	}
+//	if(key == OF_KEY_DOWN){
+//		renderer.yshift--;
+//		renderer.update();
+//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
+//	}
+//	if(key == OF_KEY_RIGHT){
+//		renderer.xshift++;
+//		renderer.update();
+//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
+//	}
+//	if(key == OF_KEY_LEFT){
+//		renderer.xshift--;
+//		renderer.update();
+//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
+//	}
 	
 }
 

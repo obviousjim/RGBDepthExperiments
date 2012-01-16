@@ -10,6 +10,8 @@
 #include "ofxTLVideoPlayer.h"
 #include "ofxTLDepthImageSequence.h";
 
+#include "ofxSimpleGuiToo.h"
+
 class testApp : public ofBaseApp{
 
   public:
@@ -26,7 +28,7 @@ class testApp : public ofBaseApp{
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-	
+ 	
 	void processDepthFrame();
 	
 	bool loadNewProject();
@@ -55,4 +57,11 @@ class testApp : public ofBaseApp{
 	
 	ofxXmlSettings projectsettings;
 
+	ofFbo fbo;
+	ofImage savingImage;
+	string saveFolder;
+	int uniqueRand;
+	
+	bool onRenderMode;
+	bool saveCurrentFrame;
 };
