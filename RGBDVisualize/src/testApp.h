@@ -35,16 +35,15 @@ class testApp : public ofBaseApp{
 	bool loadDepthSequence(string path);
 	bool loadVideoFile(string path);
 	bool loadAlignmentMatrices(string path);
-		
-	ofVideoPlayer player;
-	ofxQTKitVideoPlayer qtRenderer;
+	
+	ofVideoPlayer hiResPlayer;
+	ofVideoPlayer lowResPlayer;
 	
 	ofxRGBDRenderer renderer;
 	ofxRGBDVideoDepthSequence sequencer;
 	
 	unsigned short* depthPixelDecodeBuffer;
 
-	bool doUndistort;
 	ofImage undistortedImage;
 	bool allLoaded;
 
@@ -56,7 +55,8 @@ class testApp : public ofBaseApp{
 	ofxTLDepthImageSequence depthSequence;
 	
 	ofxXmlSettings projectsettings;
-
+	
+	ofRectangle fboRectangle;
 	ofFbo fbo;
 	ofImage savingImage;
 	string saveFolder;

@@ -3,43 +3,48 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-
 	ofSetFrameRate(60);
 	ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
 	ofBackground(0);
 
-	doUndistort = false;
 	saveCurrentFrame = false;
 	onRenderMode = false;
 	
 	savingImage.setUseTexture(false);
 	savingImage.allocate(1920,1080, OF_IMAGE_COLOR);
 	
-
-	
+	fboRectangle = ofRectangle(300, 75, 1280*.75, 720*.75);
 	fbo.allocate(1920, 1080, GL_RGB, 4);
 	
 	if(projectsettings.loadFile("projectsettings.xml")){
-		if(!loadAlignmentMatrices(projectsettings.getValue("alignmentDir", ""))){
+		string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
+		if(!loadAlignmentMatrices(loadedAlignmentDir)){
 			loadNewProject();
 		}
+		cout << "loaded alignment " << loadedAlignmentDir << endl;
 		
-		if(!loadVideoFile(projectsettings.getValue("videoFile", ""))){
+		string loadedVideoFile = projectsettings.getValue("videoFile", "");
+		if(!loadVideoFile(loadedVideoFile)){
 			loadNewProject();
 		}
+		cout << "loaded video " << loadedVideoFile << endl;
 		
-		if(!loadDepthSequence(projectsettings.getValue("depthSequence", ""))){
+		string loadedDepthSequence = projectsettings.getValue("depthSequence", "");
+		if(!loadDepthSequence(loadedDepthSequence)){
 			loadNewProject();
 		}
+		cout << "loaded depth " << loadedDepthSequence << endl;
+		
 		allLoaded = true;
 	}
 	else {
 		loadNewProject();
 	}
 	
-	//renderer.setRGBTexture(player);
-	renderer.setRGBTexture(undistortedImage);
+	renderer.setRGBTexture(lowResPlayer);
+	//renderer.setRGBTexture(undistortedImage);
+	
 	
 	cam.speed = 40;
 	cam.autosavePosition = true;
@@ -49,22 +54,31 @@ void testApp::setup(){
 	cam.setFarClip(30000);
 	
 	depthPixelDecodeBuffer = depthSequence.currentDepthRaw;
-	//depthPixelDecodeBuffer = new unsigned short[640*480];
 	
 	string videoThumbsPath = ofFilePath::removeExt(videoPath);
 	if(!ofDirectory(videoThumbsPath).exists()){
 		ofDirectory(videoThumbsPath).create(true);
 	}
 
+	cout << "setting up timeline " << endl;
+
 	timeline.setup();
+	timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
+
 	videoTimelineElement.setup();
 	
-	timeline.setDurationInFrames(player.getTotalNumFrames());
+	cout << "setting duration to  timeline " << lowResPlayer.getTotalNumFrames() << endl;
+	
+	timeline.setDurationInFrames(lowResPlayer.getTotalNumFrames());
 	timeline.addElement("Video", &videoTimelineElement);
-	
-	videoTimelineElement.toggleThumbs();
-	videoTimelineElement.setVideoPlayer(player, videoThumbsPath);
-	
+
+	cout << "added video element" << endl;
+
+	//videoTimelineElement.toggleThumbs();
+	videoTimelineElement.setVideoPlayer(lowResPlayer, videoThumbsPath);
+
+	cout << "setting video player on element " << endl;
+
 	gui.addSlider("X Linear Shift", renderer.xshift, -20, 20);
 	gui.addSlider("Y Linear Shift", renderer.yshift, -150, 15);
 	gui.addToggle("Use Distorted bits", renderer.useDistorted);
@@ -74,39 +88,62 @@ void testApp::setup(){
 	gui.toggleDraw();
 	
 	cam.setScale(1, -1, 1);
-	
 
-	
-//	player.play();
-
+	onRenderMode = false;
 }
 
 bool testApp::loadNewProject(){
 	allLoaded = false;
-
-	//Alignment matrices
+	ofSystemAlertDialog("Select Directory");
 	ofFileDialogResult r;
-	ofSystemAlertDialog("Select Alignment Directory");
-	r = ofSystemLoadDialog("Alignment Directory", true);
-	if(!r.bSuccess || !loadAlignmentMatrices(r.getPath())){
-		return false;
-	}
+	r = ofSystemLoadDialog("Get Directory", true);
+	if(r.bSuccess){
+		ofDirectory dataDirectory(r.getPath());
+		dataDirectory.listDir();
+		int numFiles = dataDirectory.numFiles();
+		string calibrationDirectory = "";
+		string videoPath = "";
+		string depthImageDirectory = "";
+		for(int i = 0; i < numFiles; i++){
+			
+			string testFile = dataDirectory.getName(i);
+			
+			if(testFile.find("calibration") != string::npos){
+				calibrationDirectory = dataDirectory.getPath(i);
+			}
+			   
+			if(testFile.find("depth") != string::npos){
+				depthImageDirectory = dataDirectory.getPath(i);
+			}
+			
+			if(testFile.find("mov") != string::npos){
+			 	if(testFile.find("small") == string::npos){
+					videoPath = dataDirectory.getPath(i);
+				}
+			}
+		}
 	
-	//Video file
-	ofSystemAlertDialog("Select Video File");
-	r = ofSystemLoadDialog("Video File", false);
-	if(!r.bSuccess || !loadVideoFile(r.getPath())){
-		return false;
+		if(calibrationDirectory != "" && videoPath != "" && depthImageDirectory != ""){
+			if(!loadAlignmentMatrices(calibrationDirectory)){
+				ofSystemAlertDialog("Load Failed -- Couldn't Load Calibration Direcotry.");
+				return false;
+			}
+
+			if(!loadVideoFile(videoPath)){
+				ofSystemAlertDialog("Load Failed -- Couldn't load video.");
+				return false;
+			}
+			
+			if(!loadDepthSequence(depthImageDirectory)){
+				ofSystemAlertDialog("Load Failed -- Couldn't load dpeth iamges.");
+				return false;
+			}
+			return true;
+		}
 	}
-	
-	//depth sequence
-	ofSystemAlertDialog("Select Depth Directory");
-	r = ofSystemLoadDialog("Depth Directory", true);
-	if(!r.bSuccess || !loadDepthSequence(r.getPath())){
-		return false;
-	}
-	
 	allLoaded = true;
+	return false;
+	
 }
 
 bool testApp::loadDepthSequence(string path){
@@ -121,19 +158,33 @@ bool testApp::loadDepthSequence(string path){
 bool testApp::loadVideoFile(string path){
 	projectsettings.setValue("videoFile", path);
 	projectsettings.saveFile();
-
-	videoPath = path;
-	//qtRenderer.loadMovie(videoPath, OFXQTVIDEOPLAYER_MODE_TEXTURE_ONLY);
-	player.loadMovie(videoPath);
+	
+	if(!hiResPlayer.loadMovie(path)){
+		ofSystemAlertDialog("Load Failed -- Couldn't load hi res video file.");
+		return false;
+	}
+	
+	string lowResPath = ofFilePath::removeExt(path) + "_small.mov";
+	if(!lowResPlayer.loadMovie(lowResPath)){
+		ofSystemAlertDialog("Load Failed -- Couldn't load low res video file.");
+		return false;		
+	}
+	
+	if(!sequencer.loadPairingFile(ofFilePath::removeExt(path) + "_pairings.xml")){
+		ofSystemAlertDialog("Load Failed -- Couldn't load pairings file.");
+		return false;				
+	}
+	
+	renderer.setTextureScale(1.0*lowResPlayer.getWidth()/hiResPlayer.getWidth(), 
+							 1.0*lowResPlayer.getHeight()/hiResPlayer.getHeight());
 	saveFolder = "saveout_" + ofFilePath::getBaseName(path);
-	//seed();
 	uniqueRand = ofGetMonth()+ofGetDay()+ofGetMinutes()+ofGetSeconds();
 	ofDirectory savdir(saveFolder);
 	if(!savdir.exists()){
 		savdir.create(true);
 	}
-	//qtRenderer.loadMovie(videoPath);
-	return sequencer.loadPairingFile(ofFilePath::removeExt(path) + "_pairings.xml");
+	
+	return true;
 }
 
 bool testApp::loadAlignmentMatrices(string path){
@@ -147,42 +198,32 @@ bool testApp::loadAlignmentMatrices(string path){
 void testApp::update(){
 	if(!allLoaded) return;
 	
-	if(onRenderMode){
-		if(player.isPlaying())
-			player.stop();
-		
-		//player.setFrame(player.getCurrentFrame()+1);
-		videoTimelineElement.selectFrame(videoTimelineElement.getSelectedFrame()+1);
-
-		cout << "current frame is " << player.getCurrentFrame() << endl;
-	}
+//	if(onRenderMode){
+//		if(player.isPlaying()){
+//			player.stop();
+//		}
+//		
+//		//player.setFrame(player.getCurrentFrame()+1);
+//		videoTimelineElement.selectFrame(videoTimelineElement.getSelectedFrame()+1);
+//
+//		cout << "current frame is " << lowResPlayer.getCurrentFrame() << endl;
+//	}
 	
-	player.update();
+	lowResPlayer.update();
 	
-	if(player.isFrameNew() || onRenderMode){
+	if(lowResPlayer.isFrameNew()){
 		saveCurrentFrame = onRenderMode;
-		
-		//cout << "new frame?" << endl;
-	//qtRenderer.update();
-	//if(qtRenderer.isFrameNew()){
-//		if(doUndistort){
-//			renderer.getDepthCalibration().undistort(toCv(player), toCv(undistortedImage));
-//			undistortedImage.update();
-//		}
-//		else{
-//			undistortedImage.setFromPixels(player.getPixelsRef());
-//		}
-		
-//		cout << "current frame number " << player.getCurrentFrame() << endl;
+				
 		long depthFrame;
 		if(sequencer.isSequenceTimebased()){
-			long movieMillis = player.getPosition() * player.getDuration()*1000;
+			long movieMillis = lowResPlayer.getPosition() * lowResPlayer.getDuration()*1000;
 			depthFrame = sequencer.getDepthFrameForVideoFrame(movieMillis);
+			depthSequence.selectTime(depthFrame);
 		}
 		else{
-			depthFrame = sequencer.getDepthFrameForVideoFrame(player.getCurrentFrame());
+			depthFrame = sequencer.getDepthFrameForVideoFrame(lowResPlayer.getCurrentFrame());
+			depthSequence.selectFrame(depthFrame);
 		}
-		depthSequence.selectTime(depthFrame);
 		
 		processDepthFrame();
 		
@@ -213,26 +254,17 @@ void testApp::draw(){
 	
 	fbo.begin();
 	ofClear(0, 0, 0);
-	
+		
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
 	glEnable(GL_DEPTH_TEST);
 	glPushMatrix();
-//	ofScale(1, -1, 1);
-	if(renderer.applyShader){
-		renderer.rgbdShader.begin();
-	}
+	ofScale(1, -1, 1);
 	
-	//qtRenderer.bind();
-	//undistortedImage.getTextureReference().bind();
-	player.getTextureReference().bind();
-	renderer.getMesh().drawFaces();
-	//renderer.drawPointCloud();
-//	undistortedImage.getTextureReference().unbind();
-	player.getTextureReference().unbind();
-	//qtRenderer.unbind();
-	if(renderer.applyShader){
-		renderer.rgbdShader.end();
-	}
+	lowResPlayer.getTextureReference().bind();
+	//renderer.getMesh().drawFaces();
+	renderer.drawPointCloud();
+
+	lowResPlayer.getTextureReference().unbind();
 	
 	glDisable(GL_DEPTH_TEST);
 	glPopMatrix();
@@ -241,6 +273,7 @@ void testApp::draw(){
 	
 	fbo.end();
 	
+	
 	if(saveCurrentFrame){
 		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
 		char filename[512];
@@ -248,9 +281,9 @@ void testApp::draw(){
 		savingImage.saveImage(filename);
 		saveCurrentFrame = false;
 	}
-	fbo.draw(300, 75, 1280*.75, 720*.75);
 	
-	timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
+	
+	fbo.getTextureReference().draw(fboRectangle);
 	
 	timeline.draw();
 	gui.draw();
@@ -266,26 +299,14 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	if(key == ' '){
-		if(player.isPlaying()){
-			player.stop();
+		if(lowResPlayer.isPlaying()){
+			lowResPlayer.stop();
 		}
 		else{
-			player.play();
-		}
-		
+			lowResPlayer.play();
+		}		
 	}
 	
-	if(key == 'u'){
-		doUndistort = !doUndistort;
-//		if(doUndistort){
-//			renderer.getRGBCalibration().undistort(toCv(player), toCv(undistortedImage));
-//			undistortedImage.update();
-//		}
-//		else{
-//			undistortedImage.setFromPixels(player.getPixelsRef());
-//		}
-		
-	}
 	if(key == '='){
 		renderer.applyShader = !renderer.applyShader;
 	}
@@ -325,7 +346,7 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-
+	cam.usemouse = fboRectangle.inside(x, y);
 }
 
 //--------------------------------------------------------------
@@ -345,6 +366,7 @@ void testApp::mouseReleased(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
 	timeline.setWidth(w);
+	timeline.setOffset(ofVec2f(0, ofGetHeight() - timeline.getDrawRect().height));
 }
 
 //--------------------------------------------------------------
