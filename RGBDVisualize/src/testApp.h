@@ -8,9 +8,10 @@
 #include "ofxTimeline.h"
 #include "ofxTLVideoPlayer.h"
 #include "ofxTLDepthImageSequence.h";
-#include "ofxFCPMarker.h"
 #include "ofxMSAInteractiveObjectDelegate.h"
 #include "ofxSimpleGuiToo.h"
+#include "ofxFCPMarker.h"
+#include "ofxCameraRecorder.h"
 
 class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 {
@@ -62,6 +63,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	ofVideoPlayer* lowResPlayer;
 	ofxFCPMarker markers;
 	int currentMarker;
+	ofxCameraRecorder cameraRecorder;
+	bool sampleCamera;
+	bool playbackCamera;
 	
 	ofxRGBDRenderer renderer;
 	ofxRGBDVideoDepthSequence sequencer;

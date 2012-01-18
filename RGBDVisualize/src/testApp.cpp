@@ -15,6 +15,9 @@ void testApp::setup(){
 	currentlyRendering = false;
 	allLoaded = false;
 	
+	sampleCamera = false;
+	playbackCamera = false;
+	
 	savingImage.setUseTexture(false);
 	savingImage.allocate(1920,1080, OF_IMAGE_COLOR);
 	
@@ -48,6 +51,7 @@ void testApp::setup(){
 	cam.loadCameraPosition();
 	cam.setFarClip(30000);
 	cam.setScale(1, -1, 1);
+	cameraRecorder.camera = &cam;
 	
 	cout << "setting up timeline " << endl;
 }
@@ -227,6 +231,8 @@ void testApp::update(){
 		renderer.setRGBTexture(*hiResPlayer);
 		renderer.setTextureScale(1.0, 1.0);
 		currentRenderFrame = timeline.getInFrame();
+		playbackCamera = true;
+		
 	}
 
 	if(currentlyRendering){
@@ -265,6 +271,14 @@ void testApp::updateRenderer(ofVideoPlayer& fromPlayer){
 	processDepthFrame();
 	
 	renderer.update();
+	
+	if(playbackCamera){
+		cameraRecorder.moveCameraToFrame(fromPlayer.getCurrentFrame());
+	}
+
+	if(sampleCamera){
+		cameraRecorder.sample(fromPlayer.getCurrentFrame());
+	}
 }
 
 //--------------------------------------------------------------
@@ -284,14 +298,13 @@ void testApp::processDepthFrame(){
 //--------------------------------------------------------------
 void testApp::draw(){
 	
-	//ofBackground(255*.2);
 	ofBackground(255*.2);
 
 	if(!allLoaded) return;
 
 	fbo.begin();
 	ofClear(0, 0, 0);
-		
+	
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
 	renderer.drawMesh();
 	//renderer.drawWireFrame();
@@ -309,10 +322,17 @@ void testApp::draw(){
 		//stop when finished
 		if(currentRenderFrame > timeline.getOutFrame()){
 			currentlyRendering = false;
-		}		
+		}
 	}
 	
 	fbo.getTextureReference().draw(fboRectangle);
+	
+	if(sampleCamera){
+		ofDrawBitmapString("RECORDING CAMERA", ofPoint(600, 10));
+	}
+	if(playbackCamera){
+		ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
+	}
 	
 	timeline.draw();
 	gui.draw();
@@ -341,15 +361,12 @@ void testApp::loadCompositions(){
 			string fullCompPath = compositions.getValue("composition","", i);
 			string compLabel = ofFilePath::getFileName(fullCompPath);
 			d->setLabel(compLabel);
-			cout << "comp label is " << compLabel << endl;
-			
 			compbuttons.push_back(d);
 			fullCompPaths.push_back(fullCompPath);
 		}
 		compositions.popTag();
 	}
-	else{
-
+	else {
 		compositions.addTag("compositions");
 		compositions.saveFile();
 	}
@@ -361,7 +378,6 @@ void testApp::newComposition(){
 	if(r.bSuccess){
 		projectsettings.loadFile(r.getPath());
 		if(loadNewProject()){
-			
 			compositions.pushTag("compositions");
 			compositions.addValue("composition", r.getPath());
 			compositions.popTag();
@@ -465,7 +481,29 @@ void testApp::keyPressed(int key){
 		currentMarker = (currentMarker + 1) % markers.getMarkers().size();
 		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
 	}
-		
+	
+
+	//RECORD CAMERA
+	if(key == 'R'){	
+		if(sampleCamera){
+			sampleCamera = false;
+		}
+		else{
+			cameraRecorder.reset();
+			sampleCamera = true;
+		}
+	}
+	
+	//PLAYBACK CAMERA
+	if(key == 'P'){
+		playbackCamera = !playbackCamera;
+		if(playbackCamera){
+			sampleCamera = false;
+			timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
+			timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
+
+		}
+	}
 }
 
 //--------------------------------------------------------------
