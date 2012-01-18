@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxQTKitVideoPlayer.h"
 #include "ofxRGBDRenderer.h"
 #include "ofxRGBDVideoDepthSequence.h"
 #include "ofxDepthImageRecorder.h"
@@ -10,10 +9,11 @@
 #include "ofxTLVideoPlayer.h"
 #include "ofxTLDepthImageSequence.h";
 #include "ofxFCPMarker.h"
-
+#include "ofxMSAInteractiveObjectDelegate.h"
 #include "ofxSimpleGuiToo.h"
 
-class testApp : public ofBaseApp{
+class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
+{
 
   public:
 	void setup();
@@ -39,14 +39,27 @@ class testApp : public ofBaseApp{
 	bool loadAlignmentMatrices(string path);
 	bool loadMarkerFile(string markerPath);
 	
-	ofxXmlSettings compositionSettings;
+	ofxXmlSettings projectsettings;
+	ofxXmlSettings compositions;
 	void loadCompositions();
 	void newComposition();
 	void saveComposition();
 	
-
-	ofVideoPlayer hiResPlayer;
-	ofVideoPlayer lowResPlayer;
+	//MSA Object delegate
+	ofxMSAInteractiveObjectWithDelegate* newCompButton;
+	ofxMSAInteractiveObjectWithDelegate* saveCompButton;
+	vector<ofxMSAInteractiveObjectWithDelegate*> compbuttons;
+	vector<string> fullCompPaths;
+	bool playerElementAdded;
+	
+ 	void objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y);
+    void objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y);
+	void objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int button);	
+	void objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button);	
+	void objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y);
+	
+	ofVideoPlayer* hiResPlayer;
+	ofVideoPlayer* lowResPlayer;
 	ofxFCPMarker markers;
 	int currentMarker;
 	
@@ -65,13 +78,14 @@ class testApp : public ofBaseApp{
 	ofxTLVideoPlayer videoTimelineElement;
 	ofxTLDepthImageSequence depthSequence;
 	
-	ofxXmlSettings projectsettings;
-	
 	ofRectangle fboRectangle;
 	ofFbo fbo;
 	ofImage savingImage;
 	string saveFolder;
 	int uniqueRand;
+	
+	float currentXShift;
+	float currentYShift;
 	
 	bool startRenderMode;
 	bool currentlyRendering;
