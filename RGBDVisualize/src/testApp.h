@@ -30,6 +30,7 @@ class testApp : public ofBaseApp{
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
  	
+	void updateRenderer(ofVideoPlayer& fromPlayer);
 	void processDepthFrame();
 	
 	bool loadNewProject();
@@ -38,21 +39,27 @@ class testApp : public ofBaseApp{
 	bool loadAlignmentMatrices(string path);
 	bool loadMarkerFile(string markerPath);
 	
+	ofxXmlSettings compositionSettings;
+	void loadCompositions();
+	void newComposition();
+	void saveComposition();
+	
+
 	ofVideoPlayer hiResPlayer;
 	ofVideoPlayer lowResPlayer;
 	ofxFCPMarker markers;
+	int currentMarker;
 	
 	ofxRGBDRenderer renderer;
 	ofxRGBDVideoDepthSequence sequencer;
 	
 	unsigned short* depthPixelDecodeBuffer;
 
-	ofImage undistortedImage;
 	bool allLoaded;
 
 	ofxGameCamera cam;
 	
-	
+	string videoThumbsPath;
 	string videoPath;
 	ofxTimeline timeline;
 	ofxTLVideoPlayer videoTimelineElement;
@@ -66,6 +73,7 @@ class testApp : public ofBaseApp{
 	string saveFolder;
 	int uniqueRand;
 	
-	bool onRenderMode;
-	bool saveCurrentFrame;
+	bool startRenderMode;
+	bool currentlyRendering;
+	int currentRenderFrame;
 };

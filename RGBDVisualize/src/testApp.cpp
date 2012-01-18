@@ -8,13 +8,15 @@ void testApp::setup(){
 	ofEnableAlphaBlending();
 	ofBackground(0);
 
-	saveCurrentFrame = false;
-	onRenderMode = false;
+	startRenderMode = false;
+	currentlyRendering = false;
+	
+	ofToggleFullscreen();
 	
 	savingImage.setUseTexture(false);
 	savingImage.allocate(1920,1080, OF_IMAGE_COLOR);
 	
-	fboRectangle = ofRectangle(300, 75, 1280*.75, 720*.75);
+	fboRectangle = ofRectangle(250, 100, 1280*.75, 720*.75);
 	fbo.allocate(1920, 1080, GL_RGB, 4);
 	
 	if(projectsettings.loadFile("projectsettings.xml")){
@@ -39,7 +41,6 @@ void testApp::setup(){
 		if(markerPath != ""){
 			loadMarkerFile(markerPath);
 		}
-		
 		cout << "loaded depth " << loadedDepthSequence << endl;
 		
 		allLoaded = true;
@@ -49,8 +50,6 @@ void testApp::setup(){
 	}
 	
 	renderer.setRGBTexture(lowResPlayer);
-	//renderer.setRGBTexture(undistortedImage);
-	
 	
 	cam.speed = 40;
 	cam.autosavePosition = true;
@@ -61,7 +60,7 @@ void testApp::setup(){
 	
 	depthPixelDecodeBuffer = depthSequence.currentDepthRaw;
 	
-	string videoThumbsPath = ofFilePath::removeExt(videoPath);
+	videoThumbsPath = ofFilePath::removeExt(videoPath);
 	if(!ofDirectory(videoThumbsPath).exists()){
 		ofDirectory(videoThumbsPath).create(true);
 	}
@@ -70,7 +69,8 @@ void testApp::setup(){
 
 	timeline.setup();
 	timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
-
+	timeline.setInOutRange(ofRange(.25,.75));
+	
 	videoTimelineElement.setup();
 	
 	cout << "setting duration to  timeline " << lowResPlayer.getTotalNumFrames() << endl;
@@ -86,15 +86,18 @@ void testApp::setup(){
 	cout << "setting video player on element " << endl;
 
 	gui.addSlider("X Linear Shift", renderer.xshift, -20, 20);
-	gui.addSlider("Y Linear Shift", renderer.yshift, -150, 15);
-	gui.addToggle("Start Render", onRenderMode);
+	gui.addSlider("Y Linear Shift", renderer.yshift, -35, 35);
+	gui.addToggle("Render Current Composition", startRenderMode);
 	
 	gui.loadFromXML();
 	gui.toggleDraw();
 	
+	startRenderMode = false;
+	
 	cam.setScale(1, -1, 1);
 
-	onRenderMode = false;
+	lowResPlayer.play();
+	lowResPlayer.setSpeed(0);
 }
 
 bool testApp::loadNewProject(){
@@ -112,7 +115,6 @@ bool testApp::loadNewProject(){
 		for(int i = 0; i < numFiles; i++){
 			
 			string testFile = dataDirectory.getName(i);
-			
 			if(testFile.find("calibration") != string::npos){
 				calibrationDirectory = dataDirectory.getPath(i);
 			}
@@ -127,7 +129,7 @@ bool testApp::loadNewProject(){
 				}
 			}
 			
-			//assumel
+			//assume
 			if(testFile.find("txt") != string::npos){
 				loadMarkerFile(dataDirectory.getPath(i));
 			}
@@ -148,12 +150,12 @@ bool testApp::loadNewProject(){
 				ofSystemAlertDialog("Load Failed -- Couldn't load dpeth iamges.");
 				return false;
 			}
+			
+			allLoaded = true;
 			return true;
 		}
 	}
-	allLoaded = true;
-	return false;
-	
+	return false;	
 }
 
 bool testApp::loadDepthSequence(string path){
@@ -208,7 +210,8 @@ bool testApp::loadMarkerFile(string markerPath){
 	}
 	projectsettings.setValue("markerPath", markerPath);
 	projectsettings.saveFile();
-
+	currentMarker = 0;
+	
 	return true;
 }
 
@@ -221,28 +224,51 @@ bool testApp::loadAlignmentMatrices(string path){
 
 //--------------------------------------------------------------
 void testApp::update(){
-	if(!allLoaded) return;
 	
-	lowResPlayer.update();	
-	if(lowResPlayer.isFrameNew()){
-		saveCurrentFrame = onRenderMode;
-				
-		long depthFrame;
-		if(sequencer.isSequenceTimebased()){
-			long movieMillis = lowResPlayer.getPosition() * lowResPlayer.getDuration()*1000;
-			depthFrame = sequencer.getDepthFrameForVideoFrame(movieMillis);
-			depthSequence.selectTime(depthFrame);
-		}
-		else{
-			depthFrame = sequencer.getDepthFrameForVideoFrame(lowResPlayer.getCurrentFrame());
-			depthSequence.selectFrame(depthFrame);
-		}
-		
-		processDepthFrame();
-		
-		renderer.setDepthImage(depthPixelDecodeBuffer);
-		renderer.update();
+	if(!allLoaded) return;
+
+	if(startRenderMode){
+		startRenderMode = false;
+		currentlyRendering = true;
+		hiResPlayer.play();
+		hiResPlayer.setSpeed(0);
+		videoTimelineElement.setVideoPlayer(hiResPlayer, videoThumbsPath);
+		renderer.setRGBTexture(hiResPlayer);
+		renderer.setTextureScale(1.0, 1.0);
+		currentRenderFrame = timeline.getInFrame();
 	}
+
+	if(currentlyRendering){
+		currentRenderFrame++;
+		timeline.setCurrentFrame(currentRenderFrame);
+		hiResPlayer.setFrame(currentRenderFrame);
+		hiResPlayer.update();
+		updateRenderer(hiResPlayer);		
+	}
+	else {
+		lowResPlayer.update();	
+		if(lowResPlayer.isFrameNew()){		
+			updateRenderer(lowResPlayer);
+		}
+	}
+}
+
+void testApp::updateRenderer(ofVideoPlayer& fromPlayer){
+	long depthFrame;
+	if(sequencer.isSequenceTimebased()){
+		long movieMillis = fromPlayer.getPosition() * fromPlayer.getDuration()*1000;
+		depthFrame = sequencer.getDepthFrameForVideoFrame(movieMillis);
+		depthSequence.selectTime(depthFrame);
+	}
+	else {
+		depthFrame = sequencer.getDepthFrameForVideoFrame(fromPlayer.getCurrentFrame());
+		depthSequence.selectFrame(depthFrame);
+	}
+	
+	processDepthFrame();
+	
+	renderer.setDepthImage(depthPixelDecodeBuffer);
+	renderer.update();
 }
 
 void testApp::processDepthFrame(){
@@ -261,7 +287,6 @@ void testApp::processDepthFrame(){
 void testApp::draw(){
 	if(!allLoaded) return;
 	
-	
 	//ofBackground(255*.2);
 	ofBackground(255*.2);
 	
@@ -269,22 +294,24 @@ void testApp::draw(){
 	ofClear(0, 0, 0);
 		
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
-	//renderer.drawMesh();
+	renderer.drawMesh();
 	//renderer.drawWireFrame();
-	renderer.drawPointCloud();
+	//renderer.drawPointCloud();
 	
 	cam.end();
-	
 	fbo.end();
 	
-	if(saveCurrentFrame){
+	if(currentlyRendering){
 		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
 		char filename[512];
-		sprintf(filename, "%s/save_%d_%05d.png", saveFolder.c_str(), uniqueRand, ofGetFrameNum());
+		sprintf(filename, "%s/save_%d_%05d.png", saveFolder.c_str(), uniqueRand, hiResPlayer.getCurrentFrame());
 		savingImage.saveImage(filename);
-		saveCurrentFrame = false;
+		
+		//stop when finished
+		if(currentRenderFrame > timeline.getOutFrame()){
+			currentlyRendering = false;
+		}		
 	}
-	
 	
 	fbo.getTextureReference().draw(fboRectangle);
 	
@@ -293,8 +320,17 @@ void testApp::draw(){
 	
 	ofSetColor(255);
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), ofPoint(20,20));
+}
+
+void testApp::loadCompositions(){
 	
-	renderer.update();
+}
+
+void testApp::newComposition(){
+	
+}
+
+void testApp::saveComposition(){
 
 }
 
@@ -302,11 +338,12 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	if(key == ' '){
-		if(lowResPlayer.isPlaying()){
-			lowResPlayer.stop();
+		if(lowResPlayer.getSpeed() != 0.0){
+			lowResPlayer.setSpeed(0);
 		}
 		else{
 			lowResPlayer.play();
+			lowResPlayer.setSpeed(1.0);
 		}		
 	}
 	
@@ -314,38 +351,30 @@ void testApp::keyPressed(int key){
 		renderer.applyShader = !renderer.applyShader;
 	}
 	
-	if(key == 'l'){
-		loadNewProject();
+	if(key == 'i'){
+		timeline.setCurrentTimeToInPoint();	
+	}
+
+	if(key == 'o'){
+		timeline.setCurrentTimeToOutPoint();
 	}
 	
+	if (key == 'j' && markers.isLoaded()) {
+		currentMarker--;
+		if(currentMarker < 0) currentMarker = markers.getMarkers().size() - 1;		
+		lowResPlayer.setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
+	}
 
-//	if(key == OF_KEY_UP){
-//		renderer.yshift++;
-//		renderer.update();
-//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-//	}
-//	if(key == OF_KEY_DOWN){
-//		renderer.yshift--;
-//		renderer.update();
-//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-//	}
-//	if(key == OF_KEY_RIGHT){
-//		renderer.xshift++;
-//		renderer.update();
-//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-//	}
-//	if(key == OF_KEY_LEFT){
-//		renderer.xshift--;
-//		renderer.update();
-//		cout << "shifts: " << renderer.xshift << " " << renderer.yshift << endl;
-//	}
-	
+	if (key == 'l' && markers.isLoaded()) {
+		currentMarker = (currentMarker + 1) % markers.getMarkers().size();
+		lowResPlayer.setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
+	}
+		
 }
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
-	
-	
+
 }
 
 //--------------------------------------------------------------
