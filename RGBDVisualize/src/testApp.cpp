@@ -34,6 +34,12 @@ void testApp::setup(){
 		if(!loadDepthSequence(loadedDepthSequence)){
 			loadNewProject();
 		}
+
+		string markerPath = projectsettings.getValue("markerPath", "");
+		if(markerPath != ""){
+			loadMarkerFile(markerPath);
+		}
+		
 		cout << "loaded depth " << loadedDepthSequence << endl;
 		
 		allLoaded = true;
@@ -81,7 +87,6 @@ void testApp::setup(){
 
 	gui.addSlider("X Linear Shift", renderer.xshift, -20, 20);
 	gui.addSlider("Y Linear Shift", renderer.yshift, -150, 15);
-	gui.addToggle("Use Distorted bits", renderer.useDistorted);
 	gui.addToggle("Start Render", onRenderMode);
 	
 	gui.loadFromXML();
@@ -120,6 +125,11 @@ bool testApp::loadNewProject(){
 			 	if(testFile.find("small") == string::npos){
 					videoPath = dataDirectory.getPath(i);
 				}
+			}
+			
+			//assumel
+			if(testFile.find("txt") != string::npos){
+				loadMarkerFile(dataDirectory.getPath(i));
 			}
 		}
 	
@@ -187,6 +197,21 @@ bool testApp::loadVideoFile(string path){
 	return true;
 }
 
+bool testApp::loadMarkerFile(string markerPath){
+	markers.setVideoFPS(24);
+	vector<string> acceptedTypes;
+	acceptedTypes.push_back("Sequence");
+	markers.setTypeFilters(acceptedTypes);
+	if(!markers.parseMarkers(markerPath)){
+		ofSystemAlertDialog("Warning -- Markers failed");
+		return false;
+	}
+	projectsettings.setValue("markerPath", markerPath);
+	projectsettings.saveFile();
+
+	return true;
+}
+
 bool testApp::loadAlignmentMatrices(string path){
 	projectsettings.setValue("alignmentDir", path);
 	projectsettings.saveFile();
@@ -198,19 +223,7 @@ bool testApp::loadAlignmentMatrices(string path){
 void testApp::update(){
 	if(!allLoaded) return;
 	
-//	if(onRenderMode){
-//		if(player.isPlaying()){
-//			player.stop();
-//		}
-//		
-//		//player.setFrame(player.getCurrentFrame()+1);
-//		videoTimelineElement.selectFrame(videoTimelineElement.getSelectedFrame()+1);
-//
-//		cout << "current frame is " << lowResPlayer.getCurrentFrame() << endl;
-//	}
-	
-	lowResPlayer.update();
-	
+	lowResPlayer.update();	
 	if(lowResPlayer.isFrameNew()){
 		saveCurrentFrame = onRenderMode;
 				
@@ -256,23 +269,13 @@ void testApp::draw(){
 	ofClear(0, 0, 0);
 		
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
-	glEnable(GL_DEPTH_TEST);
-	glPushMatrix();
-	ofScale(1, -1, 1);
-	
-	lowResPlayer.getTextureReference().bind();
-	//renderer.getMesh().drawFaces();
+	//renderer.drawMesh();
+	//renderer.drawWireFrame();
 	renderer.drawPointCloud();
-
-	lowResPlayer.getTextureReference().unbind();
-	
-	glDisable(GL_DEPTH_TEST);
-	glPopMatrix();
 	
 	cam.end();
 	
 	fbo.end();
-	
 	
 	if(saveCurrentFrame){
 		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
@@ -315,6 +318,7 @@ void testApp::keyPressed(int key){
 		loadNewProject();
 	}
 	
+
 //	if(key == OF_KEY_UP){
 //		renderer.yshift++;
 //		renderer.update();

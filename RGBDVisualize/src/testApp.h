@@ -9,6 +9,7 @@
 #include "ofxTimeline.h"
 #include "ofxTLVideoPlayer.h"
 #include "ofxTLDepthImageSequence.h";
+#include "ofxFCPMarker.h"
 
 #include "ofxSimpleGuiToo.h"
 
@@ -35,9 +36,11 @@ class testApp : public ofBaseApp{
 	bool loadDepthSequence(string path);
 	bool loadVideoFile(string path);
 	bool loadAlignmentMatrices(string path);
+	bool loadMarkerFile(string markerPath);
 	
 	ofVideoPlayer hiResPlayer;
 	ofVideoPlayer lowResPlayer;
+	ofxFCPMarker markers;
 	
 	ofxRGBDRenderer renderer;
 	ofxRGBDVideoDepthSequence sequencer;
@@ -48,7 +51,8 @@ class testApp : public ofBaseApp{
 	bool allLoaded;
 
 	ofxGameCamera cam;
-		
+	
+	
 	string videoPath;
 	ofxTimeline timeline;
 	ofxTLVideoPlayer videoTimelineElement;
