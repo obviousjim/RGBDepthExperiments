@@ -4,7 +4,7 @@
 
 #include "ofxXmlSettings.h"
 #include "ofxMSAInteractiveObjectDelegate.h"
-#include "ofxQTKitVideoPlayer.h"
+
 
 class ofxTLVideoPlayer;
 class ofxTLDepthImageSequence;

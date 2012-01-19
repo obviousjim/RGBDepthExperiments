@@ -9,6 +9,16 @@ void testApp::setup(){
 	ofBackground(0);
 	playerElementAdded = false;
 
+	cam.speed = 40;
+	cam.autosavePosition = true;
+	cam.usemouse = true;
+	cam.useArrowKeys = false;
+	cam.setFarClip(30000);
+	cam.setScale(1, -1, 1);
+	cam.targetNode.setScale(1,-1,1);
+	cameraRecorder.camera = &cam;
+	cam.loadCameraPosition();
+	
 	hiResPlayer = NULL;
 	lowResPlayer = NULL;
 	startRenderMode = false;
@@ -33,25 +43,24 @@ void testApp::setup(){
 	saveCompButton->setLabel("Save Comp");
 	saveCompButton->setDelegate(this);
 	saveCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+50, 25, 150, 25);
+	cout << "compbuttons " << compbuttons.size() << endl;
 	
 	loadCompositions();
 		
 	gui.addSlider("X Linear Shift", currentXShift, -20, 20);
 	gui.addSlider("Y Linear Shift", currentYShift, -35, 35);
-	gui.addSlider("Camera Speed", cam.speed, .1, 20);
-	gui.addToggle("Render Current Composition", startRenderMode);
-	
+	gui.addSlider("Camera Speed", cam.speed, .1, 40);
+	gui.addToggle("Draw Pointcloud", drawPointcloud);
+	gui.addToggle("Draw Wireframe", drawWireframe);
+	gui.addToggle("Draw Mesh", drawMesh);
+	gui.addSlider("Point Size", pointSize, 1, 10);
+	gui.addSlider("Line Thickness", lineSize, 1, 10);
+	gui.addTitle("");
+	gui.addToggle("Render Composition", startRenderMode);
+
 	gui.loadFromXML();
 	gui.toggleDraw();
 	
-	cam.speed = 40;
-	cam.autosavePosition = true;
-	cam.usemouse = true;
-	cam.useArrowKeys = false;
-	cam.loadCameraPosition();
-	cam.setFarClip(30000);
-	cam.setScale(1, -1, 1);
-	cameraRecorder.camera = &cam;
 	
 	cout << "setting up timeline " << endl;
 }
@@ -63,7 +72,8 @@ bool testApp::loadNewProject(){
 	ofFileDialogResult r;
 	r = ofSystemLoadDialog("Get Directory", true);
 	if(r.bSuccess){
-		ofDirectory dataDirectory(r.getPath());
+		currentMediaFolder = r.getPath();
+		ofDirectory dataDirectory(currentMediaFolder);
 		dataDirectory.listDir();
 		int numFiles = dataDirectory.numFiles();
 		string calibrationDirectory = "";
@@ -91,7 +101,7 @@ bool testApp::loadNewProject(){
 				loadMarkerFile(dataDirectory.getPath(i));
 			}
 		}
-	
+		
 		if(calibrationDirectory != "" && videoPath != "" && depthImageDirectory != ""){
 			if(!loadAlignmentMatrices(calibrationDirectory)){
 				ofSystemAlertDialog("Load Failed -- Couldn't Load Calibration Direcotry.");
@@ -108,6 +118,21 @@ bool testApp::loadNewProject(){
 				return false;
 			}
 						
+			ofDirectory compBin(currentMediaFolder + "/compositions/");
+			if(!compBin.exists()){
+				compBin.create(true);
+			}
+			compBin.listDir();
+			int compNumber = compBin.numFiles();
+			currentCompositionDirectory = currentMediaFolder + "/compositions/comp" + ofToString(compNumber) + "/";
+			ofDirectory compFolder(currentCompositionDirectory);
+			if(!compFolder.exists()){
+				compFolder.create(true);
+			}
+			
+			string currentCompositionFile = currentCompositionDirectory+"compositionsettings.xml";
+			projectsettings.loadFile(currentCompositionFile);
+			refreshCompButtons();
 			allLoaded = true;
 			return true;
 		}
@@ -161,12 +186,6 @@ bool testApp::loadVideoFile(string path){
 	
 	renderer.setTextureScale(1.0*lowResPlayer->getWidth()/hiResPlayer->getWidth(), 
 							 1.0*lowResPlayer->getHeight()/hiResPlayer->getHeight());
-	saveFolder = "saveout_" + ofFilePath::getBaseName(path);
-	uniqueRand = ofGetMonth()+ofGetDay()+ofGetMinutes()+ofGetSeconds();
-	ofDirectory savdir(saveFolder);
-	if(!savdir.exists()){
-		savdir.create(true);
-	}
 	
 	videoThumbsPath = ofFilePath::removeExt(videoPath);
 	if(!ofDirectory(videoThumbsPath).exists()){
@@ -225,6 +244,9 @@ void testApp::update(){
 	if(startRenderMode){
 		startRenderMode = false;
 		currentlyRendering = true;
+		saveFolder = currentCompositionDirectory + "rendered/";
+		ofDirectory outputDirectory(saveFolder);
+		if(!outputDirectory.exists()) outputDirectory.create(true);
 		hiResPlayer->play();
 		hiResPlayer->setSpeed(0);
 		videoTimelineElement.setVideoPlayer(*hiResPlayer, videoThumbsPath);
@@ -232,7 +254,6 @@ void testApp::update(){
 		renderer.setTextureScale(1.0, 1.0);
 		currentRenderFrame = timeline.getInFrame();
 		playbackCamera = true;
-		
 	}
 
 	if(currentlyRendering){
@@ -306,17 +327,25 @@ void testApp::draw(){
 	ofClear(0, 0, 0);
 	
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
-	renderer.drawMesh();
-	//renderer.drawWireFrame();
-	//renderer.drawPointCloud();
-	
+	if(drawPointcloud){
+		glPointSize(pointSize);
+		renderer.drawPointCloud();
+	}
+	if(drawWireframe){
+		glLineWidth(lineSize);
+		renderer.drawWireFrame();
+	}
+	if(drawMesh){
+		renderer.drawMesh();
+	}
 	cam.end();
-	fbo.end();
 	
+	fbo.end();	
+	fbo.getTextureReference().draw(fboRectangle);
 	if(currentlyRendering){
 		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
 		char filename[512];
-		sprintf(filename, "%s/save_%d_%05d.png", saveFolder.c_str(), uniqueRand, hiResPlayer->getCurrentFrame());
+		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), hiResPlayer->getCurrentFrame());
 		savingImage.saveImage(filename);
 		
 		//stop when finished
@@ -325,7 +354,6 @@ void testApp::draw(){
 		}
 	}
 	
-	fbo.getTextureReference().draw(fboRectangle);
 	
 	if(sampleCamera){
 		ofDrawBitmapString("RECORDING CAMERA", ofPoint(600, 10));
@@ -343,53 +371,71 @@ void testApp::draw(){
 
 //--------------------------------------------------------------
 void testApp::loadCompositions(){
-	if(compositions.loadFile("compositions.xml")){
-
-		for(int i = 0; i < compbuttons.size(); i++){
-			delete compbuttons[i];
-		}
-		compbuttons.clear();
-		fullCompPaths.clear();
-		
-		compositions.pushTag("compositions");
-		int numComps = compositions.getNumTags("composition");
-		for(int i = 0; i < numComps; i++){
-			ofxMSAInteractiveObjectWithDelegate* d = new ofxMSAInteractiveObjectWithDelegate();
-			d->setup();
-			d->setDelegate(this);
-			d->setPosAndSize(ofGetHeight()-250, i*25, 200, 25);
-			string fullCompPath = compositions.getValue("composition","", i);
-			string compLabel = ofFilePath::getFileName(fullCompPath);
-			d->setLabel(compLabel);
-			compbuttons.push_back(d);
-			fullCompPaths.push_back(fullCompPath);
-		}
-		compositions.popTag();
-	}
-	else {
-		compositions.addTag("compositions");
-		compositions.saveFile();
+	cout << "compbuttons pre " << compbuttons.size() << endl;
+	ofFileDialogResult r = ofSystemLoadDialog("Select Media Bin", true);
+	if(r.bSuccess){
+		cout << "compbuttons post " << compbuttons.size() << endl;
+		mediaBinDirectory = r.getPath();
+		refreshCompButtons();
 	}
 }
 
 //--------------------------------------------------------------
-void testApp::newComposition(){
-	ofFileDialogResult r = ofSystemSaveDialog("NewComp.xml", "New Comp");
-	if(r.bSuccess){
-		projectsettings.loadFile(r.getPath());
-		if(loadNewProject()){
-			compositions.pushTag("compositions");
-			compositions.addValue("composition", r.getPath());
-			compositions.popTag();
-			compositions.saveFile();
-		}			
+void testApp::refreshCompButtons(){
+	ofDirectory dir(mediaBinDirectory);
+	dir.listDir();
+	int mediaFolders = dir.numFiles();
+//	for(int i = 0; i < compbuttons.size(); i++){
+//		delete compbuttons[i];
+//	}
+	cout << " num media folders " << mediaFolders << endl;
+	int currentCompButton = 0;
+	for(int i = 0; i < mediaFolders; i++){
+		string compositionsFolder = dir.getPath(i) + "/compositions/";
+//		cout << "loading comps from folder " << compositionsFolder << endl;
+		ofDirectory compositionsDirectory(compositionsFolder);
+		if(!compositionsDirectory.exists()){
+			compositionsDirectory.create(true);
+		}
+		
+		compositionsDirectory.listDir();
+		int numComps = compositionsDirectory.numFiles();
+		cout << " num comp folders " << compbuttons.size() << endl;
+		for(int c = 0; c < numComps; c++){
+			ofxMSAInteractiveObjectWithDelegate* d;
+			if(currentCompButton >= compbuttons.size()){
+				d = new ofxMSAInteractiveObjectWithDelegate();
+				d->setup();
+				d->setDelegate(this);
+				compbuttons.push_back(d);
+			}
+			else{
+				d = compbuttons[currentCompButton];
+			}
+			 
+			d->setPosAndSize(newCompButton->x+newCompButton->width, currentCompButton*25, 200, 25);
+			string fullCompPath = compositionsDirectory.getPath(c);
+			string compLabel = ofFilePath::getFileName(fullCompPath);
+			d->setLabel(fullCompPath);
+			fullCompPaths.push_back(fullCompPath);				
+			currentCompButton++;
+		}
 	}	
 }
 
 //--------------------------------------------------------------
+void testApp::newComposition(){	
+	loadNewProject();
+}
+
+//--------------------------------------------------------------
 void testApp::saveComposition(){
-	projectsettings.setValue("inpoint", timeline.getInOutRange().min);
-	projectsettings.setValue("outpoint", timeline.getInOutRange().max);
+	string cameraSaveFile = currentCompositionDirectory + "camera.xml";
+	cameraRecorder.writeToFile(cameraSaveFile);
+	projectsettings.setValue("cameraSpeed", cam.speed);
+	projectsettings.setValue("shiftx", currentXShift);
+	projectsettings.setValue("shifty", currentYShift);
+	projectsettings.setValue("cameraFile", cameraSaveFile);
 	projectsettings.saveFile();	
 }
 
@@ -412,22 +458,24 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 	else {
 		for(int i = 0; i < compbuttons.size(); i++){
 			if(compbuttons[i] == object){
-				if(projectsettings.loadFile(fullCompPaths[i])){
+				currentCompositionDirectory = fullCompPaths[i] + "/";
+				cout << "loading comp " << currentCompositionDirectory << " clicked comp button is " << compbuttons[i]->getLabel() << endl;
+				if(projectsettings.loadFile(currentCompositionDirectory+"compositionsettings.xml")){
 					string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
 					if(!loadAlignmentMatrices(loadedAlignmentDir)){
-						loadNewProject();
+						return;
 					}
 					cout << "loaded alignment " << loadedAlignmentDir << endl;
 					
 					string loadedVideoFile = projectsettings.getValue("videoFile", "");
 					if(!loadVideoFile(loadedVideoFile)){
-						loadNewProject();
+						return;
 					}
 					cout << "loaded video " << loadedVideoFile << endl;
 					
 					string loadedDepthSequence = projectsettings.getValue("depthSequence", "");
 					if(!loadDepthSequence(loadedDepthSequence)){
-						loadNewProject();
+						return;
 					}
 					
 					string markerPath = projectsettings.getValue("markerPath", "");
@@ -436,12 +484,22 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 					}
 					cout << "loaded depth " << loadedDepthSequence << endl;
 					
+					string cameraFile = projectsettings.getValue("cameraFile", "");
+					if(cameraFile != ""){
+						cameraRecorder.loadFromFile(cameraFile);
+					}
+					cam.speed = projectsettings.getValue("cameraSpeed", 20.);
+					currentXShift = projectsettings.getValue("shiftx", 0.);
+					currentYShift = projectsettings.getValue("shifty", 0.);
+					cout << "setting " << currentXShift << " " << currentYShift << endl;
 					allLoaded = true;
 				}
 			}		
 		}
 	}
 }
+
+//--------------------------------------------------------------
 
 void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
 
@@ -457,10 +515,6 @@ void testApp::keyPressed(int key){
 			lowResPlayer->play();
 			lowResPlayer->setSpeed(1.0);
 		}		
-	}
-	
-	if(key == '='){
-		renderer.applyShader = !renderer.applyShader;
 	}
 	
 	if(key == 'i'){
@@ -481,7 +535,6 @@ void testApp::keyPressed(int key){
 		currentMarker = (currentMarker + 1) % markers.getMarkers().size();
 		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
 	}
-	
 
 	//RECORD CAMERA
 	if(key == 'R'){	
@@ -495,13 +548,14 @@ void testApp::keyPressed(int key){
 	}
 	
 	//PLAYBACK CAMERA
-	if(key == 'P'){
+	if(key == 'P' && cameraRecorder.getSamples().size() > 0){
 		playbackCamera = !playbackCamera;
+		cam.applyRotation = cam.applyTranslation = !playbackCamera;
+		
 		if(playbackCamera){
 			sampleCamera = false;
 			timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
 			timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
-
 		}
 	}
 }
@@ -535,9 +589,9 @@ void testApp::windowResized(int w, int h){
 	timeline.setWidth(w);
 	timeline.setOffset(ofVec2f(0, ofGetHeight() - timeline.getDrawRect().height));
 
-	for(int i = 0; i < compbuttons.size(); i++){
-		compbuttons[i]->setPosAndSize(ofGetWidth()-250, i*25, 200, 25);
-	}
+//	for(int i = 0; i < compbuttons.size(); i++){
+//		compbuttons[i]->setPosAndSize(ofGetWidth()-250, i*25, 200, 25);
+//	}
 }
 
 //--------------------------------------------------------------

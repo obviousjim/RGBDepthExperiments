@@ -46,6 +46,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	void newComposition();
 	void saveComposition();
 	
+	void refreshCompButtons();
+	
 	//MSA Object delegate
 	ofxMSAInteractiveObjectWithDelegate* newCompButton;
 	ofxMSAInteractiveObjectWithDelegate* saveCompButton;
@@ -59,6 +61,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	void objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button);	
 	void objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y);
 	
+	string currentCompositionDirectory;
+	string mediaBinDirectory;
+	string currentMediaFolder;
 	ofVideoPlayer* hiResPlayer;
 	ofVideoPlayer* lowResPlayer;
 	ofxFCPMarker markers;
@@ -86,10 +91,15 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	ofFbo fbo;
 	ofImage savingImage;
 	string saveFolder;
-	int uniqueRand;
 	
 	float currentXShift;
 	float currentYShift;
+	
+	bool drawPointcloud;
+	bool drawWireframe;
+	bool drawMesh;
+	int pointSize;
+	int lineSize;
 	
 	bool startRenderMode;
 	bool currentlyRendering;

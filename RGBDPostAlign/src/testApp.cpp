@@ -49,7 +49,10 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
 //	timeline->setOffset(ofVec2f(0, ofGetMouseY()));
-
+	
+	if(player.isLoaded()){
+		player.update();
+	}
 	
 	if(ofGetKeyPressed('S')){
 		offset = ofGetMouseY();
@@ -168,6 +171,8 @@ void testApp::loadVideoPath(string path){
 		ofLogError("Couldn't Load video " + path);
 		return;
 	}
+	player.play();
+	player.setSpeed(0);
 	
 	if(playerElement != NULL){
 		//timeline->removeElement(playerElement);

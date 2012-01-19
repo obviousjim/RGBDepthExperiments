@@ -19,6 +19,8 @@ typedef struct{
 class ofxCameraRecorder {
   public:
 	ofxCameraRecorder();
+	
+	vector<CameraSample> & getSamples();
 	void sample(int frame);
 	void writeToFile(string fileName);
 	void loadFromFile(string fileName);
@@ -26,6 +28,8 @@ class ofxCameraRecorder {
 	void moveCameraToFrame(int frame);
 	int getFirstFrame();
 	int getLastFrame();
+	string getXMLRep();
+	void loadFromXMLRep(string rep);
 	
 	ofCamera* camera;
 	
