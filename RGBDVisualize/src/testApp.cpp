@@ -43,10 +43,10 @@ void testApp::setup(){
 	saveCompButton->setLabel("Save Comp");
 	saveCompButton->setDelegate(this);
 	saveCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+50, 25, 150, 25);
-	cout << "compbuttons " << compbuttons.size() << endl;
-	
+
 	loadCompositions();
-		
+
+			
 	gui.addSlider("X Linear Shift", currentXShift, -20, 20);
 	gui.addSlider("Y Linear Shift", currentYShift, -35, 35);
 	gui.addSlider("Camera Speed", cam.speed, .1, 40);
@@ -132,6 +132,7 @@ bool testApp::loadNewProject(){
 			
 			string currentCompositionFile = currentCompositionDirectory+"compositionsettings.xml";
 			projectsettings.loadFile(currentCompositionFile);
+			saveComposition();
 			refreshCompButtons();
 			allLoaded = true;
 			return true;
@@ -550,8 +551,8 @@ void testApp::keyPressed(int key){
 	//PLAYBACK CAMERA
 	if(key == 'P' && cameraRecorder.getSamples().size() > 0){
 		playbackCamera = !playbackCamera;
-		cam.applyRotation = cam.applyTranslation = !playbackCamera;
-		
+		cam.applyRotation = !playbackCamera;
+		cam.applyTranslation = !playbackCamera;
 		if(playbackCamera){
 			sampleCamera = false;
 			timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());

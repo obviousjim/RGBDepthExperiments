@@ -14,6 +14,7 @@ typedef struct{
 	int frame;
 	ofVec3f position;
 	ofQuaternion orientation;
+	ofMatrix4x4 matrix;
 } CameraSample;
 
 class ofxCameraRecorder {
