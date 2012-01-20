@@ -55,7 +55,6 @@ void testApp::setup(){
 		ofExit(0);	
 	}
 	
-	
 	ofDirectory depthDirectory(depthDirectoryPath);
 	depthDirectory.allowExt("png");
 	depthDirectory.listDir();

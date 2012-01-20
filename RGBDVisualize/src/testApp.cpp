@@ -68,7 +68,7 @@ void testApp::setup(){
 //--------------------------------------------------------------
 bool testApp::loadNewProject(){
 	allLoaded = false;
-	ofSystemAlertDialog("Select Directory");
+	ofSystemAlertDialog("Select Someone's Name");
 	ofFileDialogResult r;
 	r = ofSystemLoadDialog("Get Directory", true);
 	if(r.bSuccess){
@@ -125,6 +125,9 @@ bool testApp::loadNewProject(){
 			compBin.listDir();
 			int compNumber = compBin.numFiles();
 			currentCompositionDirectory = currentMediaFolder + "/compositions/comp" + ofToString(compNumber) + "/";
+			cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
+			cam.loadCameraPosition();
+
 			ofDirectory compFolder(currentCompositionDirectory);
 			if(!compFolder.exists()){
 				compFolder.create(true);
@@ -250,11 +253,12 @@ void testApp::update(){
 		if(!outputDirectory.exists()) outputDirectory.create(true);
 		hiResPlayer->play();
 		hiResPlayer->setSpeed(0);
-		videoTimelineElement.setVideoPlayer(*hiResPlayer, videoThumbsPath);
+		hiResPlayer->setVolume(0);
+//		videoTimelineElement.setVideoPlayer(*hiResPlayer, videoThumbsPath);
 		renderer.setRGBTexture(*hiResPlayer);
 		renderer.setTextureScale(1.0, 1.0);
 		currentRenderFrame = timeline.getInFrame();
-		playbackCamera = true;
+		startCameraPlayback();
 	}
 
 	if(currentlyRendering){
@@ -328,6 +332,10 @@ void testApp::draw(){
 	ofClear(0, 0, 0);
 	
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
+
+	if(!drawPointcloud && !drawWireframe && !drawMesh){
+		drawPointcloud = true;
+	}
 	if(drawPointcloud){
 		glPointSize(pointSize);
 		renderer.drawPointCloud();
@@ -342,6 +350,9 @@ void testApp::draw(){
 	cam.end();
 	
 	fbo.end();	
+	fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
+	fboRectangle.width = 16.0/9.0*fboRectangle.height;
+	ofDrawBitmapString(currentCompositionDirectory, ofPoint(fboRectangle.x, fboRectangle.y-15));
 	fbo.getTextureReference().draw(fboRectangle);
 	if(currentlyRendering){
 		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
@@ -351,10 +362,9 @@ void testApp::draw(){
 		
 		//stop when finished
 		if(currentRenderFrame > timeline.getOutFrame()){
-			currentlyRendering = false;
+			finishRender();
 		}
 	}
-	
 	
 	if(sampleCamera){
 		ofDrawBitmapString("RECORDING CAMERA", ofPoint(600, 10));
@@ -372,10 +382,10 @@ void testApp::draw(){
 
 //--------------------------------------------------------------
 void testApp::loadCompositions(){
-	cout << "compbuttons pre " << compbuttons.size() << endl;
+	ofSystemAlertDialog("Select the MediaBin containing everyone's names");
+
 	ofFileDialogResult r = ofSystemLoadDialog("Select Media Bin", true);
 	if(r.bSuccess){
-		cout << "compbuttons post " << compbuttons.size() << endl;
 		mediaBinDirectory = r.getPath();
 		refreshCompButtons();
 	}
@@ -386,14 +396,9 @@ void testApp::refreshCompButtons(){
 	ofDirectory dir(mediaBinDirectory);
 	dir.listDir();
 	int mediaFolders = dir.numFiles();
-//	for(int i = 0; i < compbuttons.size(); i++){
-//		delete compbuttons[i];
-//	}
-	cout << " num media folders " << mediaFolders << endl;
 	int currentCompButton = 0;
 	for(int i = 0; i < mediaFolders; i++){
 		string compositionsFolder = dir.getPath(i) + "/compositions/";
-//		cout << "loading comps from folder " << compositionsFolder << endl;
 		ofDirectory compositionsDirectory(compositionsFolder);
 		if(!compositionsDirectory.exists()){
 			compositionsDirectory.create(true);
@@ -401,7 +406,7 @@ void testApp::refreshCompButtons(){
 		
 		compositionsDirectory.listDir();
 		int numComps = compositionsDirectory.numFiles();
-		cout << " num comp folders " << compbuttons.size() << endl;
+		int compx = newCompButton->x+newCompButton->width;
 		for(int c = 0; c < numComps; c++){
 			ofxMSAInteractiveObjectWithDelegate* d;
 			if(currentCompButton >= compbuttons.size()){
@@ -413,11 +418,12 @@ void testApp::refreshCompButtons(){
 			else{
 				d = compbuttons[currentCompButton];
 			}
-			 
-			d->setPosAndSize(newCompButton->x+newCompButton->width, currentCompButton*25, 200, 25);
+			
+			d->setPosAndSize(compx, currentCompButton*25, 400, 25);
 			string fullCompPath = compositionsDirectory.getPath(c);
-			string compLabel = ofFilePath::getFileName(fullCompPath);
-			d->setLabel(fullCompPath);
+			string compLabel = ofFilePath::getEnclosingDirectory(fullCompPath) + ofFilePath::getFileName(fullCompPath);
+			
+			d->setLabel(compLabel);
 			fullCompPaths.push_back(fullCompPath);				
 			currentCompButton++;
 		}
@@ -432,11 +438,18 @@ void testApp::newComposition(){
 //--------------------------------------------------------------
 void testApp::saveComposition(){
 	string cameraSaveFile = currentCompositionDirectory + "camera.xml";
+
 	cameraRecorder.writeToFile(cameraSaveFile);
 	projectsettings.setValue("cameraSpeed", cam.speed);
 	projectsettings.setValue("shiftx", currentXShift);
 	projectsettings.setValue("shifty", currentYShift);
+	projectsettings.setValue("pointSize", pointSize);
+	projectsettings.setValue("lineSize", lineSize);
 	projectsettings.setValue("cameraFile", cameraSaveFile);
+	projectsettings.setValue("pointcloud", drawPointcloud);
+	projectsettings.setValue("wireframe", drawWireframe);
+	projectsettings.setValue("mesh", drawMesh);
+	
 	projectsettings.saveFile();	
 }
 
@@ -460,6 +473,8 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 		for(int i = 0; i < compbuttons.size(); i++){
 			if(compbuttons[i] == object){
 				currentCompositionDirectory = fullCompPaths[i] + "/";
+				cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
+				cam.loadCameraPosition();
 				cout << "loading comp " << currentCompositionDirectory << " clicked comp button is " << compbuttons[i]->getLabel() << endl;
 				if(projectsettings.loadFile(currentCompositionDirectory+"compositionsettings.xml")){
 					string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
@@ -488,11 +503,21 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 					string cameraFile = projectsettings.getValue("cameraFile", "");
 					if(cameraFile != ""){
 						cameraRecorder.loadFromFile(cameraFile);
+						if(cameraRecorder.getSamples().size() > 0){
+							timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
+							timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
+						}
 					}
 					cam.speed = projectsettings.getValue("cameraSpeed", 20.);
 					currentXShift = projectsettings.getValue("shiftx", 0.);
 					currentYShift = projectsettings.getValue("shifty", 0.);
-					cout << "setting " << currentXShift << " " << currentYShift << endl;
+					pointSize = projectsettings.getValue("pointSize", 1);
+					lineSize = projectsettings.getValue("lineSize", 1);
+					
+					drawPointcloud = projectsettings.getValue("pointcloud", false);
+					drawWireframe = projectsettings.getValue("wireframe", false);
+					drawMesh = projectsettings.getValue("mesh", false);
+					
 					allLoaded = true;
 				}
 			}		
@@ -506,11 +531,27 @@ void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
 
 }
 
+void testApp::finishRender(){
+	currentlyRendering = false;
+	stopCameraPlayback();
+	renderer.setTextureScale(1.0*lowResPlayer->getWidth()/hiResPlayer->getWidth(), 
+							 1.0*lowResPlayer->getHeight()/hiResPlayer->getHeight());	
+}
+
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+	if(currentlyRendering){
+		if(key == ' '){
+			finishRender();
+			renderer.setRGBTexture(*lowResPlayer);
+		}
+		return;
+	}
+	
 	if(key == ' '){
 		if(lowResPlayer->getSpeed() != 0.0){
 			lowResPlayer->setSpeed(0);
+			stopCameraPlayback();
 		}
 		else{
 			lowResPlayer->play();
@@ -537,6 +578,10 @@ void testApp::keyPressed(int key){
 		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
 	}
 
+	if(key == 'f'){
+		ofToggleFullscreen();
+	}
+	
 	//RECORD CAMERA
 	if(key == 'R'){	
 		if(sampleCamera){
@@ -545,21 +590,53 @@ void testApp::keyPressed(int key){
 		else{
 			cameraRecorder.reset();
 			sampleCamera = true;
+			lowResPlayer->setSpeed(1.0);
 		}
 	}
 	
 	//PLAYBACK CAMERA
-	if(key == 'P' && cameraRecorder.getSamples().size() > 0){
-		playbackCamera = !playbackCamera;
-		cam.applyRotation = !playbackCamera;
-		cam.applyTranslation = !playbackCamera;
-		if(playbackCamera){
-			sampleCamera = false;
-			timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
-			timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
-		}
+	if(key == 'P'){
+		toggleCameraPlayback();
 	}
 }
+
+void testApp::stopCameraPlayback(){
+	playbackCamera = false;
+	lowResPlayer->setSpeed(0.);
+	hiResPlayer->setSpeed(0.);
+	cam.applyRotation = true;
+	cam.applyTranslation = true;
+}
+
+void testApp::startCameraPlayback(){
+	if(cameraRecorder.getSamples().size() > 0){
+		playbackCamera = true;
+		cam.applyRotation = false;
+		cam.applyTranslation = false;
+		timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
+		timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
+		
+		if(currentlyRendering){
+			hiResPlayer->setSpeed(1.0);
+		}
+		else{
+			lowResPlayer->setSpeed(1.0);
+		}
+	}
+	else{
+		ofSystemAlertDialog("Save a camera move in order to play back");
+	}
+}
+
+void testApp::toggleCameraPlayback(){
+	if(playbackCamera){
+		stopCameraPlayback();
+	}
+	else {
+		startCameraPlayback();
+	}
+}
+
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
@@ -589,10 +666,6 @@ void testApp::mouseReleased(int x, int y, int button){
 void testApp::windowResized(int w, int h){
 	timeline.setWidth(w);
 	timeline.setOffset(ofVec2f(0, ofGetHeight() - timeline.getDrawRect().height));
-
-//	for(int i = 0; i < compbuttons.size(); i++){
-//		compbuttons[i]->setPosAndSize(ofGetWidth()-250, i*25, 200, 25);
-//	}
 }
 
 //--------------------------------------------------------------

@@ -40,11 +40,6 @@ string ofxCameraRecorder::getXMLRep(){
 		settings.pushTag("sample", i);
 		
 		settings.addValue("frame", samples[i].frame);
-//		stringstream pos, quat;
-//		pos << samples[i].position;
-//		quat << samples[i].orientation;
-//		settings.addValue("pos", pos.str());
-//		settings.addValue("quat", quat.str());
 		
 		settings.addValue("px", samples[i].position.x);
 		settings.addValue("py", samples[i].position.y);

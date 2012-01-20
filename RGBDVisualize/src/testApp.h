@@ -61,6 +61,11 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	void objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button);	
 	void objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y);
 	
+	void finishRender();
+	void stopCameraPlayback();
+	void startCameraPlayback();
+	void toggleCameraPlayback();
+	
 	string currentCompositionDirectory;
 	string mediaBinDirectory;
 	string currentMediaFolder;
