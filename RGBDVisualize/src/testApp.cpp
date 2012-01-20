@@ -534,6 +534,7 @@ void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
 void testApp::finishRender(){
 	currentlyRendering = false;
 	stopCameraPlayback();
+	renderer.setRGBTexture(*lowResPlayer);
 	renderer.setTextureScale(1.0*lowResPlayer->getWidth()/hiResPlayer->getWidth(), 
 							 1.0*lowResPlayer->getHeight()/hiResPlayer->getHeight());	
 }

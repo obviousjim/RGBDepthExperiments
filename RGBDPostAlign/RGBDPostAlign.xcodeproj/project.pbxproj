@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A60F69DA1475E6CE007E1206 /* ofxQTKitVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A60F69D71475E6CE007E1206 /* ofxQTKitVideoPlayer.mm */; };
-		A60F69DB1475E6CE007E1206 /* QTKitMovieRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = A60F69D91475E6CE007E1206 /* QTKitMovieRenderer.m */; };
 		A60F69DD1475E6DC007E1206 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DC1475E6DC007E1206 /* QTKit.framework */; };
 		A60F69DF1475E6E1007E1206 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A60F69DE1475E6E1007E1206 /* CoreVideo.framework */; };
 		A628E1E1148A796400F2AC7A /* ofxTLColors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A628E1DF148A796400F2AC7A /* ofxTLColors.cpp */; };
@@ -100,10 +98,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A60F69D61475E6CE007E1206 /* ofxQTKitVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxQTKitVideoPlayer.h; sourceTree = "<group>"; };
-		A60F69D71475E6CE007E1206 /* ofxQTKitVideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxQTKitVideoPlayer.mm; sourceTree = "<group>"; };
-		A60F69D81475E6CE007E1206 /* QTKitMovieRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTKitMovieRenderer.h; sourceTree = "<group>"; };
-		A60F69D91475E6CE007E1206 /* QTKitMovieRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTKitMovieRenderer.m; sourceTree = "<group>"; };
 		A60F69DC1475E6DC007E1206 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		A60F69DE1475E6E1007E1206 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A628E1DF148A796400F2AC7A /* ofxTLColors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTLColors.cpp; sourceTree = "<group>"; };
@@ -237,27 +231,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A60F69D31475E6C7007E1206 /* ofxQTKitVideoPlayer */ = {
-			isa = PBXGroup;
-			children = (
-				A60F69D51475E6CE007E1206 /* src */,
-			);
-			name = ofxQTKitVideoPlayer;
-			path = ../../../addons/ofxMSAInteractiveObject;
-			sourceTree = "<group>";
-		};
-		A60F69D51475E6CE007E1206 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				A60F69D61475E6CE007E1206 /* ofxQTKitVideoPlayer.h */,
-				A60F69D71475E6CE007E1206 /* ofxQTKitVideoPlayer.mm */,
-				A60F69D81475E6CE007E1206 /* QTKitMovieRenderer.h */,
-				A60F69D91475E6CE007E1206 /* QTKitMovieRenderer.m */,
-			);
-			name = src;
-			path = ../../../addons/ofxQTKitVideoPlayer/src;
-			sourceTree = SOURCE_ROOT;
-		};
 		A6477E37149D7E5500908B2B /* ofxTextInputField */ = {
 			isa = PBXGroup;
 			children = (
@@ -436,7 +409,6 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				A60F69D31475E6C7007E1206 /* ofxQTKitVideoPlayer */,
 				A6477E37149D7E5500908B2B /* ofxTextInputField */,
 				A69D9AD514721A81005D9265 /* ofxMSAInteractiveObject */,
 				A69D9A92147212D4005D9265 /* ofxRGBDepth */,
@@ -696,8 +668,6 @@
 				A69D99E11471F94D005D9265 /* ofxTLVideoThumb.cpp in Sources */,
 				A69D99E21471F94D005D9265 /* ofxTLZoomer.cpp in Sources */,
 				A69D9B1614721A81005D9265 /* ofxMSAInteractiveObject.cpp in Sources */,
-				A60F69DA1475E6CE007E1206 /* ofxQTKitVideoPlayer.mm in Sources */,
-				A60F69DB1475E6CE007E1206 /* QTKitMovieRenderer.m in Sources */,
 				E7DF56BD147CA40600A3A9C7 /* ofxTLDepthImageSequence.cpp in Sources */,
 				E7DF56BE147CA40600A3A9C7 /* ofxTLVideoDepthAlignmentScrubber.cpp in Sources */,
 				E7DF5789147CA9A000A3A9C7 /* ofxRGBDVideoDepthSequence.cpp in Sources */,
