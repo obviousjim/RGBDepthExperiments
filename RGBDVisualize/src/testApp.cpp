@@ -98,7 +98,7 @@ bool testApp::loadNewProject(){
 			
 			//assume
 			if(testFile.find("txt") != string::npos){
-				loadMarkerFile(dataDirectory.getPath(i));
+				//loadMarkerFile(dataDirectory.getPath(i));
 			}
 		}
 		
@@ -139,6 +139,9 @@ bool testApp::loadNewProject(){
 			refreshCompButtons();
 			allLoaded = true;
 			return true;
+		}
+		else{
+			ofSystemAlertDialog("Couldn't find one of the following: Calib==[" + calibrationDirectory + "] Video==[" + videoPath + "] Depth==[" + depthImageDirectory + "]");
 		}
 	}
 	return false;	

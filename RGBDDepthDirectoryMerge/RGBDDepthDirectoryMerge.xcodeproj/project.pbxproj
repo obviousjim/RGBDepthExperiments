@@ -24,14 +24,11 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		F39CBA5D14C8A56500E2DB17 /* rgbd.frag in Sources */ = {isa = PBXBuildFile; fileRef = F39CBA4614C8A56500E2DB17 /* rgbd.frag */; };
-		F39CBA5E14C8A56500E2DB17 /* rgbd.vert in Sources */ = {isa = PBXBuildFile; fileRef = F39CBA4814C8A56500E2DB17 /* rgbd.vert */; };
-		F39CBA6614C8A56500E2DB17 /* ofxRGBDVideoDepthSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39CBA5B14C8A56500E2DB17 /* ofxRGBDVideoDepthSequence.cpp */; };
-		F39CBAA714C8A64000E2DB17 /* ofxFCPMarker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39CBAA514C8A64000E2DB17 /* ofxFCPMarker.cpp */; };
-		F39CBAB914C8B3CC00E2DB17 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39CBAB214C8B3CC00E2DB17 /* tinyxml.cpp */; };
-		F39CBABA14C8B3CC00E2DB17 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39CBAB414C8B3CC00E2DB17 /* tinyxmlerror.cpp */; };
-		F39CBABB14C8B3CC00E2DB17 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39CBAB514C8B3CC00E2DB17 /* tinyxmlparser.cpp */; };
-		F39CBABC14C8B3CC00E2DB17 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39CBAB714C8B3CC00E2DB17 /* ofxXmlSettings.cpp */; };
+		F3C1DAB514CB0A44000B5AEB /* ofxRGBDVideoDepthSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3C1DAAA14CB0A44000B5AEB /* ofxRGBDVideoDepthSequence.cpp */; };
+		F3C1DAC714CB0BCF000B5AEB /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3C1DAC014CB0BCF000B5AEB /* tinyxml.cpp */; };
+		F3C1DAC814CB0BCF000B5AEB /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3C1DAC214CB0BCF000B5AEB /* tinyxmlerror.cpp */; };
+		F3C1DAC914CB0BCF000B5AEB /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3C1DAC314CB0BCF000B5AEB /* tinyxmlparser.cpp */; };
+		F3C1DACA14CB0BCF000B5AEB /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3C1DAC514CB0BCF000B5AEB /* ofxXmlSettings.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +73,7 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* RGBDCutScriptDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RGBDCutScriptDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* RGBDDepthDirectoryMergeDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RGBDDepthDirectoryMergeDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = testApp.cpp; path = src/testApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = src/testApp.h; sourceTree = SOURCE_ROOT; };
@@ -86,21 +83,16 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
-		F39CBA4614C8A56500E2DB17 /* rgbd.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = rgbd.frag; sourceTree = "<group>"; };
-		F39CBA4714C8A56500E2DB17 /* rgbd.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rgbd.geom; sourceTree = "<group>"; };
-		F39CBA4814C8A56500E2DB17 /* rgbd.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = rgbd.vert; sourceTree = "<group>"; };
-		F39CBA4F14C8A56500E2DB17 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		F39CBA5B14C8A56500E2DB17 /* ofxRGBDVideoDepthSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDVideoDepthSequence.cpp; sourceTree = "<group>"; };
-		F39CBA5C14C8A56500E2DB17 /* ofxRGBDVideoDepthSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDVideoDepthSequence.h; sourceTree = "<group>"; };
-		F39CBAA514C8A64000E2DB17 /* ofxFCPMarker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxFCPMarker.cpp; sourceTree = "<group>"; };
-		F39CBAA614C8A64000E2DB17 /* ofxFCPMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFCPMarker.h; sourceTree = "<group>"; };
-		F39CBAB014C8B3CC00E2DB17 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
-		F39CBAB214C8B3CC00E2DB17 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
-		F39CBAB314C8B3CC00E2DB17 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
-		F39CBAB414C8B3CC00E2DB17 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
-		F39CBAB514C8B3CC00E2DB17 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
-		F39CBAB714C8B3CC00E2DB17 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
-		F39CBAB814C8B3CC00E2DB17 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
+		F3C1DA9E14CB0A44000B5AEB /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		F3C1DAAA14CB0A44000B5AEB /* ofxRGBDVideoDepthSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxRGBDVideoDepthSequence.cpp; sourceTree = "<group>"; };
+		F3C1DAAB14CB0A44000B5AEB /* ofxRGBDVideoDepthSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRGBDVideoDepthSequence.h; sourceTree = "<group>"; };
+		F3C1DABE14CB0BCF000B5AEB /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
+		F3C1DAC014CB0BCF000B5AEB /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
+		F3C1DAC114CB0BCF000B5AEB /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
+		F3C1DAC214CB0BCF000B5AEB /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
+		F3C1DAC314CB0BCF000B5AEB /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
+		F3C1DAC514CB0BCF000B5AEB /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
+		F3C1DAC614CB0BCF000B5AEB /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,9 +123,8 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				F39CBAAF14C8B3CC00E2DB17 /* ofxXmlSettings */,
-				F39CBA6D14C8A64000E2DB17 /* ofxFCPMarker */,
-				F39CBA2014C8A56500E2DB17 /* ofxRGBDepth */,
+				F3C1DABD14CB0BCF000B5AEB /* ofxXmlSettings */,
+				F3C1DA5614CB0A44000B5AEB /* ofxRGBDepth */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -191,7 +182,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				E4B69B5B0A3A1756003C02F2 /* RGBDCutScriptDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* RGBDDepthDirectoryMergeDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -214,81 +205,52 @@
 			name = openFrameworks;
 			sourceTree = "<group>";
 		};
-		F39CBA2014C8A56500E2DB17 /* ofxRGBDepth */ = {
+		F3C1DA5614CB0A44000B5AEB /* ofxRGBDepth */ = {
 			isa = PBXGroup;
 			children = (
-				F39CBA4514C8A56500E2DB17 /* assets */,
-				F39CBA4F14C8A56500E2DB17 /* README */,
-				F39CBA5014C8A56500E2DB17 /* src */,
+				F3C1DA9E14CB0A44000B5AEB /* README */,
+				F3C1DA9F14CB0A44000B5AEB /* src */,
 			);
 			name = ofxRGBDepth;
 			path = ../../../addons/ofxRGBDepth;
 			sourceTree = SOURCE_ROOT;
 		};
-		F39CBA4514C8A56500E2DB17 /* assets */ = {
+		F3C1DA9F14CB0A44000B5AEB /* src */ = {
 			isa = PBXGroup;
 			children = (
-				F39CBA4614C8A56500E2DB17 /* rgbd.frag */,
-				F39CBA4714C8A56500E2DB17 /* rgbd.geom */,
-				F39CBA4814C8A56500E2DB17 /* rgbd.vert */,
-			);
-			path = assets;
-			sourceTree = "<group>";
-		};
-		F39CBA5014C8A56500E2DB17 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				F39CBA5C14C8A56500E2DB17 /* ofxRGBDVideoDepthSequence.h */,
-				F39CBA5B14C8A56500E2DB17 /* ofxRGBDVideoDepthSequence.cpp */,
+				F3C1DAAB14CB0A44000B5AEB /* ofxRGBDVideoDepthSequence.h */,
+				F3C1DAAA14CB0A44000B5AEB /* ofxRGBDVideoDepthSequence.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
 		};
-		F39CBA6D14C8A64000E2DB17 /* ofxFCPMarker */ = {
+		F3C1DABD14CB0BCF000B5AEB /* ofxXmlSettings */ = {
 			isa = PBXGroup;
 			children = (
-				F39CBAA414C8A64000E2DB17 /* src */,
-			);
-			name = ofxFCPMarker;
-			path = ../../../addons/ofxFCPMarker;
-			sourceTree = SOURCE_ROOT;
-		};
-		F39CBAA414C8A64000E2DB17 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				F39CBAA614C8A64000E2DB17 /* ofxFCPMarker.h */,
-				F39CBAA514C8A64000E2DB17 /* ofxFCPMarker.cpp */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
-		F39CBAAF14C8B3CC00E2DB17 /* ofxXmlSettings */ = {
-			isa = PBXGroup;
-			children = (
-				F39CBAB014C8B3CC00E2DB17 /* install.xml */,
-				F39CBAB114C8B3CC00E2DB17 /* libs */,
-				F39CBAB614C8B3CC00E2DB17 /* src */,
+				F3C1DABE14CB0BCF000B5AEB /* install.xml */,
+				F3C1DABF14CB0BCF000B5AEB /* libs */,
+				F3C1DAC414CB0BCF000B5AEB /* src */,
 			);
 			name = ofxXmlSettings;
 			path = ../../../addons/ofxXmlSettings;
 			sourceTree = SOURCE_ROOT;
 		};
-		F39CBAB114C8B3CC00E2DB17 /* libs */ = {
+		F3C1DABF14CB0BCF000B5AEB /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				F39CBAB214C8B3CC00E2DB17 /* tinyxml.cpp */,
-				F39CBAB314C8B3CC00E2DB17 /* tinyxml.h */,
-				F39CBAB414C8B3CC00E2DB17 /* tinyxmlerror.cpp */,
-				F39CBAB514C8B3CC00E2DB17 /* tinyxmlparser.cpp */,
+				F3C1DAC014CB0BCF000B5AEB /* tinyxml.cpp */,
+				F3C1DAC114CB0BCF000B5AEB /* tinyxml.h */,
+				F3C1DAC214CB0BCF000B5AEB /* tinyxmlerror.cpp */,
+				F3C1DAC314CB0BCF000B5AEB /* tinyxmlparser.cpp */,
 			);
 			path = libs;
 			sourceTree = "<group>";
 		};
-		F39CBAB614C8B3CC00E2DB17 /* src */ = {
+		F3C1DAC414CB0BCF000B5AEB /* src */ = {
 			isa = PBXGroup;
 			children = (
-				F39CBAB714C8B3CC00E2DB17 /* ofxXmlSettings.cpp */,
-				F39CBAB814C8B3CC00E2DB17 /* ofxXmlSettings.h */,
+				F3C1DAC514CB0BCF000B5AEB /* ofxXmlSettings.cpp */,
+				F3C1DAC614CB0BCF000B5AEB /* ofxXmlSettings.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -296,9 +258,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* RGBDCutScript */ = {
+		E4B69B5A0A3A1756003C02F2 /* RGBDDepthDirectoryMerge */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDCutScript" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDDepthDirectoryMerge" */;
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
@@ -310,9 +272,9 @@
 			dependencies = (
 				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
 			);
-			name = RGBDCutScript;
+			name = RGBDDepthDirectoryMerge;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* RGBDCutScriptDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* RGBDDepthDirectoryMergeDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -320,7 +282,7 @@
 /* Begin PBXProject section */
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDCutScript" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDDepthDirectoryMerge" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -341,7 +303,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* RGBDCutScript */,
+				E4B69B5A0A3A1756003C02F2 /* RGBDDepthDirectoryMerge */,
 			);
 		};
 /* End PBXProject section */
@@ -379,14 +341,11 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
-				F39CBA5D14C8A56500E2DB17 /* rgbd.frag in Sources */,
-				F39CBA5E14C8A56500E2DB17 /* rgbd.vert in Sources */,
-				F39CBA6614C8A56500E2DB17 /* ofxRGBDVideoDepthSequence.cpp in Sources */,
-				F39CBAA714C8A64000E2DB17 /* ofxFCPMarker.cpp in Sources */,
-				F39CBAB914C8B3CC00E2DB17 /* tinyxml.cpp in Sources */,
-				F39CBABA14C8B3CC00E2DB17 /* tinyxmlerror.cpp in Sources */,
-				F39CBABB14C8B3CC00E2DB17 /* tinyxmlparser.cpp in Sources */,
-				F39CBABC14C8B3CC00E2DB17 /* ofxXmlSettings.cpp in Sources */,
+				F3C1DAB514CB0A44000B5AEB /* ofxRGBDVideoDepthSequence.cpp in Sources */,
+				F3C1DAC714CB0BCF000B5AEB /* tinyxml.cpp in Sources */,
+				F3C1DAC814CB0BCF000B5AEB /* tinyxmlerror.cpp in Sources */,
+				F3C1DAC914CB0BCF000B5AEB /* tinyxmlparser.cpp in Sources */,
+				F3C1DACA14CB0BCF000B5AEB /* ofxXmlSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,7 +498,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)Debug";
+				PRODUCT_NAME = RGBDDepthDirectoryMergeDebug;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -625,7 +584,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RGBDDepthDirectoryMerge;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -633,7 +592,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDCutScript" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "RGBDDepthDirectoryMerge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -642,7 +601,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDCutScript" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "RGBDDepthDirectoryMerge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,
