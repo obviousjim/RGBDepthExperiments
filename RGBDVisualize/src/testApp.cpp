@@ -25,6 +25,9 @@ void testApp::setup(){
 	currentlyRendering = false;
 	allLoaded = false;
 	
+	shouldSaveCameraPoint = false;
+	shouldClearCameraMoves = false;
+
 	sampleCamera = false;
 	playbackCamera = false;
 	
@@ -46,21 +49,30 @@ void testApp::setup(){
 
 	loadCompositions();
 
-			
-	gui.addSlider("X Linear Shift", currentXShift, -20, 20);
-	gui.addSlider("Y Linear Shift", currentYShift, -35, 35);
+	gui.addSlider("X Linear Shift", currentXShift, -25, 25);
+	gui.addSlider("Y Linear Shift", currentYShift, -35, 50);
 	gui.addSlider("Camera Speed", cam.speed, .1, 40);
 	gui.addToggle("Draw Pointcloud", drawPointcloud);
 	gui.addToggle("Draw Wireframe", drawWireframe);
 	gui.addToggle("Draw Mesh", drawMesh);
 	gui.addSlider("Point Size", pointSize, 1, 10);
 	gui.addSlider("Line Thickness", lineSize, 1, 10);
+	gui.addSlider("Edge Cull", currentEdgeCull, 1, 500);
+	gui.addSlider("Simplify", currentSimplify, 1, 4);
+	gui.addSlider("Z Far Clip", farClip, 2, 5000);
+	
+	gui.addToggle("Clear Camera Moves", shouldClearCameraMoves);
+	gui.addToggle("Set Camera Point", shouldSaveCameraPoint);
+	
 	gui.addTitle("");
 	gui.addToggle("Render Composition", startRenderMode);
 
 	gui.loadFromXML();
 	gui.toggleDraw();
 	
+//	ofEnableLighting();
+	
+
 	
 	cout << "setting up timeline " << endl;
 }
@@ -97,9 +109,9 @@ bool testApp::loadNewProject(){
 			}
 			
 			//assume
-			if(testFile.find("txt") != string::npos){
-				//loadMarkerFile(dataDirectory.getPath(i));
-			}
+//			if(testFile.find("txt") != string::npos){
+//				//loadMarkerFile(dataDirectory.getPath(i));
+//			}
 		}
 		
 		if(calibrationDirectory != "" && videoPath != "" && depthImageDirectory != ""){
@@ -257,9 +269,10 @@ void testApp::update(){
 		hiResPlayer->play();
 		hiResPlayer->setSpeed(0);
 		hiResPlayer->setVolume(0);
-//		videoTimelineElement.setVideoPlayer(*hiResPlayer, videoThumbsPath);
+
 		renderer.setRGBTexture(*hiResPlayer);
 		renderer.setTextureScale(1.0, 1.0);
+		currentSimplify = 1;
 		currentRenderFrame = timeline.getInFrame();
 		startCameraPlayback();
 	}
@@ -278,9 +291,27 @@ void testApp::update(){
 		}
 	}
 	
-	if(currentXShift != renderer.xshift || currentYShift != renderer.yshift){
+	if(shouldClearCameraMoves){
+		cameraRecorder.reset();
+		shouldClearCameraMoves = false;
+	}
+	
+	if(shouldSaveCameraPoint){
+		cameraRecorder.sample(lowResPlayer->getCurrentFrame());
+		shouldSaveCameraPoint = false;	
+	}
+	
+	if(currentXShift != renderer.xshift || 
+	   currentYShift != renderer.yshift || 
+	   currentSimplify != renderer.getSimplification() ||
+	   currentEdgeCull != renderer.edgeCull ||
+	   farClip != renderer.farClip){
+		
+		renderer.farClip = farClip;
 		renderer.xshift = currentXShift;
 		renderer.yshift = currentYShift;
+		renderer.edgeCull = currentEdgeCull;
+		renderer.setSimplification(currentSimplify);
 		renderer.update();
 	}
 }
@@ -316,12 +347,14 @@ void testApp::processDepthFrame(){
 	for(int y = 0; y <	480; y++){
 		for(int x = 0; x < 640; x++){
 			int index = y*640+x;
-//			if(depthPixelDecodeBuffer[index] == 0){
-//				depthPixelDecodeBuffer[index] = 5000;
+
+//			if(depthPixelDecodeBuffer[index] < currentZThresh){
+//				depthPixelDecodeBuffer[index] = 0;
 //			}
 			//depthPixelDecodeBuffer[index] *= 1.0 - .0*(sin(y/10.0 + ofGetFrameNum()/10.0)*.5+.5); 
 		}
 	}
+	
 }
 
 //--------------------------------------------------------------
@@ -350,6 +383,13 @@ void testApp::draw(){
 	if(drawMesh){
 		renderer.drawMesh();
 	}
+	
+
+//	for(int i = 0; i < renderer.getMesh().getNormals().size(); i++){
+//		ofLine(renderer.getMesh().getVertices()[i], 
+//			   renderer.getMesh().getVertices()[i] + renderer.getMesh().getNormals()[i]*10);
+//	}
+	
 	cam.end();
 	
 	fbo.end();	
@@ -571,16 +611,16 @@ void testApp::keyPressed(int key){
 		timeline.setCurrentTimeToOutPoint();
 	}
 	
-	if (key == 'j' && markers.isLoaded()) {
-		currentMarker--;
-		if(currentMarker < 0) currentMarker = markers.getMarkers().size() - 1;		
-		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
-	}
-
-	if (key == 'l' && markers.isLoaded()) {
-		currentMarker = (currentMarker + 1) % markers.getMarkers().size();
-		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
-	}
+//	if (key == 'j' && markers.isLoaded()) {
+//		currentMarker--;
+//		if(currentMarker < 0) currentMarker = markers.getMarkers().size() - 1;		
+//		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
+//	}
+//
+//	if (key == 'l' && markers.isLoaded()) {
+//		currentMarker = (currentMarker + 1) % markers.getMarkers().size();
+//		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
+//	}
 
 	if(key == 'f'){
 		ofToggleFullscreen();
@@ -591,7 +631,7 @@ void testApp::keyPressed(int key){
 		if(sampleCamera){
 			sampleCamera = false;
 		}
-		else{
+		else {
 			cameraRecorder.reset();
 			sampleCamera = true;
 			lowResPlayer->setSpeed(1.0);

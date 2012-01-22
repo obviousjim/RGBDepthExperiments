@@ -85,7 +85,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	bool allLoaded;
 
 	ofxGameCamera cam;
-	
+
 	string videoThumbsPath;
 	string videoPath;
 	ofxTimeline timeline;
@@ -99,14 +99,20 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	
 	float currentXShift;
 	float currentYShift;
+	float farClip;
+	float currentEdgeCull;
+	bool shouldSaveCameraPoint;
+	bool shouldClearCameraMoves;
 	
 	bool drawPointcloud;
 	bool drawWireframe;
 	bool drawMesh;
 	int pointSize;
 	int lineSize;
+	int currentSimplify;
 	
 	bool startRenderMode;
 	bool currentlyRendering;
 	int currentRenderFrame;
+
 };
