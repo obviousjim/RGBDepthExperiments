@@ -114,5 +114,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	bool startRenderMode;
 	bool currentlyRendering;
 	int currentRenderFrame;
-
+	
+	ofVec3f lightpos;
+	ofLight light;
 };

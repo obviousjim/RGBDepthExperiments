@@ -58,8 +58,13 @@ void testApp::setup(){
 	gui.addSlider("Point Size", pointSize, 1, 10);
 	gui.addSlider("Line Thickness", lineSize, 1, 10);
 	gui.addSlider("Edge Cull", currentEdgeCull, 1, 500);
-	gui.addSlider("Simplify", currentSimplify, 1, 4);
 	gui.addSlider("Z Far Clip", farClip, 2, 5000);
+	gui.addSlider("Simplify", currentSimplify, 1, 4);
+	
+	gui.addSlider("LightX", lightpos.x, -1500, 1500);
+	gui.addSlider("LightY", lightpos.y, -1500, 1500);
+	gui.addSlider("LightZ", lightpos.z, -1500, 1500);
+	
 	
 	gui.addToggle("Clear Camera Moves", shouldClearCameraMoves);
 	gui.addToggle("Set Camera Point", shouldSaveCameraPoint);
@@ -71,10 +76,8 @@ void testApp::setup(){
 	gui.toggleDraw();
 	
 //	ofEnableLighting();
-	
-
-	
-	cout << "setting up timeline " << endl;
+//	light.setPosition(ofGetWidth()*.5, ofGetHeight()*.25, 0);
+//	light.enable();	
 }
 
 //--------------------------------------------------------------
@@ -260,6 +263,8 @@ void testApp::update(){
 	
 	if(!allLoaded) return;
 
+	light.setPosition(lightpos.x, lightpos.y, lightpos.z);
+	
 	if(startRenderMode){
 		startRenderMode = false;
 		currentlyRendering = true;
@@ -366,7 +371,7 @@ void testApp::draw(){
 
 	fbo.begin();
 	ofClear(0, 0, 0);
-	
+//	ofEnableLighting();
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
 
 	if(!drawPointcloud && !drawWireframe && !drawMesh){
@@ -384,12 +389,13 @@ void testApp::draw(){
 		renderer.drawMesh();
 	}
 	
+//	light.setPointLight();
 
 //	for(int i = 0; i < renderer.getMesh().getNormals().size(); i++){
 //		ofLine(renderer.getMesh().getVertices()[i], 
 //			   renderer.getMesh().getVertices()[i] + renderer.getMesh().getNormals()[i]*10);
 //	}
-	
+//	ofDisableLighting();
 	cam.end();
 	
 	fbo.end();	
@@ -492,6 +498,8 @@ void testApp::saveComposition(){
 	projectsettings.setValue("pointcloud", drawPointcloud);
 	projectsettings.setValue("wireframe", drawWireframe);
 	projectsettings.setValue("mesh", drawMesh);
+	projectsettings.setValue("currentEdgeCull", currentEdgeCull);
+	projectsettings.setValue("farClip",farClip);
 	
 	projectsettings.saveFile();	
 }
@@ -556,7 +564,8 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 					currentYShift = projectsettings.getValue("shifty", 0.);
 					pointSize = projectsettings.getValue("pointSize", 1);
 					lineSize = projectsettings.getValue("lineSize", 1);
-					
+					currentEdgeCull = projectsettings.getValue("edgeCull", 50);
+					farClip = projectsettings.getValue("farClip", 5000);
 					drawPointcloud = projectsettings.getValue("pointcloud", false);
 					drawWireframe = projectsettings.getValue("wireframe", false);
 					drawMesh = projectsettings.getValue("mesh", false);
