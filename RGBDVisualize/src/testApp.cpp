@@ -27,7 +27,8 @@ void testApp::setup(){
 	
 	shouldSaveCameraPoint = false;
 	shouldClearCameraMoves = false;
-
+	
+	
 	sampleCamera = false;
 	playbackCamera = false;
 	
@@ -422,6 +423,15 @@ void testApp::draw(){
 		ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
 	}
 	
+	ofPushStyle();
+	ofSetColor(100,100,255, 200);
+	for(int i = 0; i < comps.size(); i++){
+		if(comps[i]->batchExport){
+			ofRect(*comps[i]->toggle);
+		}
+	}
+	ofPopStyle();
+	
 	timeline.draw();
 	gui.draw();
 	
@@ -447,6 +457,7 @@ void testApp::refreshCompButtons(){
 	int mediaFolders = dir.numFiles();
 	int currentCompButton = 0;
 	for(int i = 0; i < mediaFolders; i++){
+		
 		string compositionsFolder = dir.getPath(i) + "/compositions/";
 		ofDirectory compositionsDirectory(compositionsFolder);
 		if(!compositionsDirectory.exists()){
@@ -457,26 +468,35 @@ void testApp::refreshCompButtons(){
 		int numComps = compositionsDirectory.numFiles();
 		int compx = newCompButton->x+newCompButton->width;
 		for(int c = 0; c < numComps; c++){
-			ofxMSAInteractiveObjectWithDelegate* d;
-			if(currentCompButton >= compbuttons.size()){
-				d = new ofxMSAInteractiveObjectWithDelegate();
-				d->setup();
-				d->setDelegate(this);
-				compbuttons.push_back(d);
+			Comp* comp;
+			
+			if(currentCompButton >= comps.size()){
+				comp = new Comp();
+				comp->load  = new ofxMSAInteractiveObjectWithDelegate();
+				comp->load->setup();
+				comp->load->setDelegate(this);
+				
+				comp->toggle = new ofxMSAInteractiveObjectWithDelegate();
+				comp->toggle->setup();
+				comp->toggle->setDelegate(this);				
+				comps.push_back(comp);
 			}
 			else{
-				d = compbuttons[currentCompButton];
+				comp = comps[currentCompButton];
 			}
+			comp->batchExport = false;
+			comp->toggle->setPosAndSize(compx-25,currentCompButton*25,25,25);
+			comp->load->setPosAndSize(compx, currentCompButton*25, 500, 25);
+			comp->fullCompPath = compositionsDirectory.getPath(c);
+			vector<string> compSplit = ofSplitString(comp->fullCompPath, "/", true, true);
+			string compLabel = compSplit[compSplit.size()-3] + ":" + compSplit[compSplit.size()-1];
 			
-			d->setPosAndSize(compx, currentCompButton*25, 400, 25);
-			string fullCompPath = compositionsDirectory.getPath(c);
-			string compLabel = ofFilePath::getEnclosingDirectory(fullCompPath) + ofFilePath::getFileName(fullCompPath);
+			comp->load->setLabel(compLabel);
 			
-			d->setLabel(compLabel);
-			fullCompPaths.push_back(fullCompPath);				
+//			comps.push_back(fullCompPath);				
 			currentCompButton++;
 		}
-	}	
+	}
 }
 
 //--------------------------------------------------------------
@@ -521,12 +541,18 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 		saveComposition();		
 	}
 	else {
-		for(int i = 0; i < compbuttons.size(); i++){
-			if(compbuttons[i] == object){
-				currentCompositionDirectory = fullCompPaths[i] + "/";
+		for(int i = 0; i < comps.size(); i++){
+			
+			if(comps[i]->toggle == object){
+				comps[i]->batchExport = !comps[i]->batchExport;
+				break;
+			}
+
+			if(comps[i]->load == object){
+				currentCompositionDirectory = comps[i]->fullCompPath + "/";
 				cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
 				cam.loadCameraPosition();
-				cout << "loading comp " << currentCompositionDirectory << " clicked comp button is " << compbuttons[i]->getLabel() << endl;
+				cout << "loading comp " << currentCompositionDirectory << " clicked comp button is " << comps[i]->load->getLabel() << endl;
 				if(projectsettings.loadFile(currentCompositionDirectory+"compositionsettings.xml")){
 					string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
 					if(!loadAlignmentMatrices(loadedAlignmentDir)){
@@ -571,6 +597,7 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 					drawMesh = projectsettings.getValue("mesh", false);
 					
 					allLoaded = true;
+					break;
 				}
 			}		
 		}

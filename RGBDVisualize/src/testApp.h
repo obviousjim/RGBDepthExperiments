@@ -13,8 +13,15 @@
 #include "ofxFCPMarker.h"
 #include "ofxCameraRecorder.h"
 
-class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
-{
+typedef struct {
+	ofxMSAInteractiveObjectWithDelegate* load;
+	ofxMSAInteractiveObjectWithDelegate* toggle;
+	string fullCompPath;
+	bool batchExport;
+	string name;
+} Comp;
+
+class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 
   public:
 	void setup();
@@ -50,9 +57,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	
 	//MSA Object delegate
 	ofxMSAInteractiveObjectWithDelegate* newCompButton;
-	ofxMSAInteractiveObjectWithDelegate* saveCompButton;
-	vector<ofxMSAInteractiveObjectWithDelegate*> compbuttons;
-	vector<string> fullCompPaths;
+	ofxMSAInteractiveObjectWithDelegate* saveCompButton;	
+	vector<Comp*> comps;
+	
 	bool playerElementAdded;
 	
  	void objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y);
