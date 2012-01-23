@@ -13,8 +13,16 @@
 #include "ofxFCPMarker.h"
 #include "ofxCameraRecorder.h"
 
-class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
-{
+typedef struct {
+	ofxMSAInteractiveObjectWithDelegate* load;
+	ofxMSAInteractiveObjectWithDelegate* toggle;
+	string fullCompPath;
+	bool batchExport;
+	bool wasRenderedInBatch;
+	string name;
+} Comp;
+
+class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 
   public:
 	void setup();
@@ -45,14 +53,14 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	void loadCompositions();
 	void newComposition();
 	void saveComposition();
-	
+	bool loadCompositionAtIndex(int i);
 	void refreshCompButtons();
 	
 	//MSA Object delegate
 	ofxMSAInteractiveObjectWithDelegate* newCompButton;
-	ofxMSAInteractiveObjectWithDelegate* saveCompButton;
-	vector<ofxMSAInteractiveObjectWithDelegate*> compbuttons;
-	vector<string> fullCompPaths;
+	ofxMSAInteractiveObjectWithDelegate* saveCompButton;	
+	vector<Comp*> comps;
+	
 	bool playerElementAdded;
 	
  	void objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y);
@@ -66,6 +74,11 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	void startCameraPlayback();
 	void toggleCameraPlayback();
 	
+	void startCameraRecord();
+	void stopCameraRecord();
+	void toggleCameraRecord();
+	
+	int currentCompIndex;
 	string currentCompositionDirectory;
 	string mediaBinDirectory;
 	string currentMediaFolder;
@@ -85,7 +98,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	bool allLoaded;
 
 	ofxGameCamera cam;
-	
+
 	string videoThumbsPath;
 	string videoPath;
 	ofxTimeline timeline;
@@ -99,14 +112,22 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	
 	float currentXShift;
 	float currentYShift;
+	float farClip;
+	float currentEdgeCull;
+	bool shouldSaveCameraPoint;
+	bool shouldClearCameraMoves;
 	
 	bool drawPointcloud;
 	bool drawWireframe;
 	bool drawMesh;
 	int pointSize;
 	int lineSize;
+	int currentSimplify;
 	
 	bool startRenderMode;
 	bool currentlyRendering;
 	int currentRenderFrame;
+	
+	ofVec3f lightpos;
+	ofLight light;
 };
