@@ -273,7 +273,7 @@ void testApp::update(){
 		renderer.setRGBTexture(*hiResPlayer);
 		renderer.setTextureScale(1.0, 1.0);
 //		currentSimplify = 1;
-//		currentRenderFrame = timeline.getInFrame();
+		currentRenderFrame = timeline.getInFrame();
 		startCameraPlayback();
 	}
 
