@@ -44,12 +44,21 @@ void testApp::setup(){
 	timeline->setDurationInFrames(300);
 	
 	recalculateVideoRects();
+	
+	shouldRefreshButtons = false;
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 //	timeline->setOffset(ofVec2f(0, ofGetMouseY()));
-
+	
+	if(player.isLoaded()){
+		player.update();
+	}
+	
+	if(shouldRefreshButtons){
+		refreshAlignmentPairButtons();
+	}
 	
 	if(ofGetKeyPressed('S')){
 		offset = ofGetMouseY();
@@ -57,6 +66,9 @@ void testApp::update(){
 		recalculateVideoRects();
 	}
 	
+	if(timeline->getIsPlaying()){
+		alignmentScrubber->selectPercent(timeline->getPercentComplete());
+	}
 	
 	loadVideoButton->setPosAndSize(0,0,playerRect.width, 20);
 	loadDepthButton->setPosAndSize(playerRect.width, 0, depthRect.width, 20);
@@ -140,14 +152,16 @@ void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int 
 //			int depthFrame = depthSequenceElement->getSelectedFrame();
 //			alignmentScrubber->addAlignedPair(videoFrame, depthFrame);
 			alignmentScrubber->registerCurrentAlignment();
-			refreshAlignmentPairButtons();
+			//refreshAlignmentPairButtons();
+			shouldRefreshButtons = true;
 		}
 	}
 	else {
 		for(int i = 0; i < alignmentPairButtons.size(); i++){
 			if(object == alignmentPairButtons[i]){
 				alignmentScrubber->removeAlignmentPair(i);
-				refreshAlignmentPairButtons();
+				//refreshAlignmentPairButtons();
+				shouldRefreshButtons = true;
 				break;
 			}
 		}
@@ -168,6 +182,8 @@ void testApp::loadVideoPath(string path){
 		ofLogError("Couldn't Load video " + path);
 		return;
 	}
+	player.play();
+	player.setSpeed(0);
 	
 	if(playerElement != NULL){
 		//timeline->removeElement(playerElement);
@@ -205,14 +221,14 @@ void testApp::refreshAlignmentPairButtons(){
 	for(int i = 0; i < alignmentScrubber->getPairs().size(); i++){
 		ofxMSAInteractiveObjectWithDelegate* pairButton;
 		pairButton = new ofxMSAInteractiveObjectWithDelegate();
-		pairButton->disableAppEvents();
+//		pairButton->disableAppEvents();
 		pairButton->setup();
 		pairButton->setPosAndSize(savePairButton->x, savePairButton->y+savePairButton->height * (i+1), 
 								  savePairButton->width, savePairButton->height);
 		pairButton->setDelegate(this);		
 		alignmentPairButtons.push_back(pairButton);
 	}
-		
+	shouldRefreshButtons = false;
 }
 
 void testApp::loadDepthPath(string path){
@@ -257,6 +273,9 @@ void testApp::keyPressed(int key){
 		}
 	}
 	
+	if(key == ' '){
+		timeline->togglePlay();
+	}
 }
 
 //--------------------------------------------------------------

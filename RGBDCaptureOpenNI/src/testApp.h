@@ -72,6 +72,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	float btnheight;
 	float takeWidth;
 	
+	bool flip;
+	
 	ofSoundPlayer highbeeper;
 	ofSoundPlayer lowbeeper;
 	

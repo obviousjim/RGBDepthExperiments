@@ -7,7 +7,7 @@ void testApp::setup(){
 
 	ofEnableAlphaBlending();
 	ofSetFrameRate(60);
-	//ofToggleFullscreen();
+	ofToggleFullscreen();
 	
 	//ofBackground(255*.2);
 	ofBackground(255*0);
@@ -20,7 +20,6 @@ void testApp::setup(){
 	
 	fullscreenPoints = false;
 	
-	recording = false;
 	inCaptureMode = false;
 	clicks = 0;
 	lastClickTime = 0;
@@ -107,7 +106,7 @@ void testApp::setup(){
 	btnRecordBtn->setDelegate(this);
 
 	btnCaptureMode = new ofxMSAInteractiveObjectWithDelegate();
-	btnCaptureMode->setPosAndSize(framewidth+thirdWidth, 0, framewidth, btnheight*2);
+	btnCaptureMode->setPosAndSize(framewidth+thirdWidth*3, 0, framewidth, btnheight*2);
 	btnCaptureMode->setLabel("!! CAPTURE MODE !!");
 	btnCaptureMode->setIdleColor(idleColor);
 	btnCaptureMode->setDownColor(downColor);
@@ -142,6 +141,7 @@ void testApp::setup(){
 	cam.setFarClip(50000);
 	recorder.setup();	
 		
+	flip = false;
 	
 }
 
@@ -163,7 +163,7 @@ void testApp::update(){
 		recordDepth.update();	
 	}
 	
-	if(recordDepth.isFrameNew() && recording){
+	if(recordDepth.isFrameNew() && recorder.isRecording()){
 		recorder.addImage( (unsigned short*)recordDepth.getRawDepthPixels());
 	}
 }
@@ -216,6 +216,7 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 	}
 	else if(object == btnCaptureMode){
 		inCaptureMode = true;
+		timeline.disable();
 	}
 	else {
 		for(int i = 0; i < btnTakes.size(); i++){
@@ -263,10 +264,7 @@ void testApp::loadSequenceForPlayback( int index ){
 }
 
 void testApp::toggleRecord(){
-	recording = !recording;
-//	if(recording){
-//		recorder.incrementFolder();
-//	}	
+	recorder.toggleRecord();
 	updateTakeButtons();
 }
 
@@ -296,12 +294,22 @@ void testApp::updateTakeButtons(){
 	
 	for(int i = 0; i < files.size(); i++){
 		ofxMSAInteractiveObjectWithDelegate* btnTake = new ofxMSAInteractiveObjectWithDelegate();		
-		btnTake->setPosAndSize(framewidth, btnheight/2*i, thirdWidth, btnheight/2);
+		float x = framewidth;
+		float y = btnheight/2*i;
+//		cout << "y is " << btnheight/2*i << " limit is " << btnheight*3+frameheight << endl;
+		while(y >= btnheight*3+frameheight){
+			y -= btnheight*3+frameheight;
+			x += thirdWidth;
+		}
+		
+		btnTake->setPosAndSize(x, y, thirdWidth, btnheight/2);
 		btnTake->setLabel( ofFilePath::getFileName(files[i]) );
 		btnTake->setIdleColor(idleColor);
 		btnTake->setDownColor(downColor);
 		btnTake->setHoverColor(hoverColor);
 		btnTake->setDelegate(this);
+		btnTake->enableAllEvents();
+		
 		btnTakes.push_back( btnTake );
 	}
 }
@@ -323,6 +331,12 @@ void testApp::draw(){
 		//TODO render modes
 		if(!inCaptureMode){
 			recordDepth.draw(0,btnheight*2,640,480);
+			ofPushStyle();
+			ofSetColor(255, 255, 255, 60);
+			ofLine(320, btnheight*2, 320, btnheight*2+480);
+			ofLine(0, btnheight*2+240, 640, btnheight*2+240);
+
+			ofPopStyle();
 		}
 	}
 	else {
@@ -339,7 +353,7 @@ void testApp::draw(){
 	}
 
 	//draw save meter if buffer is getting full
-	if(recording){
+	if(recorder.isRecording()){
 		ofPushStyle();
 		ofSetColor(255, 0, 0);
 		ofNoFill();
@@ -350,7 +364,6 @@ void testApp::draw(){
 	}
 	
 	if(recorder.numFramesWaitingSave() > 0){
-		cout << recorder.numFramesWaitingSave() << endl;
 		ofPushStyle();
 		float width = recorder.numFramesWaitingSave()/2000.0 * btnRecordBtn->width;
 		ofFill();
@@ -367,8 +380,7 @@ void testApp::draw(){
 	if(inCaptureMode){
 		ofSetColor(255, 0, 0, 15);
 		ofRect(0, 0, ofGetWidth(), ofGetHeight());
-	}
-		
+	}		
 }
 
 void testApp::drawPointcloud(bool fullscreen){
@@ -392,8 +404,7 @@ void testApp::drawPointcloud(bool fullscreen){
 	}
 	glEnd();
 	cam.end();
-	glDisable(GL_DEPTH_TEST);
-	
+	glDisable(GL_DEPTH_TEST);	
 }
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
@@ -408,17 +419,17 @@ void testApp::keyPressed(int key){
 			timeline.togglePlay();
 		}
 	}
-    
-    if(key == 'c'){
-		captureCalibrationImage();
-    }
-	
+    	
 	if(key == OF_KEY_DEL && currentTab == TabCalibrate){
 		alignment.discardCurrentPair();
 		alignment.saveState();
 	}
-	   
+
 	if(key == 'f'){
+		ofToggleFullscreen();
+	}
+	
+	if(key == 'p'){
 		fullscreenPoints = !fullscreenPoints;
 		if(fullscreenPoints){
 			btnSetDirectory->disableAllEvents();
@@ -492,7 +503,7 @@ void testApp::mouseReleased(int x, int y, int button){
 			if (clicks > 1) {
 				clicks = 0;
 				toggleRecord();
-				if(!recording){
+				if(!recorder.isRecording()){
 					//play sound
 					lowbeeper.play();
 					highbeeper.play();
