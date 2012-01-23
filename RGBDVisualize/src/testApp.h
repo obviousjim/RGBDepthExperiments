@@ -123,10 +123,15 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	int pointSize;
 	int lineSize;
 	int currentSimplify;
-	
+
 	bool startRenderMode;
 	bool currentlyRendering;
 	int currentRenderFrame;
+	int lastRenderFrame;
+	int numFramesToRender;
+	int numFramesRendered;
+	ofImage testImageOne;
+	ofImage testImageTwo;
 	
 	ofVec3f lightpos;
 	ofLight light;

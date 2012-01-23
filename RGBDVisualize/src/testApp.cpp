@@ -7,7 +7,6 @@ void testApp::setup(){
 	ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
 	ofBackground(0);
-	playerElementAdded = false;
 
 	cam.speed = 40;
 	cam.autosavePosition = true;
@@ -24,6 +23,7 @@ void testApp::setup(){
 	startRenderMode = false;
 	currentlyRendering = false;
 	allLoaded = false;
+	playerElementAdded = false;
 	
 	shouldSaveCameraPoint = false;
 	shouldClearCameraMoves = false;
@@ -274,17 +274,13 @@ void testApp::update(){
 		renderer.setTextureScale(1.0, 1.0);
 //		currentSimplify = 1;
 		currentRenderFrame = timeline.getInFrame();
+		lastRenderFrame = currentRenderFrame-1;
+		numFramesToRender = timeline.getOutFrame() - timeline.getInFrame();
+		numFramesRendered = 0;
 		startCameraPlayback();
 	}
 
-	if(currentlyRendering){
-		currentRenderFrame++;
-		timeline.setCurrentFrame(currentRenderFrame);
-		hiResPlayer->setFrame(currentRenderFrame);
-		hiResPlayer->update();
-		updateRenderer(*hiResPlayer);		
-	}
-	else {
+	if(!currentlyRendering){
 		lowResPlayer->update();	
 		if(lowResPlayer->isFrameNew()){		
 			updateRenderer(*lowResPlayer);
@@ -377,6 +373,28 @@ void testApp::draw(){
 	
 	if(!allLoaded) return;
 
+	if(currentlyRendering){
+		currentRenderFrame++;
+		timeline.setCurrentFrame(currentRenderFrame);
+		hiResPlayer->setFrame(currentRenderFrame);
+		hiResPlayer->update();
+		
+		////////
+//		char filename[512];
+//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_A.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
+//		savingImage.saveImage(filename);		
+//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
+//		savingImage.saveImage(filename);
+//		
+//		cout << "FRAME UPDATE" << endl;
+//		cout << "	setting frame to " << currentRenderFrame << " actual frame is " << hiResPlayer->getCurrentFrame() << endl;
+//		cout << "	set to percent " << 1.0*currentRenderFrame/hiResPlayer->getTotalNumFrames() << " actual percent " << hiResPlayer->getPosition() << endl;
+		////////
+		
+		
+		updateRenderer(*hiResPlayer);		
+	}
+	
 	fbo.begin();
 	ofClear(0, 0, 0);
 //	ofEnableLighting();
@@ -415,8 +433,18 @@ void testApp::draw(){
 	if(currentlyRendering){
 		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
 		char filename[512];
-		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), hiResPlayer->getCurrentFrame());
+//		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), hiResPlayer->getCurrentFrame());
+		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), currentRenderFrame);
 		savingImage.saveImage(filename);
+
+		///////frame debugging
+//		numFramesRendered++;
+//		cout << "	Rendered (" << numFramesRendered << "/" << numFramesToRender << ") +++ current render frame is " << currentRenderFrame << " quick time reports frame " << hiResPlayer->getCurrentFrame() << endl;
+//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_B.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
+//		savingImage.saveImage(filename);
+//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
+//		savingImage.saveImage(filename);
+		//////
 		
 		//stop when finished
 		if(currentRenderFrame > timeline.getOutFrame()){
