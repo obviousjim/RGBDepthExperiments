@@ -18,6 +18,7 @@ typedef struct {
 	ofxMSAInteractiveObjectWithDelegate* toggle;
 	string fullCompPath;
 	bool batchExport;
+	bool wasRenderedInBatch;
 	string name;
 } Comp;
 
@@ -52,7 +53,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void loadCompositions();
 	void newComposition();
 	void saveComposition();
-	
+	bool loadCompositionAtIndex(int i);
 	void refreshCompButtons();
 	
 	//MSA Object delegate
@@ -73,6 +74,11 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void startCameraPlayback();
 	void toggleCameraPlayback();
 	
+	void startCameraRecord();
+	void stopCameraRecord();
+	void toggleCameraRecord();
+	
+	int currentCompIndex;
 	string currentCompositionDirectory;
 	string mediaBinDirectory;
 	string currentMediaFolder;

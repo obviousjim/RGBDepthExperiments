@@ -28,7 +28,6 @@ void testApp::setup(){
 	shouldSaveCameraPoint = false;
 	shouldClearCameraMoves = false;
 	
-	
 	sampleCamera = false;
 	playbackCamera = false;
 	
@@ -41,12 +40,12 @@ void testApp::setup(){
 	newCompButton = new ofxMSAInteractiveObjectWithDelegate();
 	newCompButton->setLabel("New Comp");
 	newCompButton->setDelegate(this);
-	newCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+50, 0, 150, 25);
+	newCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+25, 0, 100, 25);
 	
 	saveCompButton = new ofxMSAInteractiveObjectWithDelegate();
 	saveCompButton->setLabel("Save Comp");
 	saveCompButton->setDelegate(this);
-	saveCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+50, 25, 150, 25);
+	saveCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+25, 25, 100, 25);
 
 	loadCompositions();
 
@@ -62,9 +61,9 @@ void testApp::setup(){
 	gui.addSlider("Z Far Clip", farClip, 2, 5000);
 	gui.addSlider("Simplify", currentSimplify, 1, 4);
 	
-	gui.addSlider("LightX", lightpos.x, -1500, 1500);
-	gui.addSlider("LightY", lightpos.y, -1500, 1500);
-	gui.addSlider("LightZ", lightpos.z, -1500, 1500);
+//	gui.addSlider("LightX", lightpos.x, -1500, 1500);
+//	gui.addSlider("LightY", lightpos.y, -1500, 1500);
+//	gui.addSlider("LightZ", lightpos.z, -1500, 1500);
 	
 	
 	gui.addToggle("Clear Camera Moves", shouldClearCameraMoves);
@@ -110,12 +109,7 @@ bool testApp::loadNewProject(){
 			 	if(testFile.find("small") == string::npos){
 					videoPath = dataDirectory.getPath(i);
 				}
-			}
-			
-			//assume
-//			if(testFile.find("txt") != string::npos){
-//				//loadMarkerFile(dataDirectory.getPath(i));
-//			}
+			}			
 		}
 		
 		if(calibrationDirectory != "" && videoPath != "" && depthImageDirectory != ""){
@@ -143,7 +137,7 @@ bool testApp::loadNewProject(){
 			currentCompositionDirectory = currentMediaFolder + "/compositions/comp" + ofToString(compNumber) + "/";
 			cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
 			cam.loadCameraPosition();
-
+			
 			ofDirectory compFolder(currentCompositionDirectory);
 			if(!compFolder.exists()){
 				compFolder.create(true);
@@ -216,7 +210,7 @@ bool testApp::loadVideoFile(string path){
 	}
 	
 	videoTimelineElement.setup();
-	timeline.setInOutRange(ofRange(.25,.75));	
+	timeline.setInOutRange(ofRange(0,1.0));	
 		
 	if(!playerElementAdded){
 		timeline.setup();
@@ -367,7 +361,20 @@ void testApp::processDepthFrame(){
 void testApp::draw(){
 	
 	ofBackground(255*.2);
-
+	ofPushStyle();
+	for(int i = 0; i < comps.size(); i++){
+		if(comps[i]->wasRenderedInBatch){
+			ofSetColor(50,200,100, 200);
+			ofRect(*comps[i]->toggle);
+		}
+		else if(comps[i]->batchExport){
+			ofSetColor(255,255,100, 200);
+			ofRect(*comps[i]->toggle);
+		}
+	}
+	ofPopStyle();
+	
+	
 	if(!allLoaded) return;
 
 	fbo.begin();
@@ -423,16 +430,8 @@ void testApp::draw(){
 		ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
 	}
 	
-	ofPushStyle();
-	ofSetColor(100,100,255, 200);
-	for(int i = 0; i < comps.size(); i++){
-		if(comps[i]->batchExport){
-			ofRect(*comps[i]->toggle);
-		}
-	}
-	ofPopStyle();
-	
 	timeline.draw();
+	gui.setDraw(!currentlyRendering);
 	gui.draw();
 	
 	ofSetColor(255);
@@ -466,7 +465,7 @@ void testApp::refreshCompButtons(){
 		
 		compositionsDirectory.listDir();
 		int numComps = compositionsDirectory.numFiles();
-		int compx = newCompButton->x+newCompButton->width;
+		int compx = newCompButton->x+newCompButton->width+25;
 		for(int c = 0; c < numComps; c++){
 			Comp* comp;
 			
@@ -485,6 +484,7 @@ void testApp::refreshCompButtons(){
 				comp = comps[currentCompButton];
 			}
 			comp->batchExport = false;
+			comp->wasRenderedInBatch = false;
 			comp->toggle->setPosAndSize(compx-25,currentCompButton*25,25,25);
 			comp->load->setPosAndSize(compx, currentCompButton*25, 500, 25);
 			comp->fullCompPath = compositionsDirectory.getPath(c);
@@ -492,7 +492,9 @@ void testApp::refreshCompButtons(){
 			string compLabel = compSplit[compSplit.size()-3] + ":" + compSplit[compSplit.size()-1];
 			
 			comp->load->setLabel(compLabel);
-			
+			if(currentCompositionDirectory == comp->fullCompPath){
+				currentCompIndex = currentCompButton;
+			}
 //			comps.push_back(fullCompPath);				
 			currentCompButton++;
 		}
@@ -544,78 +546,104 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 		for(int i = 0; i < comps.size(); i++){
 			
 			if(comps[i]->toggle == object){
+				comps[i]->wasRenderedInBatch = false;
 				comps[i]->batchExport = !comps[i]->batchExport;
 				break;
 			}
 
 			if(comps[i]->load == object){
-				currentCompositionDirectory = comps[i]->fullCompPath + "/";
-				cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
-				cam.loadCameraPosition();
-				cout << "loading comp " << currentCompositionDirectory << " clicked comp button is " << comps[i]->load->getLabel() << endl;
-				if(projectsettings.loadFile(currentCompositionDirectory+"compositionsettings.xml")){
-					string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
-					if(!loadAlignmentMatrices(loadedAlignmentDir)){
-						return;
-					}
-					cout << "loaded alignment " << loadedAlignmentDir << endl;
-					
-					string loadedVideoFile = projectsettings.getValue("videoFile", "");
-					if(!loadVideoFile(loadedVideoFile)){
-						return;
-					}
-					cout << "loaded video " << loadedVideoFile << endl;
-					
-					string loadedDepthSequence = projectsettings.getValue("depthSequence", "");
-					if(!loadDepthSequence(loadedDepthSequence)){
-						return;
-					}
-					
-					string markerPath = projectsettings.getValue("markerPath", "");
-					if(markerPath != ""){
-						loadMarkerFile(markerPath);
-					}
-					cout << "loaded depth " << loadedDepthSequence << endl;
-					
-					string cameraFile = projectsettings.getValue("cameraFile", "");
-					if(cameraFile != ""){
-						cameraRecorder.loadFromFile(cameraFile);
-						if(cameraRecorder.getSamples().size() > 0){
-							timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
-							timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
-						}
-					}
-					cam.speed = projectsettings.getValue("cameraSpeed", 20.);
-					currentXShift = projectsettings.getValue("shiftx", 0.);
-					currentYShift = projectsettings.getValue("shifty", 0.);
-					pointSize = projectsettings.getValue("pointSize", 1);
-					lineSize = projectsettings.getValue("lineSize", 1);
-					currentEdgeCull = projectsettings.getValue("edgeCull", 50);
-					farClip = projectsettings.getValue("farClip", 5000);
-					drawPointcloud = projectsettings.getValue("pointcloud", false);
-					drawWireframe = projectsettings.getValue("wireframe", false);
-					drawMesh = projectsettings.getValue("mesh", false);
-					
-					allLoaded = true;
-					break;
-				}
+				loadCompositionAtIndex(i);
+				break;
 			}		
 		}
 	}
 }
 
-//--------------------------------------------------------------
 
+bool testApp::loadCompositionAtIndex(int i){
+	stopCameraPlayback();
+	stopCameraRecord();
+	
+	currentCompositionDirectory = comps[i]->fullCompPath + "/";
+	currentCompIndex = i;
+	cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
+	cam.loadCameraPosition();
+	cout << "loading comp " << currentCompositionDirectory << " clicked comp button is " << comps[i]->load->getLabel() << endl;
+	if(projectsettings.loadFile(currentCompositionDirectory+"compositionsettings.xml")){
+		string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
+		if(!loadAlignmentMatrices(loadedAlignmentDir)){
+			return false;
+		}
+		cout << "loaded alignment " << loadedAlignmentDir << endl;
+		
+		string loadedVideoFile = projectsettings.getValue("videoFile", "");
+		if(!loadVideoFile(loadedVideoFile)){
+			return false;
+		}
+		cout << "loaded video " << loadedVideoFile << endl;
+		
+		string loadedDepthSequence = projectsettings.getValue("depthSequence", "");
+		if(!loadDepthSequence(loadedDepthSequence)){
+			return false;
+		}
+		
+		string markerPath = projectsettings.getValue("markerPath", "");
+		if(markerPath != ""){
+			loadMarkerFile(markerPath);
+		}
+		cout << "loaded depth " << loadedDepthSequence << endl;
+		
+		string cameraFile = projectsettings.getValue("cameraFile", "");
+		if(cameraFile != ""){
+			cameraRecorder.loadFromFile(cameraFile);
+			if(cameraRecorder.getSamples().size() > 0){
+				timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
+				timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
+			}
+		}
+		else{
+			cameraRecorder.reset();
+		}
+		
+		cam.speed = projectsettings.getValue("cameraSpeed", 20.);
+		
+		currentXShift = projectsettings.getValue("shiftx", 0.);
+		currentYShift = projectsettings.getValue("shifty", 0.);
+		pointSize = projectsettings.getValue("pointSize", 1);
+		lineSize = projectsettings.getValue("lineSize", 1);
+		currentEdgeCull = projectsettings.getValue("edgeCull", 50);
+		farClip = projectsettings.getValue("farClip", 5000);
+		drawPointcloud = projectsettings.getValue("pointcloud", false);
+		drawWireframe = projectsettings.getValue("wireframe", false);
+		drawMesh = projectsettings.getValue("mesh", false);
+		
+		allLoaded = true;
+	}
+}	
+
+//--------------------------------------------------------------
 void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
 
 }
 
 void testApp::finishRender(){
 	currentlyRendering = false;
-	stopCameraPlayback();
+	comps[currentCompIndex]->batchExport = false;
+	comps[currentCompIndex]->wasRenderedInBatch = true;
+	for(int i = currentCompIndex+1; i < comps.size(); i++){
+		if(comps[i]->batchExport){
+			loadCompositionAtIndex(i);
+			startRenderMode = true;
+			return;
+		}
+	}
+	
+	//no more left, we are done
+	//stopCameraPlayback();
 	renderer.setRGBTexture(*lowResPlayer);
 	renderer.setTextureScale(1.0*lowResPlayer->getWidth()/hiResPlayer->getWidth(), 
 							 1.0*lowResPlayer->getHeight()/hiResPlayer->getHeight());	
+	
 }
 
 //--------------------------------------------------------------
@@ -623,7 +651,6 @@ void testApp::keyPressed(int key){
 	if(currentlyRendering){
 		if(key == ' '){
 			finishRender();
-			renderer.setRGBTexture(*lowResPlayer);
 		}
 		return;
 	}
@@ -664,14 +691,7 @@ void testApp::keyPressed(int key){
 	
 	//RECORD CAMERA
 	if(key == 'R'){	
-		if(sampleCamera){
-			sampleCamera = false;
-		}
-		else {
-			cameraRecorder.reset();
-			sampleCamera = true;
-			lowResPlayer->setSpeed(1.0);
-		}
+		toggleCameraRecord();
 	}
 	
 	//PLAYBACK CAMERA
@@ -680,12 +700,35 @@ void testApp::keyPressed(int key){
 	}
 }
 
+void testApp::startCameraRecord(){
+	if(!playbackCamera && !sampleCamera){
+		cameraRecorder.reset();
+		sampleCamera = true;
+		lowResPlayer->setSpeed(1.0);
+	}	
+}
+
+void testApp::stopCameraRecord(){
+	sampleCamera = false;
+}
+
+void testApp::toggleCameraRecord(){
+	if(sampleCamera){
+		stopCameraRecord();
+	}
+	else{
+		startCameraRecord();
+	}
+}
+
 void testApp::stopCameraPlayback(){
-	playbackCamera = false;
-	lowResPlayer->setSpeed(0.);
-	hiResPlayer->setSpeed(0.);
-	cam.applyRotation = true;
-	cam.applyTranslation = true;
+	if(playbackCamera){
+		playbackCamera = false;
+		lowResPlayer->setSpeed(0.);
+		hiResPlayer->setSpeed(0.);
+		cam.applyRotation = true;
+		cam.applyTranslation = true;
+	}
 }
 
 void testApp::startCameraPlayback(){

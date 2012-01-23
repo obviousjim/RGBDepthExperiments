@@ -279,7 +279,6 @@ void testApp::captureCalibrationImage(){
 		alignment.addDepthCalibrationImage(filename);
 		alignment.generateAlignment();
 		alignment.saveState();
-		
 	}
 }
 
