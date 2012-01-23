@@ -278,8 +278,8 @@ void testApp::update(){
 
 		renderer.setRGBTexture(*hiResPlayer);
 		renderer.setTextureScale(1.0, 1.0);
-		currentSimplify = 1;
-		currentRenderFrame = timeline.getInFrame();
+//		currentSimplify = 1;
+//		currentRenderFrame = timeline.getInFrame();
 		startCameraPlayback();
 	}
 
@@ -373,8 +373,9 @@ void testApp::draw(){
 	fbo.begin();
 	ofClear(0, 0, 0);
 //	ofEnableLighting();
+	
 	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
-
+	
 	if(!drawPointcloud && !drawWireframe && !drawMesh){
 		drawPointcloud = true;
 	}
@@ -396,8 +397,8 @@ void testApp::draw(){
 //		ofLine(renderer.getMesh().getVertices()[i], 
 //			   renderer.getMesh().getVertices()[i] + renderer.getMesh().getNormals()[i]*10);
 //	}
-//	ofDisableLighting();
 	cam.end();
+//	ofDisableLighting();
 	
 	fbo.end();	
 	fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
