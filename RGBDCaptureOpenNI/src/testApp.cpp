@@ -264,9 +264,9 @@ void testApp::loadSequenceForPlayback( int index ){
 
 void testApp::toggleRecord(){
 	recording = !recording;
-	if(recording){
-		recorder.incrementFolder();
-	}	
+//	if(recording){
+//		recorder.incrementFolder();
+//	}	
 	updateTakeButtons();
 }
 
@@ -387,7 +387,7 @@ void testApp::drawPointcloud(bool fullscreen){
 			double wx = (double)(x - 640/2) * factor;
 			double wy = (double)(y - 480/2) * factor;
 			glColor3f(1.0,1.0,1.0);
-			glVertex3f(wx,-wy,-wz);
+			glVertex3f(wx,wy,-wz);
 		}
 	}
 	glEnd();
