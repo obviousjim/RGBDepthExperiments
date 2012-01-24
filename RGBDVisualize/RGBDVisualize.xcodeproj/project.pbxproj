@@ -44,7 +44,6 @@
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E704A2CA147AACF9002064D0 /* ofxGameCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E704A2C6147AACF9002064D0 /* ofxGameCamera.cpp */; };
 		E73BE0B314A3B784004FE0E5 /* ofxDepthImageCompressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E73BE0B114A3B784004FE0E5 /* ofxDepthImageCompressor.cpp */; };
-		E74B305B14CB523C0071E092 /* ofxFCPMarker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E74B305914CB523C0071E092 /* ofxFCPMarker.cpp */; };
 		E7D0C60514796DA600510013 /* opencv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D0C60214796DA600510013 /* opencv.a */; };
 		E7DF569A147CA28300A3A9C7 /* ofxTimeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF5677147CA28300A3A9C7 /* ofxTimeline.cpp */; };
 		E7DF569C147CA28300A3A9C7 /* ofxTLElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E7DF567C147CA28300A3A9C7 /* ofxTLElement.cpp */; };
@@ -187,31 +186,6 @@
 		E704A2C7147AACF9002064D0 /* ofxGameCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGameCamera.h; sourceTree = "<group>"; };
 		E73BE0B114A3B784004FE0E5 /* ofxDepthImageCompressor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthImageCompressor.cpp; sourceTree = "<group>"; };
 		E73BE0B214A3B784004FE0E5 /* ofxDepthImageCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDepthImageCompressor.h; sourceTree = "<group>"; };
-		E74B303414CB523C0071E092 /* config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config; sourceTree = "<group>"; };
-		E74B303514CB523C0071E092 /* description */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = description; sourceTree = "<group>"; };
-		E74B303614CB523C0071E092 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		E74B303814CB523C0071E092 /* applypatch-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "applypatch-msg.sample"; sourceTree = "<group>"; };
-		E74B303914CB523C0071E092 /* commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "commit-msg.sample"; sourceTree = "<group>"; };
-		E74B303A14CB523C0071E092 /* post-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-commit.sample"; sourceTree = "<group>"; };
-		E74B303B14CB523C0071E092 /* post-receive.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-receive.sample"; sourceTree = "<group>"; };
-		E74B303C14CB523C0071E092 /* post-update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "post-update.sample"; sourceTree = "<group>"; };
-		E74B303D14CB523C0071E092 /* pre-applypatch.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-applypatch.sample"; sourceTree = "<group>"; };
-		E74B303E14CB523C0071E092 /* pre-commit.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-commit.sample"; sourceTree = "<group>"; };
-		E74B303F14CB523C0071E092 /* pre-rebase.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "pre-rebase.sample"; sourceTree = "<group>"; };
-		E74B304014CB523C0071E092 /* prepare-commit-msg.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "prepare-commit-msg.sample"; sourceTree = "<group>"; };
-		E74B304114CB523C0071E092 /* update.sample */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update.sample; sourceTree = "<group>"; };
-		E74B304214CB523C0071E092 /* index */ = {isa = PBXFileReference; lastKnownFileType = file; path = index; sourceTree = "<group>"; };
-		E74B304414CB523C0071E092 /* exclude */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = exclude; sourceTree = "<group>"; };
-		E74B304614CB523C0071E092 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		E74B304914CB523C0071E092 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		E74B304D14CB523C0071E092 /* pack-ca42e99be716bef6c4e7bc92e698074bcb92fec8.idx */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pack-ca42e99be716bef6c4e7bc92e698074bcb92fec8.idx"; sourceTree = "<group>"; };
-		E74B304E14CB523C0071E092 /* pack-ca42e99be716bef6c4e7bc92e698074bcb92fec8.pack */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pack-ca42e99be716bef6c4e7bc92e698074bcb92fec8.pack"; sourceTree = "<group>"; };
-		E74B304F14CB523C0071E092 /* packed-refs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "packed-refs"; sourceTree = "<group>"; };
-		E74B305214CB523C0071E092 /* master */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = master; sourceTree = "<group>"; };
-		E74B305514CB523C0071E092 /* HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HEAD; sourceTree = "<group>"; };
-		E74B305714CB523C0071E092 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		E74B305914CB523C0071E092 /* ofxFCPMarker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxFCPMarker.cpp; sourceTree = "<group>"; };
-		E74B305A14CB523C0071E092 /* ofxFCPMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFCPMarker.h; sourceTree = "<group>"; };
 		E7D0C5AD14796DA600510013 /* cv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cv.h; sourceTree = "<group>"; };
 		E7D0C5AE14796DA600510013 /* cv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cv.hpp; sourceTree = "<group>"; };
 		E7D0C5AF14796DA600510013 /* cvaux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cvaux.h; sourceTree = "<group>"; };
@@ -574,7 +548,6 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				E74B303114CB523C0071E092 /* ofxFCPMarker */,
 				F39CB64014C76F1700E2DB17 /* ofxRange */,
 				E7F4F31014AFF9C200198383 /* ofxMSAInteractiveObject */,
 				E7F4F2A614AFF95C00198383 /* ofxSimpleGuiToo */,
@@ -691,167 +664,6 @@
 			children = (
 			);
 			name = scanEffects;
-			sourceTree = "<group>";
-		};
-		E74B303114CB523C0071E092 /* ofxFCPMarker */ = {
-			isa = PBXGroup;
-			children = (
-				E74B303214CB523C0071E092 /* .git */,
-				E74B305714CB523C0071E092 /* README */,
-				E74B305814CB523C0071E092 /* src */,
-			);
-			name = ofxFCPMarker;
-			path = ../../../addons/ofxFCPMarker;
-			sourceTree = SOURCE_ROOT;
-		};
-		E74B303214CB523C0071E092 /* .git */ = {
-			isa = PBXGroup;
-			children = (
-				E74B303314CB523C0071E092 /* branches */,
-				E74B303414CB523C0071E092 /* config */,
-				E74B303514CB523C0071E092 /* description */,
-				E74B303614CB523C0071E092 /* HEAD */,
-				E74B303714CB523C0071E092 /* hooks */,
-				E74B304214CB523C0071E092 /* index */,
-				E74B304314CB523C0071E092 /* info */,
-				E74B304514CB523C0071E092 /* logs */,
-				E74B304A14CB523C0071E092 /* objects */,
-				E74B304F14CB523C0071E092 /* packed-refs */,
-				E74B305014CB523C0071E092 /* refs */,
-			);
-			path = .git;
-			sourceTree = "<group>";
-		};
-		E74B303314CB523C0071E092 /* branches */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = branches;
-			sourceTree = "<group>";
-		};
-		E74B303714CB523C0071E092 /* hooks */ = {
-			isa = PBXGroup;
-			children = (
-				E74B303814CB523C0071E092 /* applypatch-msg.sample */,
-				E74B303914CB523C0071E092 /* commit-msg.sample */,
-				E74B303A14CB523C0071E092 /* post-commit.sample */,
-				E74B303B14CB523C0071E092 /* post-receive.sample */,
-				E74B303C14CB523C0071E092 /* post-update.sample */,
-				E74B303D14CB523C0071E092 /* pre-applypatch.sample */,
-				E74B303E14CB523C0071E092 /* pre-commit.sample */,
-				E74B303F14CB523C0071E092 /* pre-rebase.sample */,
-				E74B304014CB523C0071E092 /* prepare-commit-msg.sample */,
-				E74B304114CB523C0071E092 /* update.sample */,
-			);
-			path = hooks;
-			sourceTree = "<group>";
-		};
-		E74B304314CB523C0071E092 /* info */ = {
-			isa = PBXGroup;
-			children = (
-				E74B304414CB523C0071E092 /* exclude */,
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		E74B304514CB523C0071E092 /* logs */ = {
-			isa = PBXGroup;
-			children = (
-				E74B304614CB523C0071E092 /* HEAD */,
-				E74B304714CB523C0071E092 /* refs */,
-			);
-			path = logs;
-			sourceTree = "<group>";
-		};
-		E74B304714CB523C0071E092 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				E74B304814CB523C0071E092 /* heads */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		E74B304814CB523C0071E092 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				E74B304914CB523C0071E092 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		E74B304A14CB523C0071E092 /* objects */ = {
-			isa = PBXGroup;
-			children = (
-				E74B304B14CB523C0071E092 /* info */,
-				E74B304C14CB523C0071E092 /* pack */,
-			);
-			path = objects;
-			sourceTree = "<group>";
-		};
-		E74B304B14CB523C0071E092 /* info */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = info;
-			sourceTree = "<group>";
-		};
-		E74B304C14CB523C0071E092 /* pack */ = {
-			isa = PBXGroup;
-			children = (
-				E74B304D14CB523C0071E092 /* pack-ca42e99be716bef6c4e7bc92e698074bcb92fec8.idx */,
-				E74B304E14CB523C0071E092 /* pack-ca42e99be716bef6c4e7bc92e698074bcb92fec8.pack */,
-			);
-			path = pack;
-			sourceTree = "<group>";
-		};
-		E74B305014CB523C0071E092 /* refs */ = {
-			isa = PBXGroup;
-			children = (
-				E74B305114CB523C0071E092 /* heads */,
-				E74B305314CB523C0071E092 /* remotes */,
-				E74B305614CB523C0071E092 /* tags */,
-			);
-			path = refs;
-			sourceTree = "<group>";
-		};
-		E74B305114CB523C0071E092 /* heads */ = {
-			isa = PBXGroup;
-			children = (
-				E74B305214CB523C0071E092 /* master */,
-			);
-			path = heads;
-			sourceTree = "<group>";
-		};
-		E74B305314CB523C0071E092 /* remotes */ = {
-			isa = PBXGroup;
-			children = (
-				E74B305414CB523C0071E092 /* origin */,
-			);
-			path = remotes;
-			sourceTree = "<group>";
-		};
-		E74B305414CB523C0071E092 /* origin */ = {
-			isa = PBXGroup;
-			children = (
-				E74B305514CB523C0071E092 /* HEAD */,
-			);
-			path = origin;
-			sourceTree = "<group>";
-		};
-		E74B305614CB523C0071E092 /* tags */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = tags;
-			sourceTree = "<group>";
-		};
-		E74B305814CB523C0071E092 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				E74B305914CB523C0071E092 /* ofxFCPMarker.cpp */,
-				E74B305A14CB523C0071E092 /* ofxFCPMarker.h */,
-			);
-			path = src;
 			sourceTree = "<group>";
 		};
 		E7D0C5AA14796DA600510013 /* opencv */ = {
@@ -1427,7 +1239,6 @@
 				E7F4F30314AFF95C00198383 /* ofxSimpleGuiValueControl.cpp in Sources */,
 				E7F4F35814AFF9C200198383 /* ofxMSAInteractiveObject.cpp in Sources */,
 				E7E17A2E14C7255E0089DE70 /* ofxCameraRecorder.cpp in Sources */,
-				E74B305B14CB523C0071E092 /* ofxFCPMarker.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

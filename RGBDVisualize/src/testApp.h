@@ -10,7 +10,6 @@
 #include "ofxTLDepthImageSequence.h";
 #include "ofxMSAInteractiveObjectDelegate.h"
 #include "ofxSimpleGuiToo.h"
-#include "ofxFCPMarker.h"
 #include "ofxCameraRecorder.h"
 
 typedef struct {
@@ -81,10 +80,10 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	int currentCompIndex;
 	string currentCompositionDirectory;
 	string mediaBinDirectory;
-	string currentMediaFolder;
+//	string currentMediaFolder;
 	ofVideoPlayer* hiResPlayer;
 	ofVideoPlayer* lowResPlayer;
-	ofxFCPMarker markers;
+//	ofxFCPMarker markers;
 	int currentMarker;
 	ofxCameraRecorder cameraRecorder;
 	bool sampleCamera;

@@ -70,7 +70,7 @@ void testApp::setup(){
 	gui.addToggle("Set Camera Point", shouldSaveCameraPoint);
 	
 	gui.addTitle("");
-	gui.addToggle("Render Composition", startRenderMode);
+	gui.addToggle("Render Batch", startRenderMode);
 
 	gui.loadFromXML();
 	gui.toggleDraw();
@@ -87,9 +87,22 @@ bool testApp::loadNewProject(){
 	ofFileDialogResult r;
 	r = ofSystemLoadDialog("Get Directory", true);
 	if(r.bSuccess){
-		currentMediaFolder = r.getPath();
+		
+		string currentMediaFolder = r.getPath();		
 		ofDirectory dataDirectory(currentMediaFolder);
 		dataDirectory.listDir();
+		
+		ofDirectory compBin(currentMediaFolder + "/compositions/");
+		if(!compBin.exists()){
+			compBin.create(true);
+		}
+		compBin.listDir();
+		int compNumber = compBin.numFiles();
+		currentCompositionDirectory = currentMediaFolder + "/compositions/comp" + ofToString(compNumber) + "/";
+		
+		string currentCompositionFile = currentCompositionDirectory+"compositionsettings.xml";
+		projectsettings.loadFile(currentCompositionFile);
+
 		int numFiles = dataDirectory.numFiles();
 		string calibrationDirectory = "";
 		videoPath = "";
@@ -128,13 +141,6 @@ bool testApp::loadNewProject(){
 				return false;
 			}
 						
-			ofDirectory compBin(currentMediaFolder + "/compositions/");
-			if(!compBin.exists()){
-				compBin.create(true);
-			}
-			compBin.listDir();
-			int compNumber = compBin.numFiles();
-			currentCompositionDirectory = currentMediaFolder + "/compositions/comp" + ofToString(compNumber) + "/";
 			cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
 			cam.loadCameraPosition();
 			
@@ -143,8 +149,6 @@ bool testApp::loadNewProject(){
 				compFolder.create(true);
 			}
 			
-			string currentCompositionFile = currentCompositionDirectory+"compositionsettings.xml";
-			projectsettings.loadFile(currentCompositionFile);
 			saveComposition();
 			refreshCompButtons();
 			allLoaded = true;
@@ -210,7 +214,6 @@ bool testApp::loadVideoFile(string path){
 	}
 	
 	videoTimelineElement.setup();
-	timeline.setInOutRange(ofRange(0,1.0));	
 		
 	if(!playerElementAdded){
 		timeline.setup();
@@ -230,7 +233,9 @@ bool testApp::loadVideoFile(string path){
 	return true;
 }
 
+
 bool testApp::loadMarkerFile(string markerPath){
+	/*
 	markers.setVideoFPS(24);
 	vector<string> acceptedTypes;
 	acceptedTypes.push_back("Sequence");
@@ -242,8 +247,8 @@ bool testApp::loadMarkerFile(string markerPath){
 	projectsettings.setValue("markerPath", markerPath);
 	projectsettings.saveFile();
 	currentMarker = 0;
-	
 	return true;
+	 */
 }
 
 bool testApp::loadAlignmentMatrices(string path){
@@ -261,6 +266,14 @@ void testApp::update(){
 	light.setPosition(lightpos.x, lightpos.y, lightpos.z);
 	
 	if(startRenderMode){
+		saveComposition();
+		for(int i = 0; i < comps.size(); i++){
+			if(comps[i]->batchExport){
+				loadCompositionAtIndex(i);
+				break;
+			}
+		}
+		
 		startRenderMode = false;
 		currentlyRendering = true;
 		saveFolder = currentCompositionDirectory + "rendered/";
@@ -280,6 +293,26 @@ void testApp::update(){
 		startCameraPlayback();
 	}
 
+	if(currentlyRendering){
+		timeline.setCurrentFrame(currentRenderFrame);
+		hiResPlayer->setFrame(currentRenderFrame);
+		hiResPlayer->update();
+		
+		////////
+		//		char filename[512];
+		//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_A.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
+		//		savingImage.saveImage(filename);		
+		//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
+		//		savingImage.saveImage(filename);
+		//		
+		//		cout << "FRAME UPDATE" << endl;
+		//		cout << "	setting frame to " << currentRenderFrame << " actual frame is " << hiResPlayer->getCurrentFrame() << endl;
+		//		cout << "	set to percent " << 1.0*currentRenderFrame/hiResPlayer->getTotalNumFrames() << " actual percent " << hiResPlayer->getPosition() << endl;
+		////////
+		
+		updateRenderer(*hiResPlayer);		
+	}
+	
 	if(!currentlyRendering){
 		lowResPlayer->update();	
 		if(lowResPlayer->isFrameNew()){		
@@ -357,6 +390,82 @@ void testApp::processDepthFrame(){
 void testApp::draw(){
 	
 	ofBackground(255*.2);
+	
+	
+	if(allLoaded){
+		
+		fbo.begin();
+		ofClear(0, 0, 0);
+	//	ofEnableLighting();
+		
+		cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
+		
+		if(!drawPointcloud && !drawWireframe && !drawMesh){
+			drawPointcloud = true;
+		}
+		if(drawPointcloud){
+			glPointSize(pointSize);
+			renderer.drawPointCloud();
+		}
+		if(drawWireframe){
+			glLineWidth(lineSize);
+			renderer.drawWireFrame();
+		}
+		if(drawMesh){
+			renderer.drawMesh();
+		}
+		
+	//	light.setPointLight();
+
+	//	for(int i = 0; i < renderer.getMesh().getNormals().size(); i++){
+	//		ofLine(renderer.getMesh().getVertices()[i], 
+	//			   renderer.getMesh().getVertices()[i] + renderer.getMesh().getNormals()[i]*10);
+	//	}
+		cam.end();
+	//	ofDisableLighting();
+		
+		fbo.end();	
+		fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
+		fboRectangle.width = 16.0/9.0*fboRectangle.height;
+		ofDrawBitmapString(currentCompositionDirectory, ofPoint(fboRectangle.x, fboRectangle.y-15));
+		fbo.getTextureReference().draw(fboRectangle);
+		if(currentlyRendering){
+			fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
+			char filename[512];
+	//		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), hiResPlayer->getCurrentFrame());
+			sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), currentRenderFrame);
+			savingImage.saveImage(filename);
+
+			///////frame debugging
+	//		numFramesRendered++;
+	//		cout << "	Rendered (" << numFramesRendered << "/" << numFramesToRender << ") +++ current render frame is " << currentRenderFrame << " quick time reports frame " << hiResPlayer->getCurrentFrame() << endl;
+	//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_B.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
+	//		savingImage.saveImage(filename);
+	//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
+	//		savingImage.saveImage(filename);
+			//////
+			
+			//stop when finished
+			currentRenderFrame++;
+			if(currentRenderFrame > timeline.getOutFrame()){
+				finishRender();
+			}
+		}
+		
+		if(sampleCamera){
+			ofDrawBitmapString("RECORDING CAMERA", ofPoint(600, 10));
+		}
+		if(playbackCamera){
+			ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
+		}
+		
+		timeline.draw();
+		gui.setDraw(!currentlyRendering);
+		gui.draw();
+		
+		ofSetColor(255);
+	}
+	
 	ofPushStyle();
 	for(int i = 0; i < comps.size(); i++){
 		if(comps[i]->wasRenderedInBatch){
@@ -370,101 +479,6 @@ void testApp::draw(){
 	}
 	ofPopStyle();
 	
-	
-	if(!allLoaded) return;
-
-	if(currentlyRendering){
-		currentRenderFrame++;
-		timeline.setCurrentFrame(currentRenderFrame);
-		hiResPlayer->setFrame(currentRenderFrame);
-		hiResPlayer->update();
-		
-		////////
-//		char filename[512];
-//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_A.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
-//		savingImage.saveImage(filename);		
-//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
-//		savingImage.saveImage(filename);
-//		
-//		cout << "FRAME UPDATE" << endl;
-//		cout << "	setting frame to " << currentRenderFrame << " actual frame is " << hiResPlayer->getCurrentFrame() << endl;
-//		cout << "	set to percent " << 1.0*currentRenderFrame/hiResPlayer->getTotalNumFrames() << " actual percent " << hiResPlayer->getPosition() << endl;
-		////////
-		
-		
-		updateRenderer(*hiResPlayer);		
-	}
-	
-	fbo.begin();
-	ofClear(0, 0, 0);
-//	ofEnableLighting();
-	
-	cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
-	
-	if(!drawPointcloud && !drawWireframe && !drawMesh){
-		drawPointcloud = true;
-	}
-	if(drawPointcloud){
-		glPointSize(pointSize);
-		renderer.drawPointCloud();
-	}
-	if(drawWireframe){
-		glLineWidth(lineSize);
-		renderer.drawWireFrame();
-	}
-	if(drawMesh){
-		renderer.drawMesh();
-	}
-	
-//	light.setPointLight();
-
-//	for(int i = 0; i < renderer.getMesh().getNormals().size(); i++){
-//		ofLine(renderer.getMesh().getVertices()[i], 
-//			   renderer.getMesh().getVertices()[i] + renderer.getMesh().getNormals()[i]*10);
-//	}
-	cam.end();
-//	ofDisableLighting();
-	
-	fbo.end();	
-	fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
-	fboRectangle.width = 16.0/9.0*fboRectangle.height;
-	ofDrawBitmapString(currentCompositionDirectory, ofPoint(fboRectangle.x, fboRectangle.y-15));
-	fbo.getTextureReference().draw(fboRectangle);
-	if(currentlyRendering){
-		fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
-		char filename[512];
-//		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), hiResPlayer->getCurrentFrame());
-		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), currentRenderFrame);
-		savingImage.saveImage(filename);
-
-		///////frame debugging
-//		numFramesRendered++;
-//		cout << "	Rendered (" << numFramesRendered << "/" << numFramesToRender << ") +++ current render frame is " << currentRenderFrame << " quick time reports frame " << hiResPlayer->getCurrentFrame() << endl;
-//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_B.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
-//		savingImage.saveImage(filename);
-//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
-//		savingImage.saveImage(filename);
-		//////
-		
-		//stop when finished
-		if(currentRenderFrame > timeline.getOutFrame()){
-			finishRender();
-		}
-	}
-	
-	if(sampleCamera){
-		ofDrawBitmapString("RECORDING CAMERA", ofPoint(600, 10));
-	}
-	if(playbackCamera){
-		ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
-	}
-	
-	timeline.draw();
-	gui.setDraw(!currentlyRendering);
-	gui.draw();
-	
-	ofSetColor(255);
-	ofDrawBitmapString(ofToString(ofGetFrameRate()), ofPoint(20,20));
 }
 
 //--------------------------------------------------------------
@@ -538,7 +552,8 @@ void testApp::newComposition(){
 //--------------------------------------------------------------
 void testApp::saveComposition(){
 	string cameraSaveFile = currentCompositionDirectory + "camera.xml";
-
+	cam.saveCameraPosition();
+	cout << "writing camera position to " << cam.cameraPositionFile << endl;
 	cameraRecorder.writeToFile(cameraSaveFile);
 	projectsettings.setValue("cameraSpeed", cam.speed);
 	projectsettings.setValue("shiftx", currentXShift);
@@ -551,6 +566,7 @@ void testApp::saveComposition(){
 	projectsettings.setValue("mesh", drawMesh);
 	projectsettings.setValue("currentEdgeCull", currentEdgeCull);
 	projectsettings.setValue("farClip",farClip);
+	projectsettings.setValue("simplify",currentSimplify);
 	
 	projectsettings.saveFile();	
 }
@@ -577,6 +593,7 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 			if(comps[i]->toggle == object){
 				comps[i]->wasRenderedInBatch = false;
 				comps[i]->batchExport = !comps[i]->batchExport;
+				
 				break;
 			}
 
@@ -595,47 +612,40 @@ bool testApp::loadCompositionAtIndex(int i){
 	
 	currentCompositionDirectory = comps[i]->fullCompPath + "/";
 	currentCompIndex = i;
-	cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
-	cam.loadCameraPosition();
+		
+	
 	cout << "loading comp " << currentCompositionDirectory << " clicked comp button is " << comps[i]->load->getLabel() << endl;
 	if(projectsettings.loadFile(currentCompositionDirectory+"compositionsettings.xml")){
-		string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
+		//string loadedAlignmentDir = projectsettings.getValue("alignmentDir", "");
+		string loadedAlignmentDir = currentCompositionDirectory + "../../calibration/";
+		cout << "loading alignment " << loadedAlignmentDir << endl;
 		if(!loadAlignmentMatrices(loadedAlignmentDir)){
 			return false;
 		}
-		cout << "loaded alignment " << loadedAlignmentDir << endl;
 		
 		string loadedVideoFile = projectsettings.getValue("videoFile", "");
+		loadedVideoFile = currentCompositionDirectory + "../../" + ofFilePath::getFileName(loadedVideoFile);
+		cout << "loading video " << loadedVideoFile << endl;
 		if(!loadVideoFile(loadedVideoFile)){
 			return false;
 		}
-		cout << "loaded video " << loadedVideoFile << endl;
 		
 		string loadedDepthSequence = projectsettings.getValue("depthSequence", "");
+		loadedDepthSequence = currentCompositionDirectory+ "../../" + ofFilePath::getFileName(loadedDepthSequence);
+		cout << "loading depth " << loadedDepthSequence << endl;
 		if(!loadDepthSequence(loadedDepthSequence)){
 			return false;
 		}
 		
-		string markerPath = projectsettings.getValue("markerPath", "");
-		if(markerPath != ""){
-			loadMarkerFile(markerPath);
-		}
-		cout << "loaded depth " << loadedDepthSequence << endl;
+//		string markerPath = projectsettings.getValue("markerPath", "");
+//		cout << "loading depth " << loadedDepthSequence << endl;
+//		if(markerPath != ""){
+//			loadMarkerFile(markerPath);
+//		}
 		
-		string cameraFile = projectsettings.getValue("cameraFile", "");
-		if(cameraFile != ""){
-			cameraRecorder.loadFromFile(cameraFile);
-			if(cameraRecorder.getSamples().size() > 0){
-				timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
-				timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
-			}
-		}
-		else{
-			cameraRecorder.reset();
-		}
+		//string cameraFile = projectsettings.getValue("cameraFile", "");
 		
 		cam.speed = projectsettings.getValue("cameraSpeed", 20.);
-		
 		currentXShift = projectsettings.getValue("shiftx", 0.);
 		currentYShift = projectsettings.getValue("shifty", 0.);
 		pointSize = projectsettings.getValue("pointSize", 1);
@@ -645,9 +655,36 @@ bool testApp::loadCompositionAtIndex(int i){
 		drawPointcloud = projectsettings.getValue("pointcloud", false);
 		drawWireframe = projectsettings.getValue("wireframe", false);
 		drawMesh = projectsettings.getValue("mesh", false);
-		
-		allLoaded = true;
+		currentSimplify = projectsettings.getValue("simplify", 1);
+		allLoaded = true; 
 	}
+	
+	//LOAD CAMERA SAVE AND POS
+	cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
+	cam.loadCameraPosition();
+	
+	string cameraFilePath = currentCompositionDirectory + "camera.xml";
+	cout << "loading camera file " << cameraFilePath << endl;
+	ofFile cameraFile(cameraFilePath);
+	if(cameraFile.exists()){
+		cout << "camera file does exist" << endl;
+		cameraRecorder.loadFromFile(cameraFilePath);
+		if(cameraRecorder.getSamples().size() > 0){
+			cout << "~~~~~ SETTING IN AND OUT" << endl;
+			
+			timeline.setInPointAtFrame(cameraRecorder.getFirstFrame());
+			timeline.setOutPointAtFrame(cameraRecorder.getLastFrame());
+			
+		}
+		else{
+			timeline.setInOutRange(ofRange(0,1.0));
+		}
+	}
+	else{
+		ofSystemAlertDialog("Composition " + currentCompositionDirectory + " has no camera save");
+		cameraRecorder.reset();
+	}
+	
 }	
 
 //--------------------------------------------------------------

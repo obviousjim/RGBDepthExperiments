@@ -221,7 +221,6 @@ void testApp::refreshAlignmentPairButtons(){
 	for(int i = 0; i < alignmentScrubber->getPairs().size(); i++){
 		ofxMSAInteractiveObjectWithDelegate* pairButton;
 		pairButton = new ofxMSAInteractiveObjectWithDelegate();
-//		pairButton->disableAppEvents();
 		pairButton->setup();
 		pairButton->setPosAndSize(savePairButton->x, savePairButton->y+savePairButton->height * (i+1), 
 								  savePairButton->width, savePairButton->height);
