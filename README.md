@@ -1,5 +1,5 @@
 # RGBD Depth Library
-Library for combining 
+Library for texturing depth images with simultaneously shot high resolution digital video from an external camera
 
 #Dependencies
 ofxRGBDepth (https://github.com/obviousjim/ofxRGBDepth) 
