@@ -3,12 +3,19 @@ Library for combining
 
 #Dependencies
 ofxRGBDepth (https://github.com/obviousjim/ofxRGBDepth) 
+
 ofxTimeline (https://github.com/Flightphase/ofxTimeline)
+
 ofxRange (https://github.com/Flightphase/ofxRange)
+
 ofxTween (https://github.com/Flightphase/ofxTween)
+
 ofxMSAInteractiveObject (https://github.com/Flightphase/ofxMSAInteractiveObject)
+
 ofxSimpleGuiToo (https://github.com/Flightphase/ofxSimpleGuiToo)
+
 ofxGameCamera (https://github.com/Flightphase/ofxGameCamera)
+
 ofxTextInputField (https://github.com/Flightphase/ofxTextInputField)
 
 
