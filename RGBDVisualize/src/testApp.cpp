@@ -49,14 +49,9 @@ void testApp::setup(){
 
 	loadCompositions();
 
-	gui.addSlider("X Scalar Shift", currentXShift, -25, 25);
-	gui.addSlider("Y Scalar Shift", currentYShift, -35, 75);
+//	gui.addSlider("X Scalar Shift", currentXShift, -25, 25);
+//	gui.addSlider("Y Scalar Shift", currentYShift, -35, 75);
 
-//	gui.addSlider("X Scalar Shift", currentXMultiplyShift, -25, 25);
-//	gui.addSlider("Y Scalar Shift", currentYMultiplyShift, -35, 75);
-//	gui.addSlider("X Linear Shift", currentXAdditiveShift, -25, 25);
-//	gui.addSlider("Y Linear Shift", currentYAdditiveShift, -35, 75);
-	
 	gui.addSlider("Camera Speed", cam.speed, .1, 40);
 	gui.addToggle("Draw Pointcloud", drawPointcloud);
 	gui.addToggle("Draw Wireframe", drawWireframe);
@@ -65,15 +60,23 @@ void testApp::setup(){
 	gui.addSlider("Line Thickness", lineSize, 1, 10);
 	gui.addSlider("Edge Cull", currentEdgeCull, 1, 500);
 	gui.addSlider("Z Far Clip", farClip, 2, 5000);
-	gui.addSlider("Simplify", currentSimplify, 1, 4);
+	gui.addSlider("Simplify", currentSimplify, 1, 8);
 	
 //	gui.addSlider("LightX", lightpos.x, -1500, 1500);
 //	gui.addSlider("LightY", lightpos.y, -1500, 1500);
 //	gui.addSlider("LightZ", lightpos.z, -1500, 1500);
-	
-	
+		
 	gui.addToggle("Clear Camera Moves", shouldClearCameraMoves);
 	gui.addToggle("Set Camera Point", shouldSaveCameraPoint);
+
+	gui.addPage("Calibration Tweaks");
+	gui.addSlider("X Multiply Shift", currentXMultiplyShift, -25, 25);
+	gui.addSlider("Y Multiply Shift", currentYMultiplyShift, -35, 75);
+	gui.addSlider("X Linear Shift", currentXAdditiveShift, -25, 25);
+	gui.addSlider("Y Linear Shift", currentYAdditiveShift, -35, 75);
+	gui.addSlider("X Scale", currentXScale, .75, 1.25);
+	gui.addSlider("Y Scale", currentYScale, .75, 1.25);
+	gui.addSlider("Rotation Comp", currentRotationCompensation, -10, 10);
 	
 	gui.addTitle("");
 	gui.addToggle("Render Batch", startRenderMode);
@@ -336,15 +339,29 @@ void testApp::update(){
 		shouldSaveCameraPoint = false;	
 	}
 	
-	if(currentXShift != renderer.xshift || 
-	   currentYShift != renderer.yshift || 
+	if(currentXMultiplyShift != renderer.xmult ||
+	   currentYMultiplyShift != renderer.ymult ||
+	   currentXAdditiveShift != renderer.yshift ||
+	   currentYAdditiveShift != renderer.yshift ||
+	   currentXScale != renderer.xscale ||
+	   currentYScale != renderer.yscale ||
+	   currentRotationCompensation != renderer.rotationCompensation ||
+//	   currentXShift != renderer.xshift || 
+//	   currentYShift != renderer.yshift || 
 	   currentSimplify != renderer.getSimplification() ||
 	   currentEdgeCull != renderer.edgeCull ||
 	   farClip != renderer.farClip){
 		
 		renderer.farClip = farClip;
-		renderer.xshift = currentXShift;
-		renderer.yshift = currentYShift;
+//		renderer.xshift = currentXShift;
+//		renderer.yshift = currentYShift;
+		renderer.xshift = currentXAdditiveShift;
+		renderer.yshift = currentYAdditiveShift;
+		renderer.xmult = currentXMultiplyShift;
+		renderer.ymult = currentYMultiplyShift;
+		renderer.xscale = currentXScale;
+		renderer.yscale = currentYScale;
+		renderer.rotationCompensation = currentRotationCompensation;
 		renderer.edgeCull = currentEdgeCull;
 		renderer.setSimplification(currentSimplify);
 		renderer.update();
@@ -562,15 +579,22 @@ void testApp::saveComposition(){
 	cout << "writing camera position to " << cam.cameraPositionFile << endl;
 	cameraRecorder.writeToFile(cameraSaveFile);
 	projectsettings.setValue("cameraSpeed", cam.speed);
-	projectsettings.setValue("shiftx", currentXShift);
-	projectsettings.setValue("shifty", currentYShift);
+//	projectsettings.setValue("shiftx", currentXShift);
+//	projectsettings.setValue("shifty", currentYShift);
+	projectsettings.setValue("xmult", currentXMultiplyShift);
+	projectsettings.setValue("ymult", currentYMultiplyShift);
+	projectsettings.setValue("xshift", currentXAdditiveShift);
+	projectsettings.setValue("yshift", currentYAdditiveShift);
+	projectsettings.setValue("xscale", currentXScale);
+	projectsettings.setValue("yscale", currentYScale);
+	
 	projectsettings.setValue("pointSize", pointSize);
 	projectsettings.setValue("lineSize", lineSize);
 	projectsettings.setValue("cameraFile", cameraSaveFile);
 	projectsettings.setValue("pointcloud", drawPointcloud);
 	projectsettings.setValue("wireframe", drawWireframe);
 	projectsettings.setValue("mesh", drawMesh);
-	projectsettings.setValue("currentEdgeCull", currentEdgeCull);
+	projectsettings.setValue("edgeCull", currentEdgeCull);
 	projectsettings.setValue("farClip",farClip);
 	projectsettings.setValue("simplify",currentSimplify);
 	
@@ -652,8 +676,16 @@ bool testApp::loadCompositionAtIndex(int i){
 		//string cameraFile = projectsettings.getValue("cameraFile", "");
 		
 		cam.speed = projectsettings.getValue("cameraSpeed", 20.);
-		currentXShift = projectsettings.getValue("shiftx", 0.);
-		currentYShift = projectsettings.getValue("shifty", 0.);
+//		currentXShift = projectsettings.getValue("shiftx", 0.);
+//		currentYShift = projectsettings.getValue("shifty", 0.);
+		
+		currentXMultiplyShift = projectsettings.getValue("xmult", 0.);
+		currentYMultiplyShift = projectsettings.getValue("ymult", 0.);
+		currentXAdditiveShift = projectsettings.getValue("xshift", 0.);
+		currentYAdditiveShift = projectsettings.getValue("yshift", 0.);
+		currentXScale = projectsettings.getValue("xscale", 1.0);
+		currentYScale = projectsettings.getValue("yscale", 1.0);
+		
 		pointSize = projectsettings.getValue("pointSize", 1);
 		lineSize = projectsettings.getValue("lineSize", 1);
 		currentEdgeCull = projectsettings.getValue("edgeCull", 50);

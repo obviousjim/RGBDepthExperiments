@@ -113,8 +113,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	float currentYMultiplyShift;
 	float currentXAdditiveShift;
 	float currentYAdditiveShift;
-	float currentXShift;
-	float currentYShift;
+	float currentXScale;
+	float currentYScale;
+	float currentRotationCompensation;
 	
 	float farClip;
 	float currentEdgeCull;

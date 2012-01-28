@@ -22,13 +22,13 @@ void ofxCameraRecorder::sample(int frame){
 	if(camera == NULL){
 		ofLogError("ofxCameraRecorder -- can't sample a null camera");
 	}
-	if(frame > getLastFrame()){	
+//	if(frame > getLastFrame()){	
 		CameraSample c;
 		c.frame = frame;
 		c.position = camera->getPosition();
 		c.orientation = camera->getOrientationQuat();
 		samples.push_back(c);
-	}
+//	}
 }
 
 string ofxCameraRecorder::getXMLRep(){
