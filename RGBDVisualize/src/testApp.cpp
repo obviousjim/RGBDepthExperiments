@@ -49,8 +49,14 @@ void testApp::setup(){
 
 	loadCompositions();
 
-	gui.addSlider("X Linear Shift", currentXShift, -25, 25);
-	gui.addSlider("Y Linear Shift", currentYShift, -35, 50);
+	gui.addSlider("X Scalar Shift", currentXShift, -25, 25);
+	gui.addSlider("Y Scalar Shift", currentYShift, -35, 75);
+
+//	gui.addSlider("X Scalar Shift", currentXMultiplyShift, -25, 25);
+//	gui.addSlider("Y Scalar Shift", currentYMultiplyShift, -35, 75);
+//	gui.addSlider("X Linear Shift", currentXAdditiveShift, -25, 25);
+//	gui.addSlider("Y Linear Shift", currentYAdditiveShift, -35, 75);
+	
 	gui.addSlider("Camera Speed", cam.speed, .1, 40);
 	gui.addToggle("Draw Pointcloud", drawPointcloud);
 	gui.addToggle("Draw Wireframe", drawWireframe);

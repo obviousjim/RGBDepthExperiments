@@ -109,8 +109,13 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	ofImage savingImage;
 	string saveFolder;
 	
+	float currentXMultiplyShift;
+	float currentYMultiplyShift;
+	float currentXAdditiveShift;
+	float currentYAdditiveShift;
 	float currentXShift;
 	float currentYShift;
+	
 	float farClip;
 	float currentEdgeCull;
 	bool shouldSaveCameraPoint;
