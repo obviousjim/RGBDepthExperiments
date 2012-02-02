@@ -40,12 +40,13 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
  	
 	void updateRenderer(ofVideoPlayer& fromPlayer);
 	void processDepthFrame();
+	void processGeometry();
+	void drawGeometry();
 	
 	bool loadNewProject();
 	bool loadDepthSequence(string path);
 	bool loadVideoFile(string path);
 	bool loadAlignmentMatrices(string path);
-	bool loadMarkerFile(string markerPath);
 	
 	ofxXmlSettings projectsettings;
 	ofxXmlSettings compositions;
@@ -80,10 +81,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	int currentCompIndex;
 	string currentCompositionDirectory;
 	string mediaBinDirectory;
-//	string currentMediaFolder;
 	ofVideoPlayer* hiResPlayer;
 	ofVideoPlayer* lowResPlayer;
-//	ofxFCPMarker markers;
 	int currentMarker;
 	ofxCameraRecorder cameraRecorder;
 	bool sampleCamera;
