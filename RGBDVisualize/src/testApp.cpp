@@ -28,6 +28,9 @@ void testApp::setup(){
 	shouldSaveCameraPoint = false;
 	shouldClearCameraMoves = false;
 	
+	temporalAlignmentMode = false;
+	captureFramePair = false;
+
 	sampleCamera = false;
 	playbackCamera = false;
 	
@@ -72,23 +75,388 @@ void testApp::setup(){
 	gui.addPage("Calibration Tweaks");
 	gui.addSlider("X Multiply Shift", currentXMultiplyShift, -25, 25);
 	gui.addSlider("Y Multiply Shift", currentYMultiplyShift, -35, 75);
-	gui.addSlider("X Linear Shift", currentXAdditiveShift, -25, 25);
-	gui.addSlider("Y Linear Shift", currentYAdditiveShift, -35, 75);
-	gui.addSlider("X Scale", currentXScale, .75, 1.25);
-	gui.addSlider("Y Scale", currentYScale, .75, 1.25);
-	gui.addSlider("Rotation Comp", currentRotationCompensation, -10, 10);
+	gui.addToggle("TemporalAlignmentMode", temporalAlignmentMode);
+	gui.addToggle("Capture Frame Pair", captureFramePair);
 	
-	gui.addTitle("");
+//	gui.addSlider("X Linear Shift", currentXAdditiveShift, -25, 25);
+//	gui.addSlider("Y Linear Shift", currentYAdditiveShift, -35, 75);
+//	gui.addSlider("X Scale", currentXScale, .75, 1.25);
+//	gui.addSlider("Y Scale", currentYScale, .75, 1.25);
+//	gui.addSlider("Rotation Comp", currentRotationCompensation, -10, 10);
+	
+	gui.addPage("Batching");
 	gui.addToggle("Render Batch", startRenderMode);
 
 	gui.loadFromXML();
 	gui.toggleDraw();
 	
-//	ofEnableLighting();
-//	light.setPosition(ofGetWidth()*.5, ofGetHeight()*.25, 0);
-//	light.enable();	
+	
+	currentXScale = 1.0;
+	currentYScale = 1.0;
+	currentXAdditiveShift = 0;
+	currentYAdditiveShift = 0;
+	currentRotationCompensation = 0;	
 }
 
+#pragma mark customization
+//--------------------------------------------------------------
+void testApp::processDepthFrame(){
+	
+	for(int y = 0; y <	480; y++){
+		for(int x = 0; x < 640; x++){
+			int index = y*640+x;
+			
+			//***************************************************
+			//CUSTOMIZATION: YOU CAN PROCESS YOU	R RAW DEPTH FRAME HERE
+			//* 
+			//* depthPixelDecodeBuffer contains the raw depth image
+			//*
+			//***************************************************			
+			
+		}
+	}
+}
+
+void testApp::processGeometry(){
+	//***************************************************
+	//CUSTOMIZATION: YOU CAN MANIPULATE YOUR MESH HERE
+	//*
+	//* rendere.getMesh() contains mesh with indeces and texture coordinates 
+	//*
+	//***************************************************
+}
+
+void testApp::drawGeometry(){
+	
+	//***************************************************
+	//CUSTOMIZATION: YOU CAN DRAW WHATEVER YOU WANT HERE TOO OR USE SHADERS
+	//*
+	//* draw whatever you want!
+	//*
+	//***************************************************
+	
+	if(drawPointcloud){
+		glPointSize(pointSize);
+		renderer.drawPointCloud();
+	}
+	
+	if(drawWireframe){
+		glLineWidth(lineSize);
+		renderer.drawWireFrame();
+	}
+	
+	if(drawMesh){
+		renderer.drawMesh();
+	}	
+}
+
+//************************************************************
+///CUSTOMIZATION: Feel free to add things for interaction here
+//************************************************************
+//--------------------------------------------------------------
+void testApp::keyPressed(int key){
+	if(currentlyRendering){
+		if(key == ' '){
+			finishRender();
+		}
+		return;
+	}
+	
+	if(key == ' '){
+		if(lowResPlayer->getSpeed() != 0.0){
+			lowResPlayer->setSpeed(0);
+			stopCameraPlayback();
+		}
+		else{
+			lowResPlayer->play();
+			lowResPlayer->setSpeed(1.0);
+		}		
+	}
+	
+	if(key == 'i'){
+		timeline.setCurrentTimeToInPoint();	
+	}
+	
+	if(key == 'o'){
+		timeline.setCurrentTimeToOutPoint();
+	}
+	
+	if(key == 'f'){
+		ofToggleFullscreen();
+	}
+	
+	//RECORD CAMERA
+	if(key == 'R'){	
+		toggleCameraRecord();
+	}
+	
+	//PLAYBACK CAMERA
+	if(key == 'P'){
+		toggleCameraPlayback();
+	}
+	
+	if(key == '\t'){
+		videoTimelineElement.toggleThumbs();
+		depthSequence.toggleThumbs();
+	}
+}
+
+//--------------------------------------------------------------
+void testApp::keyReleased(int key){
+	
+}
+
+//--------------------------------------------------------------
+void testApp::mouseMoved(int x, int y ){
+	cam.usemouse = fboRectangle.inside(x, y);
+}
+
+//--------------------------------------------------------------
+void testApp::mouseDragged(int x, int y, int button){
+	
+}
+
+//--------------------------------------------------------------
+void testApp::mousePressed(int x, int y, int button){
+}
+
+//--------------------------------------------------------------
+void testApp::mouseReleased(int x, int y, int button){
+	
+}
+
+
+//***************************************************
+///Labbers: Everything below here is application logic
+//***************************************************
+
+#pragma mark application logic
+//--------------------------------------------------------------
+void testApp::update(){
+	
+	if(!allLoaded) return;
+	
+	light.setPosition(lightpos.x, lightpos.y, lightpos.z);
+	
+	if(startRenderMode){
+		saveComposition();
+		for(int i = 0; i < comps.size(); i++){
+			if(comps[i]->batchExport){
+				loadCompositionAtIndex(i);
+				break;
+			}
+		}
+		
+		startRenderMode = false;
+		currentlyRendering = true;
+		saveFolder = currentCompositionDirectory + "rendered/";
+		ofDirectory outputDirectory(saveFolder);
+		if(!outputDirectory.exists()) outputDirectory.create(true);
+		hiResPlayer->play();
+		hiResPlayer->setSpeed(0);
+		hiResPlayer->setVolume(0);
+		
+		renderer.setRGBTexture(*hiResPlayer);
+		renderer.setTextureScale(1.0, 1.0);
+		//		currentSimplify = 1;
+		currentRenderFrame = timeline.getInFrame();
+		lastRenderFrame = currentRenderFrame-1;
+		numFramesToRender = timeline.getOutFrame() - timeline.getInFrame();
+		numFramesRendered = 0;
+		startCameraPlayback();
+	}
+	
+	if(currentlyRendering){
+		timeline.setCurrentFrame(currentRenderFrame);
+		hiResPlayer->setFrame(currentRenderFrame);
+		hiResPlayer->update();
+		
+		////////
+		//		char filename[512];
+		//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_A.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
+		//		savingImage.saveImage(filename);		
+		//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
+		//		savingImage.saveImage(filename);
+		//		
+		//		cout << "FRAME UPDATE" << endl;
+		//		cout << "	setting frame to " << currentRenderFrame << " actual frame is " << hiResPlayer->getCurrentFrame() << endl;
+		//		cout << "	set to percent " << 1.0*currentRenderFrame/hiResPlayer->getTotalNumFrames() << " actual percent " << hiResPlayer->getPosition() << endl;
+		////////
+		
+		updateRenderer(*hiResPlayer);		
+	}
+	
+	if(!currentlyRendering){
+		lowResPlayer->update();	
+		if(!temporalAlignmentMode && lowResPlayer->isFrameNew()){		
+			updateRenderer(*lowResPlayer);
+		}
+		
+		if(temporalAlignmentMode && currentDepthFrame != depthSequence.getSelectedFrame()){
+			updateRenderer(*lowResPlayer);
+		}
+		
+		if(captureFramePair){
+			alignmentScrubber.registerCurrentAlignment();
+			alignmentScrubber.save();
+			captureFramePair = false;
+		}
+	}
+	
+	if(shouldClearCameraMoves){
+		cameraRecorder.reset();
+		shouldClearCameraMoves = false;
+	}
+	
+	if(shouldSaveCameraPoint){
+		cameraRecorder.sample(lowResPlayer->getCurrentFrame());
+		shouldSaveCameraPoint = false;	
+	}
+	
+	if(currentXAdditiveShift != renderer.yshift ||
+	   currentYAdditiveShift != renderer.yshift ||
+	   currentXMultiplyShift != renderer.xmult ||
+	   currentYMultiplyShift != renderer.ymult ||
+	   currentXScale != renderer.xscale ||
+	   currentYScale != renderer.yscale ||
+	   currentRotationCompensation != renderer.rotationCompensation ||
+	   currentSimplify != renderer.getSimplification() ||
+	   currentEdgeCull != renderer.edgeCull ||
+	   farClip != renderer.farClip){
+		
+		renderer.xshift = currentXAdditiveShift;
+		renderer.yshift = currentYAdditiveShift;
+		renderer.xmult = currentXMultiplyShift;
+		renderer.ymult = currentYMultiplyShift;
+		renderer.xscale = currentXScale;
+		renderer.yscale = currentYScale;
+		renderer.rotationCompensation = currentRotationCompensation;
+		renderer.edgeCull = currentEdgeCull;
+		renderer.setSimplification(currentSimplify);
+		renderer.farClip = farClip;
+		renderer.update();
+	}
+}
+
+
+//--------------------------------------------------------------
+void testApp::updateRenderer(ofVideoPlayer& fromPlayer){
+	
+	if (!temporalAlignmentMode) {
+		if(alignmentScrubber.getPairSequence().isSequenceTimebased()){
+			long movieMillis = fromPlayer.getPosition() * fromPlayer.getDuration()*1000;
+			currentDepthFrame = alignmentScrubber.getPairSequence().getDepthFrameForVideoFrame(movieMillis);
+			depthSequence.selectTime(currentDepthFrame);
+		}
+		else {
+			currentDepthFrame = alignmentScrubber.getPairSequence().getDepthFrameForVideoFrame(fromPlayer.getCurrentFrame());
+			depthSequence.selectFrame(currentDepthFrame);
+		}
+	}
+	
+	
+	processDepthFrame();
+	
+	renderer.update();
+	
+	processGeometry();
+	
+	if(playbackCamera){
+		cameraRecorder.moveCameraToFrame(fromPlayer.getCurrentFrame());
+	}
+	
+	if(sampleCamera){
+		cameraRecorder.sample(fromPlayer.getCurrentFrame());
+	}
+	
+	if(!drawPointcloud && !drawWireframe && !drawMesh){
+		drawPointcloud = true;
+	}	
+	currentDepthFrame = depthSequence.getSelectedFrame();
+
+}
+
+//--------------------------------------------------------------
+void testApp::draw(){
+	
+	ofBackground(255*.2);
+	
+	
+	if(allLoaded){
+		
+		fbo.begin();
+		ofClear(0, 0, 0);
+		
+		cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
+		
+		drawGeometry();
+		
+		cam.end();
+		
+		fbo.end();	
+		
+		//cout << timeline.getDrawRect().height << " tl height " << endl;
+		
+		if(!ofGetMousePressed(0)){
+			timeline.setOffset(ofVec2f(0, ofGetHeight() - timeline.getDrawRect().height));
+		}
+		fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
+		fboRectangle.width = 16.0/9.0*fboRectangle.height;
+		ofDrawBitmapString(currentCompositionDirectory, ofPoint(fboRectangle.x, fboRectangle.y-15));
+		fbo.getTextureReference().draw(fboRectangle);
+		if(currentlyRendering){
+			fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
+			char filename[512];
+			sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), currentRenderFrame);
+			savingImage.saveImage(filename);
+			
+			///////frame debugging
+			//		numFramesRendered++;
+			//		cout << "	Rendered (" << numFramesRendered << "/" << numFramesToRender << ") +++ current render frame is " << currentRenderFrame << " quick time reports frame " << hiResPlayer->getCurrentFrame() << endl;
+			//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_B.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
+			//		savingImage.saveImage(filename);
+			//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
+			//		savingImage.saveImage(filename);
+			//////
+			
+			//stop when finished
+			currentRenderFrame++;
+			if(currentRenderFrame > timeline.getOutFrame()){
+				finishRender();
+			}
+		}
+		
+		if(sampleCamera){
+			ofDrawBitmapString("RECORDING CAMERA", ofPoint(600, 10));
+		}
+		if(playbackCamera){
+			ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
+		}
+		
+		timeline.draw();
+		gui.setDraw(!currentlyRendering);
+		gui.draw();
+		
+		ofSetColor(255);
+	}
+	
+	ofPushStyle();
+	for(int i = 0; i < comps.size(); i++){
+		if(comps[i]->wasRenderedInBatch){
+			ofSetColor(50,200,100, 200);
+			ofRect(*comps[i]->toggle);
+		}
+		else if(comps[i]->batchExport){
+			ofSetColor(255,255,100, 200);
+			ofRect(*comps[i]->toggle);
+		}
+	}
+	ofPopStyle();
+	
+}
+
+
+#pragma mark compositions
 //--------------------------------------------------------------
 bool testApp::loadNewProject(){
 	allLoaded = false;
@@ -140,16 +508,17 @@ bool testApp::loadNewProject(){
 				return false;
 			}
 
+			if(!loadVideoFile(videoPath)){
+				ofSystemAlertDialog("Load Failed -- Couldn't load video.");
+				return false;
+			}
+			
 			if(!loadDepthSequence(depthImageDirectory)){
 				ofSystemAlertDialog("Load Failed -- Couldn't load dpeth iamges.");
 				return false;
 			}
 			
-			if(!loadVideoFile(videoPath)){
-				ofSystemAlertDialog("Load Failed -- Couldn't load video.");
-				return false;
-			}
-						
+
 			cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
 			cam.loadCameraPosition();
 			
@@ -176,7 +545,7 @@ bool testApp::loadDepthSequence(string path){
 	projectsettings.saveFile();
 	
 	depthSequence.setup();
-	depthSequence.disable();
+	//depthSequence.disable();
 	
 	depthPixelDecodeBuffer = depthSequence.currentDepthRaw;
 	renderer.setDepthImage(depthPixelDecodeBuffer);
@@ -208,11 +577,16 @@ bool testApp::loadVideoFile(string path){
 		ofSystemAlertDialog("Load Failed -- Couldn't load low res video file.");
 		return false;		
 	}
-	
-	if(!sequencer.loadPairingFile(ofFilePath::removeExt(path) + "_pairings.xml")){
+	string pairingsFile = ofFilePath::removeExt(path) + "_pairings.xml";
+	if(!alignmentScrubber.getPairSequence().loadPairingFile(pairingsFile)){
 		ofSystemAlertDialog("Load Failed -- Couldn't load pairings file.");
 		return false;				
 	}
+	
+	alignmentScrubber.setup();
+	alignmentScrubber.setXMLFileName(pairingsFile);
+	alignmentScrubber.videoSequence = &videoTimelineElement;
+	alignmentScrubber.depthSequence = &depthSequence;
 	
 	renderer.setTextureScale(1.0*lowResPlayer->getWidth()/hiResPlayer->getWidth(), 
 							 1.0*lowResPlayer->getHeight()/hiResPlayer->getHeight());
@@ -223,11 +597,13 @@ bool testApp::loadVideoFile(string path){
 	}
 	
 	videoTimelineElement.setup();
-		
+	
 	if(!playerElementAdded){
 		timeline.setup();
 		timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
 		timeline.addElement("Video", &videoTimelineElement);
+		timeline.addElement("Depth Sequence", &depthSequence);
+		timeline.addElement("Alignment", &alignmentScrubber);
 		playerElementAdded = true;
 	}
 	
@@ -242,266 +618,12 @@ bool testApp::loadVideoFile(string path){
 	return true;
 }
 
-
-bool testApp::loadMarkerFile(string markerPath){
-	/*
-	markers.setVideoFPS(24);
-	vector<string> acceptedTypes;
-	acceptedTypes.push_back("Sequence");
-	markers.setTypeFilters(acceptedTypes);
-	if(!markers.parseMarkers(markerPath)){
-		ofSystemAlertDialog("Warning -- Markers failed");
-		return false;
-	}
-	projectsettings.setValue("markerPath", markerPath);
-	projectsettings.saveFile();
-	currentMarker = 0;
-	return true;
-	 */
-}
-
+//--------------------------------------------------------------
 bool testApp::loadAlignmentMatrices(string path){
 	projectsettings.setValue("alignmentDir", path);
 	projectsettings.saveFile();
 	
 	return renderer.setup(path);
-}
-
-//--------------------------------------------------------------
-void testApp::update(){
-	
-	if(!allLoaded) return;
-
-	light.setPosition(lightpos.x, lightpos.y, lightpos.z);
-	
-	if(startRenderMode){
-		saveComposition();
-		for(int i = 0; i < comps.size(); i++){
-			if(comps[i]->batchExport){
-				loadCompositionAtIndex(i);
-				break;
-			}
-		}
-		
-		startRenderMode = false;
-		currentlyRendering = true;
-		saveFolder = currentCompositionDirectory + "rendered/";
-		ofDirectory outputDirectory(saveFolder);
-		if(!outputDirectory.exists()) outputDirectory.create(true);
-		hiResPlayer->play();
-		hiResPlayer->setSpeed(0);
-		hiResPlayer->setVolume(0);
-
-		renderer.setRGBTexture(*hiResPlayer);
-		renderer.setTextureScale(1.0, 1.0);
-//		currentSimplify = 1;
-		currentRenderFrame = timeline.getInFrame();
-		lastRenderFrame = currentRenderFrame-1;
-		numFramesToRender = timeline.getOutFrame() - timeline.getInFrame();
-		numFramesRendered = 0;
-		startCameraPlayback();
-	}
-
-	if(currentlyRendering){
-		timeline.setCurrentFrame(currentRenderFrame);
-		hiResPlayer->setFrame(currentRenderFrame);
-		hiResPlayer->update();
-		
-		////////
-		//		char filename[512];
-		//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_A.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
-		//		savingImage.saveImage(filename);		
-		//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
-		//		savingImage.saveImage(filename);
-		//		
-		//		cout << "FRAME UPDATE" << endl;
-		//		cout << "	setting frame to " << currentRenderFrame << " actual frame is " << hiResPlayer->getCurrentFrame() << endl;
-		//		cout << "	set to percent " << 1.0*currentRenderFrame/hiResPlayer->getTotalNumFrames() << " actual percent " << hiResPlayer->getPosition() << endl;
-		////////
-		
-		updateRenderer(*hiResPlayer);		
-	}
-	
-	if(!currentlyRendering){
-		lowResPlayer->update();	
-		if(lowResPlayer->isFrameNew()){		
-			updateRenderer(*lowResPlayer);
-		}
-	}
-	
-	if(shouldClearCameraMoves){
-		cameraRecorder.reset();
-		shouldClearCameraMoves = false;
-	}
-	
-	if(shouldSaveCameraPoint){
-		cameraRecorder.sample(lowResPlayer->getCurrentFrame());
-		shouldSaveCameraPoint = false;	
-	}
-	
-	if(currentXMultiplyShift != renderer.xmult ||
-	   currentYMultiplyShift != renderer.ymult ||
-	   currentXAdditiveShift != renderer.yshift ||
-	   currentYAdditiveShift != renderer.yshift ||
-	   currentXScale != renderer.xscale ||
-	   currentYScale != renderer.yscale ||
-	   currentRotationCompensation != renderer.rotationCompensation ||
-//	   currentXShift != renderer.xshift || 
-//	   currentYShift != renderer.yshift || 
-	   currentSimplify != renderer.getSimplification() ||
-	   currentEdgeCull != renderer.edgeCull ||
-	   farClip != renderer.farClip){
-		
-		renderer.farClip = farClip;
-//		renderer.xshift = currentXShift;
-//		renderer.yshift = currentYShift;
-		renderer.xshift = currentXAdditiveShift;
-		renderer.yshift = currentYAdditiveShift;
-		renderer.xmult = currentXMultiplyShift;
-		renderer.ymult = currentYMultiplyShift;
-		renderer.xscale = currentXScale;
-		renderer.yscale = currentYScale;
-		renderer.rotationCompensation = currentRotationCompensation;
-		renderer.edgeCull = currentEdgeCull;
-		renderer.setSimplification(currentSimplify);
-		renderer.update();
-	}
-}
-
-//--------------------------------------------------------------
-void testApp::updateRenderer(ofVideoPlayer& fromPlayer){
-	if(sequencer.isSequenceTimebased()){
-		long movieMillis = fromPlayer.getPosition() * fromPlayer.getDuration()*1000;
-		long depthFrame = sequencer.getDepthFrameForVideoFrame(movieMillis);
-		depthSequence.selectTime(depthFrame);
-	}
-	else {
-		long depthFrame = sequencer.getDepthFrameForVideoFrame(fromPlayer.getCurrentFrame());
-		depthSequence.selectFrame(depthFrame);
-	}
-	
-	processDepthFrame();
-	
-	renderer.update();
-	
-	if(playbackCamera){
-		cameraRecorder.moveCameraToFrame(fromPlayer.getCurrentFrame());
-	}
-
-	if(sampleCamera){
-		cameraRecorder.sample(fromPlayer.getCurrentFrame());
-	}
-}
-
-//--------------------------------------------------------------
-void testApp::processDepthFrame(){
-	
-	for(int y = 0; y <	480; y++){
-		for(int x = 0; x < 640; x++){
-			int index = y*640+x;
-
-//			if(depthPixelDecodeBuffer[index] < currentZThresh){
-//				depthPixelDecodeBuffer[index] = 0;
-//			}
-			//depthPixelDecodeBuffer[index] *= 1.0 - .0*(sin(y/10.0 + ofGetFrameNum()/10.0)*.5+.5); 
-		}
-	}
-	
-}
-
-//--------------------------------------------------------------
-void testApp::draw(){
-	
-	ofBackground(255*.2);
-	
-	
-	if(allLoaded){
-		
-		fbo.begin();
-		ofClear(0, 0, 0);
-	//	ofEnableLighting();
-		
-		cam.begin(ofRectangle(0, 0, fbo.getWidth(), fbo.getHeight()));
-		
-		if(!drawPointcloud && !drawWireframe && !drawMesh){
-			drawPointcloud = true;
-		}
-		if(drawPointcloud){
-			glPointSize(pointSize);
-			renderer.drawPointCloud();
-		}
-		if(drawWireframe){
-			glLineWidth(lineSize);
-			renderer.drawWireFrame();
-		}
-		if(drawMesh){
-			renderer.drawMesh();
-		}
-		
-	//	light.setPointLight();
-
-	//	for(int i = 0; i < renderer.getMesh().getNormals().size(); i++){
-	//		ofLine(renderer.getMesh().getVertices()[i], 
-	//			   renderer.getMesh().getVertices()[i] + renderer.getMesh().getNormals()[i]*10);
-	//	}
-		cam.end();
-	//	ofDisableLighting();
-		
-		fbo.end();	
-		fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
-		fboRectangle.width = 16.0/9.0*fboRectangle.height;
-		ofDrawBitmapString(currentCompositionDirectory, ofPoint(fboRectangle.x, fboRectangle.y-15));
-		fbo.getTextureReference().draw(fboRectangle);
-		if(currentlyRendering){
-			fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
-			char filename[512];
-	//		sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), hiResPlayer->getCurrentFrame());
-			sprintf(filename, "%s/save_%05d.png", saveFolder.c_str(), currentRenderFrame);
-			savingImage.saveImage(filename);
-
-			///////frame debugging
-	//		numFramesRendered++;
-	//		cout << "	Rendered (" << numFramesRendered << "/" << numFramesToRender << ") +++ current render frame is " << currentRenderFrame << " quick time reports frame " << hiResPlayer->getCurrentFrame() << endl;
-	//		sprintf(filename, "%s/TEST_FRAME_%05d_%05d_B.png", saveFolder.c_str(), currentRenderFrame, hiResPlayer->getCurrentFrame());
-	//		savingImage.saveImage(filename);
-	//		savingImage.setFromPixels(hiResPlayer->getPixelsRef());
-	//		savingImage.saveImage(filename);
-			//////
-			
-			//stop when finished
-			currentRenderFrame++;
-			if(currentRenderFrame > timeline.getOutFrame()){
-				finishRender();
-			}
-		}
-		
-		if(sampleCamera){
-			ofDrawBitmapString("RECORDING CAMERA", ofPoint(600, 10));
-		}
-		if(playbackCamera){
-			ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
-		}
-		
-		timeline.draw();
-		gui.setDraw(!currentlyRendering);
-		gui.draw();
-		
-		ofSetColor(255);
-	}
-	
-	ofPushStyle();
-	for(int i = 0; i < comps.size(); i++){
-		if(comps[i]->wasRenderedInBatch){
-			ofSetColor(50,200,100, 200);
-			ofRect(*comps[i]->toggle);
-		}
-		else if(comps[i]->batchExport){
-			ofSetColor(255,255,100, 200);
-			ofRect(*comps[i]->toggle);
-		}
-	}
-	ofPopStyle();
-	
 }
 
 //--------------------------------------------------------------
@@ -560,8 +682,7 @@ void testApp::refreshCompButtons(){
 			comp->load->setLabel(compLabel);
 			if(currentCompositionDirectory == comp->fullCompPath){
 				currentCompIndex = currentCompButton;
-			}
-//			comps.push_back(fullCompPath);				
+			}	
 			currentCompButton++;
 		}
 	}
@@ -610,6 +731,7 @@ void testApp::objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y){
 void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int button){
 }
 
+//--------------------------------------------------------------
 void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button){
 	if(object == newCompButton){
 		newComposition();
@@ -636,6 +758,7 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 }
 
 
+//--------------------------------------------------------------
 bool testApp::loadCompositionAtIndex(int i){
 	stopCameraPlayback();
 	stopCameraRecord();
@@ -666,14 +789,6 @@ bool testApp::loadCompositionAtIndex(int i){
 		if(!loadDepthSequence(loadedDepthSequence)){
 			return false;
 		}
-		
-//		string markerPath = projectsettings.getValue("markerPath", "");
-//		cout << "loading depth " << loadedDepthSequence << endl;
-//		if(markerPath != ""){
-//			loadMarkerFile(markerPath);
-//		}
-		
-		//string cameraFile = projectsettings.getValue("cameraFile", "");
 		
 		cam.speed = projectsettings.getValue("cameraSpeed", 20.);
 //		currentXShift = projectsettings.getValue("shiftx", 0.);
@@ -730,6 +845,7 @@ void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
 
 }
 
+//--------------------------------------------------------------
 void testApp::finishRender(){
 	currentlyRendering = false;
 	comps[currentCompIndex]->batchExport = false;
@@ -751,59 +867,6 @@ void testApp::finishRender(){
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
-	if(currentlyRendering){
-		if(key == ' '){
-			finishRender();
-		}
-		return;
-	}
-	
-	if(key == ' '){
-		if(lowResPlayer->getSpeed() != 0.0){
-			lowResPlayer->setSpeed(0);
-			stopCameraPlayback();
-		}
-		else{
-			lowResPlayer->play();
-			lowResPlayer->setSpeed(1.0);
-		}		
-	}
-	
-	if(key == 'i'){
-		timeline.setCurrentTimeToInPoint();	
-	}
-
-	if(key == 'o'){
-		timeline.setCurrentTimeToOutPoint();
-	}
-	
-//	if (key == 'j' && markers.isLoaded()) {
-//		currentMarker--;
-//		if(currentMarker < 0) currentMarker = markers.getMarkers().size() - 1;		
-//		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
-//	}
-//
-//	if (key == 'l' && markers.isLoaded()) {
-//		currentMarker = (currentMarker + 1) % markers.getMarkers().size();
-//		lowResPlayer->setFrame(markers.getMarkers()[currentMarker].calculatedFrame);
-//	}
-
-	if(key == 'f'){
-		ofToggleFullscreen();
-	}
-	
-	//RECORD CAMERA
-	if(key == 'R'){	
-		toggleCameraRecord();
-	}
-	
-	//PLAYBACK CAMERA
-	if(key == 'P'){
-		toggleCameraPlayback();
-	}
-}
-
 void testApp::startCameraRecord(){
 	if(!playbackCamera && !sampleCamera){
 		cameraRecorder.reset();
@@ -812,10 +875,12 @@ void testApp::startCameraRecord(){
 	}	
 }
 
+//--------------------------------------------------------------
 void testApp::stopCameraRecord(){
 	sampleCamera = false;
 }
 
+//--------------------------------------------------------------
 void testApp::toggleCameraRecord(){
 	if(sampleCamera){
 		stopCameraRecord();
@@ -825,6 +890,7 @@ void testApp::toggleCameraRecord(){
 	}
 }
 
+//--------------------------------------------------------------
 void testApp::stopCameraPlayback(){
 	if(playbackCamera){
 		playbackCamera = false;
@@ -835,6 +901,7 @@ void testApp::stopCameraPlayback(){
 	}
 }
 
+//--------------------------------------------------------------
 void testApp::startCameraPlayback(){
 	if(cameraRecorder.getSamples().size() > 0){
 		playbackCamera = true;
@@ -855,6 +922,7 @@ void testApp::startCameraPlayback(){
 	}
 }
 
+//--------------------------------------------------------------
 void testApp::toggleCameraPlayback(){
 	if(playbackCamera){
 		stopCameraPlayback();
@@ -862,31 +930,6 @@ void testApp::toggleCameraPlayback(){
 	else {
 		startCameraPlayback();
 	}
-}
-
-
-//--------------------------------------------------------------
-void testApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
-	cam.usemouse = fboRectangle.inside(x, y);
-}
-
-//--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
-}
-
-//--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
-
 }
 
 //--------------------------------------------------------------

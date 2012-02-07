@@ -35,7 +35,6 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate
 	ofxTLVideoDepthAlignmentScrubber* alignmentScrubber;
 	
 	ofVideoPlayer player;
-	//ofxQTKitVideoPlayer player;
 	ofRectangle playerRect;
 	ofRectangle depthRect;
 	
