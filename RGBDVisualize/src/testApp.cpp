@@ -28,6 +28,9 @@ void testApp::setup(){
 	shouldSaveCameraPoint = false;
 	shouldClearCameraMoves = false;
 	
+	temporalAlignmentMode = false;
+	captureFramePair = false;
+
 	sampleCamera = false;
 	playbackCamera = false;
 	
@@ -72,6 +75,8 @@ void testApp::setup(){
 	gui.addPage("Calibration Tweaks");
 	gui.addSlider("X Multiply Shift", currentXMultiplyShift, -25, 25);
 	gui.addSlider("Y Multiply Shift", currentYMultiplyShift, -35, 75);
+	gui.addToggle("TemporalAlignmentMode", temporalAlignmentMode);
+	gui.addToggle("Capture Frame Pair", captureFramePair);
 	
 //	gui.addSlider("X Linear Shift", currentXAdditiveShift, -25, 25);
 //	gui.addSlider("Y Linear Shift", currentYAdditiveShift, -35, 75);
@@ -79,11 +84,12 @@ void testApp::setup(){
 //	gui.addSlider("Y Scale", currentYScale, .75, 1.25);
 //	gui.addSlider("Rotation Comp", currentRotationCompensation, -10, 10);
 	
-	gui.addTitle("");
+	gui.addPage("Batching");
 	gui.addToggle("Render Batch", startRenderMode);
 
 	gui.loadFromXML();
 	gui.toggleDraw();
+	
 	
 	currentXScale = 1.0;
 	currentYScale = 1.0;
@@ -188,6 +194,11 @@ void testApp::keyPressed(int key){
 	if(key == 'P'){
 		toggleCameraPlayback();
 	}
+	
+	if(key == '\t'){
+		videoTimelineElement.toggleThumbs();
+		depthSequence.toggleThumbs();
+	}
 }
 
 //--------------------------------------------------------------
@@ -277,8 +288,18 @@ void testApp::update(){
 	
 	if(!currentlyRendering){
 		lowResPlayer->update();	
-		if(lowResPlayer->isFrameNew()){		
+		if(!temporalAlignmentMode && lowResPlayer->isFrameNew()){		
 			updateRenderer(*lowResPlayer);
+		}
+		
+		if(temporalAlignmentMode && currentDepthFrame != depthSequence.getSelectedFrame()){
+			updateRenderer(*lowResPlayer);
+		}
+		
+		if(captureFramePair){
+			alignmentScrubber.registerCurrentAlignment();
+			alignmentScrubber.save();
+			captureFramePair = false;
 		}
 	}
 	
@@ -320,15 +341,19 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::updateRenderer(ofVideoPlayer& fromPlayer){
-	if(sequencer.isSequenceTimebased()){
-		long movieMillis = fromPlayer.getPosition() * fromPlayer.getDuration()*1000;
-		long depthFrame = sequencer.getDepthFrameForVideoFrame(movieMillis);
-		depthSequence.selectTime(depthFrame);
+	
+	if (!temporalAlignmentMode) {
+		if(alignmentScrubber.getPairSequence().isSequenceTimebased()){
+			long movieMillis = fromPlayer.getPosition() * fromPlayer.getDuration()*1000;
+			currentDepthFrame = alignmentScrubber.getPairSequence().getDepthFrameForVideoFrame(movieMillis);
+			depthSequence.selectTime(currentDepthFrame);
+		}
+		else {
+			currentDepthFrame = alignmentScrubber.getPairSequence().getDepthFrameForVideoFrame(fromPlayer.getCurrentFrame());
+			depthSequence.selectFrame(currentDepthFrame);
+		}
 	}
-	else {
-		long depthFrame = sequencer.getDepthFrameForVideoFrame(fromPlayer.getCurrentFrame());
-		depthSequence.selectFrame(depthFrame);
-	}
+	
 	
 	processDepthFrame();
 	
@@ -347,6 +372,8 @@ void testApp::updateRenderer(ofVideoPlayer& fromPlayer){
 	if(!drawPointcloud && !drawWireframe && !drawMesh){
 		drawPointcloud = true;
 	}	
+	currentDepthFrame = depthSequence.getSelectedFrame();
+
 }
 
 //--------------------------------------------------------------
@@ -481,16 +508,17 @@ bool testApp::loadNewProject(){
 				return false;
 			}
 
+			if(!loadVideoFile(videoPath)){
+				ofSystemAlertDialog("Load Failed -- Couldn't load video.");
+				return false;
+			}
+			
 			if(!loadDepthSequence(depthImageDirectory)){
 				ofSystemAlertDialog("Load Failed -- Couldn't load dpeth iamges.");
 				return false;
 			}
 			
-			if(!loadVideoFile(videoPath)){
-				ofSystemAlertDialog("Load Failed -- Couldn't load video.");
-				return false;
-			}
-						
+
 			cam.cameraPositionFile = currentCompositionDirectory + "camera_position.xml";
 			cam.loadCameraPosition();
 			
@@ -517,7 +545,7 @@ bool testApp::loadDepthSequence(string path){
 	projectsettings.saveFile();
 	
 	depthSequence.setup();
-	depthSequence.disable();
+	//depthSequence.disable();
 	
 	depthPixelDecodeBuffer = depthSequence.currentDepthRaw;
 	renderer.setDepthImage(depthPixelDecodeBuffer);
@@ -549,11 +577,16 @@ bool testApp::loadVideoFile(string path){
 		ofSystemAlertDialog("Load Failed -- Couldn't load low res video file.");
 		return false;		
 	}
-	
-	if(!sequencer.loadPairingFile(ofFilePath::removeExt(path) + "_pairings.xml")){
+	string pairingsFile = ofFilePath::removeExt(path) + "_pairings.xml";
+	if(!alignmentScrubber.getPairSequence().loadPairingFile(pairingsFile)){
 		ofSystemAlertDialog("Load Failed -- Couldn't load pairings file.");
 		return false;				
 	}
+	
+	alignmentScrubber.setup();
+	alignmentScrubber.setXMLFileName(pairingsFile);
+	alignmentScrubber.videoSequence = &videoTimelineElement;
+	alignmentScrubber.depthSequence = &depthSequence;
 	
 	renderer.setTextureScale(1.0*lowResPlayer->getWidth()/hiResPlayer->getWidth(), 
 							 1.0*lowResPlayer->getHeight()/hiResPlayer->getHeight());
@@ -564,11 +597,13 @@ bool testApp::loadVideoFile(string path){
 	}
 	
 	videoTimelineElement.setup();
-		
+	
 	if(!playerElementAdded){
 		timeline.setup();
 		timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
 		timeline.addElement("Video", &videoTimelineElement);
+		timeline.addElement("Depth Sequence", &depthSequence);
+		timeline.addElement("Alignment", &alignmentScrubber);
 		playerElementAdded = true;
 	}
 	

@@ -7,6 +7,7 @@
 #include "ofxGameCamera.h"
 #include "ofxTimeline.h"
 #include "ofxTLVideoPlayer.h"
+#include "ofxTLVideoDepthAlignmentScrubber.h"
 #include "ofxTLDepthImageSequence.h";
 #include "ofxMSAInteractiveObjectDelegate.h"
 #include "ofxSimpleGuiToo.h"
@@ -88,8 +89,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	bool sampleCamera;
 	bool playbackCamera;
 	
-	ofxRGBDRenderer renderer;
-	ofxRGBDVideoDepthSequence sequencer;
+	bool temporalAlignmentMode;
+	bool captureFramePair;
+	long currentDepthFrame;
 	
 	unsigned short* depthPixelDecodeBuffer;
 
@@ -99,9 +101,14 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 
 	string videoThumbsPath;
 	string videoPath;
+	
+	ofxRGBDRenderer renderer;
+//	ofxRGBDVideoDepthSequence sequencer;
+	
 	ofxTimeline timeline;
 	ofxTLVideoPlayer videoTimelineElement;
 	ofxTLDepthImageSequence depthSequence;
+	ofxTLVideoDepthAlignmentScrubber alignmentScrubber;
 	
 	ofRectangle fboRectangle;
 	ofFbo fbo;
