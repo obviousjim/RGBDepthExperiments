@@ -51,6 +51,10 @@ void testApp::setup(){
 	saveCompButton->setDelegate(this);
 	saveCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+25, 25, 100, 25);
 
+	timeline.setup();
+	timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
+	timeline.setPageName("Main");
+	
 	loadCompositions();
 
 //	gui.addSlider("X Scalar Shift", currentXShift, -25, 25);
@@ -90,7 +94,6 @@ void testApp::setup(){
 
 	gui.loadFromXML();
 	gui.toggleDraw();
-	
 	
 	currentXScale = 1.0;
 	currentYScale = 1.0;
@@ -230,7 +233,6 @@ void testApp::mouseReleased(int x, int y, int button){
 //***************************************************
 ///Labbers: Everything below here is application logic
 //***************************************************
-
 #pragma mark application logic
 //--------------------------------------------------------------
 void testApp::update(){
@@ -337,6 +339,9 @@ void testApp::update(){
 		renderer.farClip = farClip;
 		renderer.update();
 	}
+	
+	//update shaders
+	renderer.fadeToWhite = timeline.getKeyframeValue("White");
 }
 
 
@@ -551,6 +556,8 @@ bool testApp::loadNewProject(){
 			
 			saveComposition();
 			refreshCompButtons();
+			loadTimelineFromCurrentComp();
+			
 			allLoaded = true;
 			return true;
 		}
@@ -559,6 +566,13 @@ bool testApp::loadNewProject(){
 		}
 	}
 	return false;	
+}
+
+void testApp::loadTimelineFromCurrentComp(){
+	ofxTLKeyframer* white = (ofxTLKeyframer*)timeline.getElement("White");
+	white->setXMLFileName( currentCompositionDirectory + "white.xml");
+	white->load();
+	
 }
 
 //--------------------------------------------------------------
@@ -621,12 +635,7 @@ bool testApp::loadVideoFile(string path){
 	videoTimelineElement.setup();
 	
 	if(!playerElementAdded){
-		timeline.setup();
-		timeline.setOffset(ofVec2f(0, ofGetHeight() - 200));
-		timeline.addElement("Video", &videoTimelineElement);
-		timeline.addElement("Depth Sequence", &depthSequence);
-		timeline.addElement("Alignment", &alignmentScrubber);
-		playerElementAdded = true;
+		populateTimelineElements();
 	}
 	
 	renderer.setRGBTexture(*lowResPlayer);
@@ -638,6 +647,21 @@ bool testApp::loadVideoFile(string path){
 	lowResPlayer->setSpeed(0);
 	
 	return true;
+}
+
+void testApp::populateTimelineElements(){
+
+	
+	timeline.setPageName("Rendering");
+	timeline.addElement("Video", &videoTimelineElement);
+	timeline.addKeyframes("White", currentCompositionDirectory + "white.xml", ofRange(0,1.0) );
+	
+	
+	timeline.addPage("Alignment", true);
+	timeline.addElement("Video", &videoTimelineElement);
+	timeline.addElement("Depth Sequence", &depthSequence);
+	timeline.addElement("Alignment", &alignmentScrubber);
+	playerElementAdded = true;
 }
 
 //--------------------------------------------------------------
@@ -742,6 +766,8 @@ void testApp::saveComposition(){
 	projectsettings.setValue("simplify",currentSimplify);
 	
 	projectsettings.saveFile();	
+	
+	
 }
 
 void testApp::objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y){
@@ -831,6 +857,10 @@ bool testApp::loadCompositionAtIndex(int i){
 		drawWireframe = projectsettings.getValue("wireframe", false);
 		drawMesh = projectsettings.getValue("mesh", false);
 		currentSimplify = projectsettings.getValue("simplify", 1);
+		
+		//set keyframer files based on comp
+		loadTimelineFromCurrentComp();
+		
 		allLoaded = true; 
 	}
 	

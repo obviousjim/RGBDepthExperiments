@@ -75,6 +75,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void startCameraPlayback();
 	void toggleCameraPlayback();
 	
+	void populateTimelineElements();
+	void loadTimelineFromCurrentComp();
+	
 	void startCameraRecord();
 	void stopCameraRecord();
 	void toggleCameraRecord();
