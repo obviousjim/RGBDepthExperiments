@@ -24,6 +24,7 @@ void testApp::setup(){
 	currentlyRendering = false;
 	allLoaded = false;
 	playerElementAdded = false;
+	presentMode = false;
 	
 	shouldSaveCameraPoint = false;
 	shouldClearCameraMoves = false;
@@ -330,7 +331,7 @@ void testApp::update(){
 		renderer.ymult = currentYMultiplyShift;
 		renderer.xscale = currentXScale;
 		renderer.yscale = currentYScale;
-		renderer.rotationCompensation = currentRotationCompensation;
+//		renderer.rotationCompensation = currentRotationCompensation;
 		renderer.edgeCull = currentEdgeCull;
 		renderer.setSimplification(currentSimplify);
 		renderer.farClip = farClip;
@@ -403,7 +404,24 @@ void testApp::draw(){
 		fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
 		fboRectangle.width = 16.0/9.0*fboRectangle.height;
 		ofDrawBitmapString(currentCompositionDirectory, ofPoint(fboRectangle.x, fboRectangle.y-15));
+
+		if(presentMode){
+//			ofBackground(0);
+			fboRectangle.x = 0;
+			fboRectangle.y = 0;
+			fboRectangle.height = ofGetHeight();
+			fboRectangle.width = 16.0/9.0*fboRectangle.height;
+		}
+		else {
+			fboRectangle.x = 250;
+			fboRectangle.y = 100;
+			fboRectangle.height = (timeline.getDrawRect().y - fboRectangle.y - 20);
+			fboRectangle.width = 16.0/9.0*fboRectangle.height;
+			ofDrawBitmapString(currentCompositionDirectory, ofPoint(fboRectangle.x, fboRectangle.y-15));
+		}
+
 		fbo.getTextureReference().draw(fboRectangle);
+		
 		if(currentlyRendering){
 			fbo.getTextureReference().readToPixels(savingImage.getPixelsRef());
 			char filename[512];
@@ -432,26 +450,30 @@ void testApp::draw(){
 		if(playbackCamera){
 			ofDrawBitmapString("PLAYBACK CAMERA", ofPoint(600, 10));
 		}
+		gui.setDraw(!currentlyRendering && !presentMode);
 		
-		timeline.draw();
-		gui.setDraw(!currentlyRendering);
-		gui.draw();
+		if(!presentMode){
+			timeline.draw();
+			gui.draw();
+		}
 		
 		ofSetColor(255);
 	}
 	
-	ofPushStyle();
-	for(int i = 0; i < comps.size(); i++){
-		if(comps[i]->wasRenderedInBatch){
-			ofSetColor(50,200,100, 200);
-			ofRect(*comps[i]->toggle);
+	if(!presentMode){
+		ofPushStyle();
+		for(int i = 0; i < comps.size(); i++){
+			if(comps[i]->wasRenderedInBatch){
+				ofSetColor(50,200,100, 200);
+				ofRect(*comps[i]->toggle);
+			}
+			else if(comps[i]->batchExport){
+				ofSetColor(255,255,100, 200);
+				ofRect(*comps[i]->toggle);
+			}
 		}
-		else if(comps[i]->batchExport){
-			ofSetColor(255,255,100, 200);
-			ofRect(*comps[i]->toggle);
-		}
+		ofPopStyle();
 	}
-	ofPopStyle();
 	
 }
 
@@ -866,7 +888,7 @@ void testApp::finishRender(){
 	
 }
 
-//--------------------------------------------------------------
+
 void testApp::startCameraRecord(){
 	if(!playbackCamera && !sampleCamera){
 		cameraRecorder.reset();

@@ -123,6 +123,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	float currentYScale;
 	float currentRotationCompensation;
 	
+	bool presentMode;
+	
 	float farClip;
 	float currentEdgeCull;
 	bool shouldSaveCameraPoint;
