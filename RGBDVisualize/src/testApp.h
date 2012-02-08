@@ -11,7 +11,7 @@
 #include "ofxTLDepthImageSequence.h";
 #include "ofxMSAInteractiveObjectDelegate.h"
 #include "ofxSimpleGuiToo.h"
-#include "ofxCameraRecorder.h"
+#include "ofxTLCameraTrack.h"
 
 typedef struct {
 	ofxMSAInteractiveObjectWithDelegate* load;
@@ -87,21 +87,24 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	string mediaBinDirectory;
 	ofVideoPlayer* hiResPlayer;
 	ofVideoPlayer* lowResPlayer;
-	int currentMarker;
-	ofxCameraRecorder cameraRecorder;
-	bool sampleCamera;
-	bool playbackCamera;
-	
+		
 	bool temporalAlignmentMode;
 	bool captureFramePair;
 	long currentDepthFrame;
+	
+	bool viewComps;
 	
 	unsigned short* depthPixelDecodeBuffer;
 
 	bool allLoaded;
 
 	ofxGameCamera cam;
+	ofxTLCameraTrack cameraTrack;
+//	ofxCameraTrack cameraRecorder;
+	bool sampleCamera;
+//	bool playbackCamera;
 
+	
 	string videoThumbsPath;
 	string videoPath;
 	
@@ -126,12 +129,23 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	float currentYScale;
 	float currentRotationCompensation;
 	
+	bool currentLockCamera;
+	
+	bool shouldResetDuration;
+	int currentDuration;
+	
+	bool currentMirror;
 	bool presentMode;
 	
 	float farClip;
 	float currentEdgeCull;
 	bool shouldSaveCameraPoint;
 	bool shouldClearCameraMoves;
+	bool shouldResetCamera;
+	
+	bool enableVideoInOut;
+	float videoInPercent;
+	float videoOutPercent;
 	
 	bool drawPointcloud;
 	bool drawWireframe;
