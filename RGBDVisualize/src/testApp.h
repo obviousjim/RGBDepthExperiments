@@ -46,7 +46,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	
 	bool loadNewProject();
 	bool loadDepthSequence(string path);
-	bool loadVideoFile(string path);
+	bool loadVideoFile(string hiResPath, string lowResPath); //hires can be ""
 	bool loadAlignmentMatrices(string path);
 	
 	ofxXmlSettings projectsettings;
@@ -55,6 +55,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void newComposition();
 	void saveComposition();
 	bool loadCompositionAtIndex(int i);
+	bool loadAssetsFromCompositionDirectory(string mediaPath);
 	void refreshCompButtons();
 	
 	//MSA Object delegate
@@ -71,8 +72,6 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y);
 	
 	void finishRender();
-	void stopCameraPlayback();
-	void startCameraPlayback();
 	void toggleCameraPlayback();
 	
 	void populateTimelineElements();
@@ -105,8 +104,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 //	bool playbackCamera;
 
 	
-	string videoThumbsPath;
-	string videoPath;
+//	string videoThumbsPath;
+//	string videoPath;
+//	string smallVideoPath;
 	
 	ofxRGBDRenderer renderer;
 //	ofxRGBDVideoDepthSequence sequencer;
@@ -121,6 +121,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	ofImage savingImage;
 	string saveFolder;
 	
+
 	float currentXMultiplyShift;
 	float currentYMultiplyShift;
 	float currentXAdditiveShift;
@@ -136,6 +137,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	
 	bool currentMirror;
 	bool presentMode;
+	
+	float currentRotateMeshX;
 	
 	float farClip;
 	float currentEdgeCull;
@@ -154,6 +157,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	int lineSize;
 	int currentSimplify;
 
+	bool hasHiresVideo;
+	
 	bool startRenderMode;
 	bool currentlyRendering;
 	int currentRenderFrame;
