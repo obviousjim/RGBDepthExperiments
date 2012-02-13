@@ -126,6 +126,11 @@ void testApp::processDepthFrame(){
 			//*
 			//***************************************************			
 			
+			
+			//for example delete every other line
+//			if(y % 4 == 0){
+//				depthPixelDecodeBuffer[index] = 0;
+//			}
 		}
 	}
 }
@@ -134,9 +139,14 @@ void testApp::processGeometry(){
 	//***************************************************
 	//CUSTOMIZATION: YOU CAN MANIPULATE YOUR MESH HERE
 	//*
-	//* rendere.getMesh() contains mesh with indeces and texture coordinates 
+	//* renderer.getMesh() contains mesh with indeces and texture coordinates 
 	//*
 	//***************************************************
+
+//	for(int i = 0; i < renderer.getMesh().getVertices().size(); i++){
+//		renderer.getMesh().getVertices()[i].z += sin(i/30.0 + timeline.getCurrentFrame())*25;
+//	}
+	
 }
 
 void testApp::drawGeometry(){
