@@ -80,6 +80,8 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	void startCameraRecord();
 	void stopCameraRecord();
 	void toggleCameraRecord();
+
+	bool curUndistortDepth;
 	
 	int currentCompIndex;
 	string currentCompositionDirectory;

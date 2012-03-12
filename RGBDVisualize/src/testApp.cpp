@@ -8,6 +8,8 @@ void testApp::setup(){
 	ofEnableAlphaBlending();
 	ofBackground(0);
 
+	curUndistortDepth = false;
+	
 	cam.speed = 40;
 	cam.autosavePosition = true;
 	cam.usemouse = true;
@@ -53,7 +55,6 @@ void testApp::setup(){
 	saveCompButton->setDelegate(this);
 	saveCompButton->setPosAndSize(fboRectangle.x+fboRectangle.width+25, 25, 100, 25);
 
-	
 	timeline.setup();
 	timeline.setMovePlayheadOnDrag(true);
 	timeline.getColors().loadColors("defaultColors.xml");
@@ -90,6 +91,7 @@ void testApp::setup(){
 	gui.addSlider("Y Multiply Shift", currentYMultiplyShift, -75, 75);
 	gui.addToggle("TemporalAlignmentMode", temporalAlignmentMode);
 	gui.addToggle("Capture Frame Pair", captureFramePair);
+	gui.addToggle("UndistortDepth", curUndistortDepth);
 		
 	gui.addPage("Batching");
 	gui.addToggle("View Comps", viewComps);
@@ -171,6 +173,7 @@ void testApp::drawGeometry(){
 	if(drawMesh){
 		renderer.drawMesh();
 	}	
+
 }
 
 //************************************************************
@@ -417,7 +420,8 @@ void testApp::update(){
 	   currentSimplify != renderer.getSimplification() ||
 	   currentEdgeCull != renderer.edgeCull ||
 	   farClip != renderer.farClip ||
-	   currentMirror != renderer.mirror) {
+	   currentMirror != renderer.mirror ||
+	   curUndistortDepth != renderer.bUndistortDepth) {
 		
 		renderer.xshift = currentXAdditiveShift;
 		renderer.yshift = currentYAdditiveShift;
@@ -429,6 +433,8 @@ void testApp::update(){
 		renderer.setSimplification(currentSimplify);
 		renderer.farClip = farClip;
 		renderer.mirror = currentMirror;
+		renderer.bUndistortDepth = curUndistortDepth; 
+		
 		renderer.update();
 	}
 	
@@ -453,6 +459,8 @@ void testApp::updateRenderer(ofVideoPlayer& fromPlayer){
 			currentDepthFrame = alignmentScrubber.getPairSequence().getDepthFrameForVideoFrame(fromPlayer.getCurrentFrame());
 			depthSequence.selectFrame(currentDepthFrame);
 		}
+		renderer.setDepthImage(depthPixelDecodeBuffer);
+
 	}
 	
 	
@@ -708,7 +716,6 @@ bool testApp::loadDepthSequence(string path){
 	depthSequence.setup();
 	
 	depthPixelDecodeBuffer = depthSequence.currentDepthRaw;
-	renderer.setDepthImage(depthPixelDecodeBuffer);
 
 	return depthSequence.loadSequence(path);
 }
