@@ -10,3 +10,13 @@ build/
 xcuserdata/
 
 .DS_Store
+
+#vs2010 stuff
+
+*.suo
+*.opensdf
+*.sdf
+*.exp
+*.lib
+*.exe
+*.ilk
