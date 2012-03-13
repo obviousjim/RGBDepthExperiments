@@ -20,3 +20,6 @@ xcuserdata/
 *.lib
 *.exe
 *.ilk
+*.dll
+*.bak
+*.pdb
