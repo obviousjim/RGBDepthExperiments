@@ -172,4 +172,6 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	
 	ofVec3f lightpos;
 	ofLight light;
+
+	string pathDelim;
 };

@@ -9,7 +9,11 @@ void testApp::setup(){
 	ofBackground(0);
 
 	curUndistortDepth = false;
-	
+#ifdef TARGET_WIN32
+	pathDelim = "\\";
+#else
+	pathDelim = "/";
+#endif
 	cam.speed = 40;
 	cam.autosavePosition = true;
 	cam.usemouse = true;
@@ -323,7 +327,7 @@ void testApp::update(){
 		
 		startRenderMode = false;
 		currentlyRendering = true;
-		saveFolder = currentCompositionDirectory + "rendered/";
+		saveFolder = currentCompositionDirectory + "rendered"+pathDelim;
 		ofDirectory outputDirectory(saveFolder);
 		if(!outputDirectory.exists()) outputDirectory.create(true);
 		hiResPlayer->play();
@@ -595,14 +599,14 @@ bool testApp::loadNewProject(){
 		
 	string currentMediaFolder = r.getPath();	
 	
-	ofDirectory compBin(currentMediaFolder + "/compositions/");
+	ofDirectory compBin(currentMediaFolder + pathDelim + "compositions"+pathDelim);
 	if(!compBin.exists()){
 		compBin.create(true);
 	}	
 	compBin.listDir();
 	
 	int compNumber = compBin.numFiles();
-	currentCompositionDirectory = currentMediaFolder + "/compositions/comp" + ofToString(compNumber) + "/";
+	currentCompositionDirectory = currentMediaFolder + pathDelim+"compositions"+pathDelim+"comp" + ofToString(compNumber) + pathDelim;
 	currentCompIndex = compNumber;
 	
 	if(!loadAssetsFromCompositionDirectory(currentMediaFolder)){
@@ -835,7 +839,7 @@ void testApp::refreshCompButtons(){
 	int compy = 150;
 	for(int i = 0; i < mediaFolders; i++){
 		
-		string compositionsFolder = dir.getPath(i) + "/compositions/";
+		string compositionsFolder = dir.getPath(i) + pathDelim +"compositions"+pathDelim;
 		ofDirectory compositionsDirectory(compositionsFolder);
 		if(!compositionsDirectory.exists()){
 			compositionsDirectory.create(true);
@@ -872,8 +876,9 @@ void testApp::refreshCompButtons(){
 				compx += 325;
 			}
 			
+
 			comp->fullCompPath = compositionsDirectory.getPath(c);
-			vector<string> compSplit = ofSplitString(comp->fullCompPath, "/", true, true);
+			vector<string> compSplit = ofSplitString(comp->fullCompPath, pathDelim, true, true);
 			string compLabel = compSplit[compSplit.size()-3] + ":" + compSplit[compSplit.size()-1];
 			
 			comp->load->setLabel(compLabel);
@@ -958,17 +963,16 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 		}
 	}
 }
-
-
+			
 //--------------------------------------------------------------
 bool testApp::loadCompositionAtIndex(int i){
 //	stopCameraPlayback();
 	stopCameraRecord();
-
-	currentCompositionDirectory = comps[i]->fullCompPath + "/";
+	
+	currentCompositionDirectory = comps[i]->fullCompPath + pathDelim;
 	currentCompIndex = i;
 
-	allLoaded = loadAssetsFromCompositionDirectory( currentCompositionDirectory+"../../");
+	allLoaded = loadAssetsFromCompositionDirectory( currentCompositionDirectory+".."+pathDelim+".."+pathDelim );
 
 	if(!allLoaded){
 		return false;
