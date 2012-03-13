@@ -8,7 +8,6 @@ void testApp::setup(){
 	ofEnableAlphaBlending();
 	ofBackground(0);
 
-	curUndistortDepth = false;
 	
 	cam.speed = 40;
 	cam.autosavePosition = true;
@@ -91,7 +90,6 @@ void testApp::setup(){
 	gui.addSlider("Y Multiply Shift", currentYMultiplyShift, -75, 75);
 	gui.addToggle("TemporalAlignmentMode", temporalAlignmentMode);
 	gui.addToggle("Capture Frame Pair", captureFramePair);
-	gui.addToggle("UndistortDepth", curUndistortDepth);
 		
 	gui.addPage("Batching");
 	gui.addToggle("View Comps", viewComps);
@@ -420,8 +418,7 @@ void testApp::update(){
 	   currentSimplify != renderer.getSimplification() ||
 	   currentEdgeCull != renderer.edgeCull ||
 	   farClip != renderer.farClip ||
-	   currentMirror != renderer.mirror ||
-	   curUndistortDepth != renderer.bUndistortDepth) {
+	   currentMirror != renderer.mirror) {
 		
 		renderer.xshift = currentXAdditiveShift;
 		renderer.yshift = currentYAdditiveShift;
@@ -433,7 +430,6 @@ void testApp::update(){
 		renderer.setSimplification(currentSimplify);
 		renderer.farClip = farClip;
 		renderer.mirror = currentMirror;
-		renderer.bUndistortDepth = curUndistortDepth; 
 		
 		renderer.update();
 	}
