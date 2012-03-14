@@ -316,7 +316,7 @@ void testApp::draw(){
 	if(currentTab == TabCalibrate){
 		//recordImage.draw(0, btnheight*2, 640, 480);
 		depthImageProvider->getRawIRImage().draw(0, btnheight*2, 640, 480);
-		//calibrationPreview.draw(0, btnheight*2);
+		calibrationPreview.draw(0, btnheight*2);
 		alignment.drawDepthImages();
 	}
 	else if(currentTab == TabRecord){
@@ -463,7 +463,7 @@ void testApp::keyPressed(int key){
 }
 
 void testApp::exit() {
-
+	depthImageProvider->close();
 }
 
 //--------------------------------------------------------------
