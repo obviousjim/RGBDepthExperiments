@@ -54,9 +54,9 @@ void testApp::setup(){
 	btnSaveCalibration->setHoverColor(hoverColor);
 	btnSaveCalibration->setPosAndSize(topButtonWidth*4, 0, topButtonWidth, topButtonHeight);
 	
-	leftBoardPreview.setup(10, 7, 2.5);
-	rightBoardPreview.setup(10, 7, 2.5);
-	alignment.setup(10, 7, 2.5);
+	leftBoardPreview.setup(10, 7, 25);
+	rightBoardPreview.setup(10, 7, 25);
+	alignment.setup(10, 7, 25);
 	alignment.setupGui(0, topButtonHeight, ofGetWidth());
 	
 	ofxXmlSettings curdir;

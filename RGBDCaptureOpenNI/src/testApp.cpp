@@ -1,5 +1,6 @@
 #include "testApp.h"
 #include "ofxXmlSettings.h"
+#include "ofxDepthImageProviderFreenect.h"
 
 //--------------------------------------------------------------
 
@@ -11,23 +12,18 @@ void testApp::setup(){
 	
 	//ofBackground(255*.2);
 	ofBackground(255*0);
-	cameraFound =  recordContext.setup();	// all nodes created by code -> NOT using the xml config file at all
-	cameraFound &= recordDepth.setup(&recordContext);
-	cameraFound &= recordImage.setup(&recordContext);
+	
+//	cameraFound =  recordContext.setup();	// all nodes created by code -> NOT using the xml config file at all
+//	cameraFound &= recordDepth.setup(&recordContext);
+//	cameraFound &= recordImage.setup(&recordContext);
 	if(!cameraFound){
 		ofLogError() << "RECORDER --- Camera not found";
 	}
 	
 	fullscreenPoints = false;
-	
-	inCaptureMode = false;
-	clicks = 0;
-	lastClickTime = 0;
-
-	lowbeeper.loadSound("sounds/BEEPUP_LOW.aif",false);
-	highbeeper.loadSound("sounds/BEEPUP_HI.aif",false);
-	lowbeeper.setVolume(100);
-	highbeeper.setVolume(100);
+//	inCaptureMode = false;
+//	clicks = 0;
+//	lastClickTime = 0;
 	
 	currentTab = TabCalibrate;
 
@@ -105,6 +101,7 @@ void testApp::setup(){
 	btnRecordBtn->setHoverColor(hoverColor);
 	btnRecordBtn->setDelegate(this);
 
+	/*
 	btnCaptureMode = new ofxMSAInteractiveObjectWithDelegate();
 	btnCaptureMode->setPosAndSize(framewidth+thirdWidth*3, 0, framewidth, btnheight*2);
 	btnCaptureMode->setLabel("!! CAPTURE MODE !!");
@@ -112,6 +109,7 @@ void testApp::setup(){
 	btnCaptureMode->setDownColor(downColor);
 	btnCaptureMode->setHoverColor(hoverColor);
 	btnCaptureMode->setDelegate(this);
+	*/
 	
 	calibrationPreview.setup(10, 7, 2.5);
 	alignment.setup(10, 7, 2.5);
@@ -143,6 +141,9 @@ void testApp::setup(){
 		
 	flip = false;
 	
+	//depthImageProvider = new ofxDepthImageProviderOpenNI();
+	depthImageProvider = new ofxDepthImageProviderFreenect();
+	depthImageProvider->setup();
 }
 
 
@@ -153,34 +154,28 @@ void testApp::update(){
 		return;
 	}
 	
-	recordContext.update();
-	if(currentTab == TabCalibrate){
-		recordImage.update();
-		calibrationImage.setFromPixels(recordImage.getIRPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
-		calibrationPreview.setTestImage(calibrationImage);
+	//JG conv -- recordContext.update();
+	depthImageProvider->update();
+	if(depthImageProvider->isFrameNew()){
+		
+		if(currentTab == TabCalibrate){
+			//JG conv -- recordImage.update();
+			//JG conv -- calibrationImage.setFromPixels(recordImage.getIRPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
+			calibrationPreview.setTestImage( depthImageProvider->getRawIRImage() );
+		}
+		
+		if(recorder.isRecording()){
+			//JG conv -- recorder.addImage( (unsigned short*)recordDepth.getRawDepthPixels());
+			recorder.addImage(depthImageProvider->getRawDepth());
+		}
 	}
-	else if(currentTab == TabRecord){
-		recordDepth.update();	
-	}
-	
-	if(recordDepth.isFrameNew() && recorder.isRecording()){
-		recorder.addImage( (unsigned short*)recordDepth.getRawDepthPixels());
-	}
 }
 
-void testApp::objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y){
-}
-
-void testApp::objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y){
-}
-void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int button){
-
-}
-
+void testApp::objectDidRollOver(ofxMSAInteractiveObject* object, int x, int y){}
+void testApp::objectDidRollOut(ofxMSAInteractiveObject* object, int x, int y){}
+void testApp::objectDidPress(ofxMSAInteractiveObject* object, int x, int y, int button){}
+void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){}
 void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, int button){
-	if(inCaptureMode){
-		return;
-	}
 	
 	if(object == btnSetDirectory){
 		loadDirectory();
@@ -214,10 +209,10 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 	else if(object == btnRenderPointCloud){
 		currentRenderMode = RenderPointCloud;
 	}
-	else if(object == btnCaptureMode){
-		inCaptureMode = true;
-		timeline.disable();
-	}
+//	else if(object == btnCaptureMode){
+//		inCaptureMode = true;
+//		timeline.disable();
+//	}
 	else {
 		for(int i = 0; i < btnTakes.size(); i++){
 			if(object == btnTakes[i]){
@@ -225,10 +220,6 @@ void testApp::objectDidRelease(ofxMSAInteractiveObject* object, int x, int y, in
 			}
 		}
 	}
-}
-
-void testApp::objectDidMouseMove(ofxMSAInteractiveObject* object, int x, int y){
-
 }
 
 
@@ -270,16 +261,17 @@ void testApp::toggleRecord(){
 
 //--------------------------------------------------------------
 void testApp::captureCalibrationImage(){
-	if(recordImage.getIRPixels() != NULL){
-		
-		calibrationImage.setFromPixels(recordImage.getIRPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
-		char filename[1024];
-		sprintf(filename, "%s/calibration/calibration_image_%02d_%02d_%02d_%02d_%02d.png", workingDirectory.c_str(), ofGetMonth(), ofGetDay(), ofGetHours(), ofGetMinutes(), ofGetSeconds());
-		ofSaveImage( calibrationImage, filename);
-		alignment.addDepthCalibrationImage(filename);
-		alignment.generateAlignment();
-		alignment.saveState();
-	}
+//	if(recordImage.getIRPixels() != NULL){
+//	calibrationImage.setFromPixels(recordImage.getIRPixels(), 640, 480, OF_IMAGE_GRAYSCALE);
+	char filename[1024];
+	sprintf(filename, "%s/calibration/calibration_image_%02d_%02d_%02d_%02d_%02d.png", workingDirectory.c_str(), ofGetMonth(), ofGetDay(), ofGetHours(), ofGetMinutes(), ofGetSeconds());
+	//jg conv ofSaveImage( calibrationImage, filename);
+	ofSaveImage( depthImageProvider->getRawIRImage(), filename);
+	alignment.addDepthCalibrationImage(filename);
+	alignment.generateAlignment();
+	alignment.saveState();
+	
+//	}
 }
 
 //--------------------------------------------------------------
@@ -322,24 +314,22 @@ void testApp::draw(){
 	}
 
 	if(currentTab == TabCalibrate){
-		recordImage.draw(0, btnheight*2, 640, 480);
-		calibrationPreview.draw(0, btnheight*2);
+		//recordImage.draw(0, btnheight*2, 640, 480);
+		depthImageProvider->getRawIRImage().draw(0, btnheight*2, 640, 480);
+		//calibrationPreview.draw(0, btnheight*2);
 		alignment.drawDepthImages();
 	}
 	else if(currentTab == TabRecord){
-		//TODO render modes
-		if(!inCaptureMode){
-			recordDepth.draw(0,btnheight*2,640,480);
-			ofPushStyle();
-			ofSetColor(255, 255, 255, 60);
-			ofLine(320, btnheight*2, 320, btnheight*2+480);
-			ofLine(0, btnheight*2+240, 640, btnheight*2+240);
-
-			ofPopStyle();
-		}
+		//TODO render modes			
+		ofPushStyle();
+		ofSetColor(255, 255, 255, 60);
+		ofLine(320, btnheight*2, 320, btnheight*2+480);
+		ofLine(0, btnheight*2+240, 640, btnheight*2+240);
+		ofPopStyle();
+		depthImageProvider->getDepthImage().draw(0, btnheight*2, 640, 480);
 	}
 	else {
-		if(currentRenderMode == RenderBW){
+		if(currentRenderMode == RenderBW || currentRenderMode == RenderRainbow){
 			depthSequence.currentDepthImage.draw(0, btnheight*2, 640, 480);
 		}
 		else {
@@ -375,18 +365,18 @@ void testApp::draw(){
 		}
 		ofPopStyle();
 	}
-	
-	if(inCaptureMode){
-		ofSetColor(255, 0, 0, 15);
-		ofRect(0, 0, ofGetWidth(), ofGetHeight());
-	}		
+//	
+//	if(inCaptureMode){
+//		ofSetColor(255, 0, 0, 15);
+//		ofRect(0, 0, ofGetWidth(), ofGetHeight());
+//	}		
 }
 
 void testApp::drawPointcloud(bool fullscreen){
 	glEnable(GL_DEPTH_TEST);
 	ofRectangle rect = fullscreen ? ofRectangle(0,0, ofGetWidth(), ofGetHeight()) : ofRectangle(0, btnheight*2, 640, 480);
 	cam.begin(rect);
-	glBegin(GL_POINTS);
+	glBegin(GL_POINTS);	
 	glPointSize(4);
 	for(int y = 0; y < 480; y++){
 		for(int x = 0; x < 640; x++){
@@ -405,8 +395,10 @@ void testApp::drawPointcloud(bool fullscreen){
 	cam.end();
 	glDisable(GL_DEPTH_TEST);	
 }
+
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+	
 	if(key == ' '){
 		if(currentTab == TabCalibrate){
 			captureCalibrationImage();
@@ -443,7 +435,7 @@ void testApp::keyPressed(int key){
 			btnRenderRainbow->disableAllEvents();
 			btnRenderPointCloud->disableAllEvents();
 			
-			btnCaptureMode->disableAllEvents();
+//			btnCaptureMode->disableAllEvents();
 		
 			for(int i = 0; i < btnTakes.size(); i++) btnTakes[i]->disableAllEvents();
 			ofHideCursor();
@@ -461,13 +453,12 @@ void testApp::keyPressed(int key){
 			btnRenderRainbow->enableAllEvents();
 			btnRenderPointCloud->enableAllEvents();
 			
-			btnCaptureMode->enableAllEvents();
+//			btnCaptureMode->enableAllEvents();
 			
 			for(int i = 0; i < btnTakes.size(); i++) btnTakes[i]->enableAllEvents();
 			ofShowCursor();
 			
 		}
-
 	}
 }
 
@@ -496,27 +487,7 @@ void testApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
-	if(inCaptureMode){
-		if(ofGetElapsedTimef() - lastClickTime < 2){
-			clicks++;
-			if (clicks > 1) {
-				clicks = 0;
-				toggleRecord();
-				if(!recorder.isRecording()){
-					//play sound
-					lowbeeper.play();
-					highbeeper.play();
-				}
-				else {
-					lowbeeper.play();
-				}
-			}
-		}
-		else{
-			clicks = 0;
-		}		
-	}
-	lastClickTime = ofGetElapsedTimef();
+
 }
 
 //--------------------------------------------------------------

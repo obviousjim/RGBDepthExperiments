@@ -2,13 +2,15 @@
 
 #include "ofMain.h"
 #include "ofxDepthImageRecorder.h"
-#include "ofxOpenNI.h"
+//#include "ofxOpenNI.h"
 #include "ofxMSAInteractiveObjectDelegate.h"
 #include "ofxCvCheckerboardPreview.h"
 #include "ofxTimeline.h"
 #include "ofxTLDepthImageSequence.h"
 #include "ofxGameCamera.h"
 #include "ofxRGBDAlignment.h"
+#include "ofxDepthImageProvider.h"
+
 
 typedef enum {
 	TabCalibrate,
@@ -73,10 +75,7 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	float takeWidth;
 	
 	bool flip;
-	
-	ofSoundPlayer highbeeper;
-	ofSoundPlayer lowbeeper;
-	
+		
 	ofxMSAInteractiveObjectWithDelegate* btnSetDirectory;
 	
 	ofxMSAInteractiveObjectWithDelegate* btnCalibrateTab;
@@ -88,12 +87,9 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	ofxMSAInteractiveObjectWithDelegate* btnRenderBW;
 	ofxMSAInteractiveObjectWithDelegate* btnRenderRainbow;
 	ofxMSAInteractiveObjectWithDelegate* btnRenderPointCloud;
-	
-	ofxMSAInteractiveObjectWithDelegate* btnCaptureMode;
-	
+		
 	vector<ofxMSAInteractiveObjectWithDelegate*> btnTakes;
 	
-
 	ofxGameCamera cam;
 	
 	ofxTimeline timeline;
@@ -105,13 +101,13 @@ class testApp : public ofBaseApp, public ofxMSAInteractiveObjectDelegate {
 	RecorderTab currentTab;	
 	DepthRenderMode currentRenderMode;
 	
-	ofxOpenNIContext	recordContext;
-	ofxDepthGenerator	recordDepth;
-	ofxIRGenerator		recordImage;
-
-	bool inCaptureMode;
-	float lastClickTime;
-	int clicks;
+	//should use ofPtr...
+	//ofPtr<ofxDepthImageProvider> depthImageProvider;
+	ofxDepthImageProvider* depthImageProvider;
+	
+//	ofxOpenNIContext	recordContext;
+//	ofxDepthGenerator	recordDepth;
+//	ofxIRGenerator		recordImage;
 
 	bool recording;
 	unsigned short* frame;
