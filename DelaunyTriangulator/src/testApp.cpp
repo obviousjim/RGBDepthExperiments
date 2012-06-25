@@ -30,14 +30,15 @@ void testApp::setup(){
     cam.targetXRot = -180;
     cam.targetYRot = 0;
     cam.rotationZ = 0;    
-    
+    cam.setScale(1,-1,1);
 
     xshift = 0;
     yshift = 0;
     maxFeatures = 500;
     featureQuality = .5;
 	minDistance = 10;
-
+	
+    
     gui.setup("tests");
     gui.add(loadNew.setup("load new scene"));
 
@@ -48,9 +49,10 @@ void testApp::setup(){
     gui.add(maxFeatures.setup("max features", ofxParameter<int>(),100, 5000));
     gui.add(featureQuality.setup("feature quality", ofxParameter<float>(),.0000001, .01));
     gui.add(minDistance.setup("min distance", ofxParameter<float>(), .0, 200));
-    
+	gui.add(renderMode.setup("render", ofxParameter<bool>()));
 
     gui.loadFromFile("defaultSettings.xml");
+    renderMode = false;
     
     calculateRects();
     
@@ -124,6 +126,18 @@ void testApp::update(){
     if(player.isFrameNew()){
         meshBuilder.updateMesh(player.getDepthPixels());
     }
+    
+    if(renderMode){
+//        if(!player.getVideoPlayer().isPlaying()){
+//            player.getVideoPlayer().play();
+//            player.getVideoPlayer().setSpeed(0);
+//        }
+
+        player.getVideoPlayer().setFrame( player.getVideoPlayer().getCurrentFrame() + 1);
+        player.update();
+	    createTriangulation();
+        
+    }
 }
 
 //--------------------------------------------------------------
@@ -147,24 +161,46 @@ void testApp::draw(){
         ofPopMatrix();
         
         //draw standard generated mesh
-        cam.begin(meshRect);
+        previewFBO.begin();
+        ofClear(0,0,0,0);
+        cam.begin();
         glEnable(GL_DEPTH_TEST);
         meshBuilder.draw(player.getVideoPlayer());
         glDisable(GL_DEPTH_TEST);
         cam.end();
+        previewFBO.end();
+        previewFBO.getTextureReference().draw(meshRect);
         
+        renderFBO.begin();
+        ofClear(0,0,0,0);
         //draw triangulated mesh
-        cam.begin(triangulatedRect);
+        cam.begin();
         ofPushMatrix();
+        ofPushStyle();
         ofScale(1,-1, 1);
         glEnable(GL_DEPTH_TEST);
         player.getVideoPlayer().getTextureReference().bind();
-        ofSetLineWidth(2);
+        ofEnableAlphaBlending();
+        ofSetColor(255, 255, 255, 100);
+        triangulatedMesh.draw();
+        ofSetLineWidth(4);
+        ofBlendMode(OF_BLENDMODE_ADD);
         triangulatedMesh.drawWireframe();
         player.getVideoPlayer().getTextureReference().unbind();
         glDisable(GL_DEPTH_TEST);
+        ofPopStyle();
         ofPopMatrix();
         cam.end();
+        renderFBO.end();
+        
+        renderFBO.getTextureReference().draw(triangulatedRect);
+        if(renderMode){
+            ofImage saveImage;
+            renderFBO.getTextureReference().readToPixels(saveImage.getPixelsRef());
+            char filename[1024];
+            sprintf(filename, "videframe_%05d.png", player.getVideoPlayer().getCurrentFrame());
+            saveImage.saveImage(filename);
+        }
     }
     
     gui.draw();
@@ -176,111 +212,71 @@ void testApp::keyPressed(int key){
         player.togglePlay();
     }
     if(key == 'f'){
-		ofShortPixels& pix = player.getDepthPixels();
-        
-        //1 find features on the color image
-        featurePoints.clear();
-        ofImage img;
-        img.setUseTexture(false);
-        img.setFromPixels(player.getVideoPlayer().getPixelsRef());
-        img.setImageType(OF_IMAGE_GRAYSCALE);
-        goodFeaturesToTrack(toCv(img),
-							featurePoints,
-							maxFeatures,
-							featureQuality,
-							minDistance);
-		cout << "found " << featurePoints.size() << " features" << endl;
-        
-        //2 triangulated the features
-        triangulate.reset();
-//		triangulate.setMaxPoints(featurePoints.size());
-        for(int i = 0; i < featurePoints.size(); i++){
-    		triangulate.addPoint(featurePoints[i].x,featurePoints[i].y, 0);   
-        }
-        triangulate.triangulate();
-        
-        //3 copy them into a 3d mesh
-        triangulatedMesh.clear();
-        vector<ofVec3f>& trianglePoints = triangulate.triangleMesh.getVertices();
-        vector<ofVec2f>& textureCoords = meshBuilder.getMesh().getTexCoords();
-        vector<bool> validVertIndeces;
-    	for(int i = 0; i < trianglePoints.size(); i++){
-            int closestTexCoordIndex  = 0;
-            float closestTexCoordDistance = 1000000;
-            for(int j = 0; j < textureCoords.size(); j++){
-                ofVec2f tri2d(trianglePoints[i].x,trianglePoints[i].y);
-                float texCoordDist = tri2d.distanceSquared(textureCoords[j]);
-                if(texCoordDist < closestTexCoordDistance){
-                	closestTexCoordDistance = texCoordDist;
-                    closestTexCoordIndex = j;
-                }
+    	createTriangulation();
+    }        
+
+}
+
+//--------------------------------------------------------------
+void testApp::createTriangulation(){
+    //1 find features on the color image
+    featurePoints.clear();
+    ofImage img;
+    img.setUseTexture(false);
+    img.setFromPixels(player.getVideoPlayer().getPixelsRef());
+    img.setImageType(OF_IMAGE_GRAYSCALE);
+    goodFeaturesToTrack(toCv(img),
+                        featurePoints,
+                        maxFeatures,
+                        featureQuality,
+                        minDistance);
+    cout << "found " << featurePoints.size() << " features" << endl;
+    
+    //2 triangulated the features
+    triangulate.reset();
+    for(int i = 0; i < featurePoints.size(); i++){
+        triangulate.addPoint(featurePoints[i].x,featurePoints[i].y, 0);   
+    }
+    triangulate.triangulate();
+    
+    //3 copy them into a 3d mesh
+    triangulatedMesh.clear();
+    vector<ofVec3f>& trianglePoints = triangulate.triangleMesh.getVertices();
+    vector<ofVec2f>& textureCoords = meshBuilder.getMesh().getTexCoords();
+    vector<bool> validVertIndeces;
+    for(int i = 0; i < trianglePoints.size(); i++){
+        int closestTexCoordIndex  = 0;
+        float closestTexCoordDistance = 1000000;
+        for(int j = 0; j < textureCoords.size(); j++){
+            ofVec2f tri2d(trianglePoints[i].x,trianglePoints[i].y);
+            float texCoordDist = tri2d.distanceSquared(textureCoords[j]);
+            if(texCoordDist < closestTexCoordDistance){
+                closestTexCoordDistance = texCoordDist;
+                closestTexCoordIndex = j;
             }
-            ofVec3f vert = meshBuilder.getMesh().getVertex(closestTexCoordIndex);
-            triangulatedMesh.addVertex(vert);
-            triangulatedMesh.addTexCoord(meshBuilder.getMesh().getTexCoord(closestTexCoordIndex));
-            validVertIndeces.push_back(vert.z < farClip && vert.z > 10);
         }
+        ofVec3f vert = meshBuilder.getMesh().getVertex(closestTexCoordIndex);
+        triangulatedMesh.addVertex(vert);
+        triangulatedMesh.addTexCoord(meshBuilder.getMesh().getTexCoord(closestTexCoordIndex));
+        validVertIndeces.push_back(vert.z < farClip && vert.z > 10);
+    }
+    
+    //copy indices across
+    for(int i = 0 ; i < triangulate.triangleMesh.getNumIndices(); i+=3){
+        ofIndexType a,b,c;
+        a = triangulate.triangleMesh.getIndex(i);
+        if(!validVertIndeces[a]) continue;
         
-        //copy indices across
-        for(int i = 0 ; i < triangulate.triangleMesh.getNumIndices(); i+=3){
-            ofIndexType a,b,c;
-            a = triangulate.triangleMesh.getIndex(i);
-            if(!validVertIndeces[a]) continue;
-            
-            b = triangulate.triangleMesh.getIndex(i+1);
-            if(!validVertIndeces[b]) continue;
-
-            c = triangulate.triangleMesh.getIndex(i+2);
-            if(!validVertIndeces[c]) continue;
-
-            triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i));
-            triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i+1));
-            triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i+2));
-            
-        }
+        b = triangulate.triangleMesh.getIndex(i+1);
+        if(!validVertIndeces[b]) continue;
         
-        //4 lattice the wireframe
+        c = triangulate.triangleMesh.getIndex(i+2);
+        if(!validVertIndeces[c]) continue;
         
-        //unsigned short currentThreshold = abs(mouseX/10)+20;
-//        ofxDelaunay triangulate;
-//		triangulate.setMaxPoints(points.size());
-//        triangulate.addPoints(points);
-//        triangulate.triangulate();
-//        
-//        triangulatedMesh.clear();
-//    
-//        for(int i = 0; i < triangulate.triangles.size(); i++){
-//
-//            ofVec3f posA = meshBuilder.getWorldPoint(triangulate.triangles[i].points[0].x,
-//                                                     triangulate.triangles[i].points[0].y,
-//                                                     pix);
-//            if(posA.z > farClip || posA.z == 0) continue;
-//            
-//            ofVec3f posB = meshBuilder.getWorldPoint(triangulate.triangles[i].points[1].x,
-//                                                     triangulate.triangles[i].points[1].y, 
-//                                                     pix);
-//            if(posB.z > farClip || posB.z == 0) continue;
-//            
-//            ofVec3f posC = meshBuilder.getWorldPoint(triangulate.triangles[i].points[2].x,
-//                                                     triangulate.triangles[i].points[2].y,                                                  pix);
-//            
-//            if(posC.z > farClip || posC.z == 0) continue;
-//            
-//            triangulatedMesh.addIndex(triangulatedMesh.getNumVertices());
-//            triangulatedMesh.addIndex(triangulatedMesh.getNumVertices()+1);
-//            triangulatedMesh.addIndex(triangulatedMesh.getNumVertices()+2);
-//            
-//            triangulatedMesh.addVertex(posA);
-//            triangulatedMesh.addVertex(posB);
-//            triangulatedMesh.addVertex(posC);
-//            
-//            ofVec3f norm = (posA - posC).getCrossed(posB - posC).getNormalized();
-//            triangulatedMesh.addNormal(norm);
-//            triangulatedMesh.addNormal(norm);
-//            triangulatedMesh.addNormal(norm);
-//            
-//            //cout << "now has " << triangulatedMesh.getNumVertices() << endl;
-//        }
+        triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i));
+        triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i+1));
+        triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i+2));
+        
     }
 }
 
@@ -291,6 +287,8 @@ void testApp::calculateRects(){
     videoRect = ofRectangle(rectWidth,0,rectWidth,rectHeight);
     meshRect = ofRectangle(0,rectHeight,rectWidth,rectHeight);
 	triangulatedRect = ofRectangle(rectWidth,rectHeight,rectWidth,rectHeight);
+    renderFBO.allocate(rectWidth, rectHeight, GL_RGB, 4);
+    previewFBO.allocate(rectWidth, rectHeight, GL_RGB, 4);
 }
 
 //--------------------------------------------------------------

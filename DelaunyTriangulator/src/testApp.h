@@ -52,7 +52,11 @@ class testApp : public ofBaseApp{
     ofxIntSlider maxFeatures;
     ofxFloatSlider featureQuality;
 	ofxFloatSlider minDistance;
+    ofxToggle renderMode;
+    
     ofRectangle roi;
+    ofFbo renderFBO;
+    ofFbo previewFBO;
     
     ofMesh triangulatedMesh;
 
@@ -65,9 +69,10 @@ class testApp : public ofBaseApp{
     ofRectangle triangulatedRect;
     ofRectangle videoRect;
     void calculateRects();
+    void createTriangulation();
     
     bool loadNewScene();
     bool loadDefaultScene();
     bool loadScene(string takeDirectory);
-    
+    int renderedVidoeFrame;
 };
