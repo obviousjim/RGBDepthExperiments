@@ -82,8 +82,8 @@ void testApp::draw(){
         glEnable(GL_DEPTH_TEST);
 
         player.getRenderer().bindRenderer();
-        //testMesh.drawWireframe();
-        testMesh.draw();
+        testMesh.drawWireframe();
+        //testMesh.draw();
         player.getRenderer().unbindRenderer();
         
         glDisable(GL_DEPTH_TEST);

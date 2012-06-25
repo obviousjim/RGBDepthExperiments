@@ -6,10 +6,9 @@
 #include "ofxTLVideoPlayer.h"
 #include "ofxGameCamera.h"
 #include "ofxRGBDPlayer.h"
-//#include "ofxTriangle.h"
 #include "ofxDelaunay.h"
 
-class testApp : public ofBaseApp{
+class testApp : public ofBaseApp {
   public:
     void setup();
     void update();
@@ -26,7 +25,7 @@ class testApp : public ofBaseApp{
     void gotMessage(ofMessage msg);
     
     ofxRGBDPlayer player;
-    
+    ofxRGBDMeshBuilder builder;
     ofxGameCamera cam;
     ofxTimeline timeline;
     ofxTLVideoPlayer* videoTimelineElement;
