@@ -140,7 +140,6 @@ void testApp::update(){
         player.getVideoPlayer().setFrame( player.getVideoPlayer().getCurrentFrame() + 1);
         player.update();
 	    createTriangulation();
-        
     }
 }
 
@@ -186,6 +185,7 @@ void testApp::draw(){
         glEnable(GL_DEPTH_TEST);
         player.getVideoPlayer().getTextureReference().bind();
         ofEnableAlphaBlending();
+        /*
         ofSetColor(255, 255, 255, 255);
         glShadeModel(GL_FLAT);
         ofEnableLighting();
@@ -193,13 +193,22 @@ void testApp::draw(){
         l.setPosition(lightX,lightY,lightZ);
         l.setAttenuation(0,.01,0);
         l.enable();
-        triangulatedMesh.draw();
-        ofDisableLighting();
+         */
+
+//        triangulatedMesh.draw();
+//        triangulatedMesh.drawWireframe();
+//        ofDisableLighting();
         
-        ofSetLineWidth(4);
-        ofBlendMode(OF_BLENDMODE_ADD);
+        ofSetLineWidth(1);
+//s        ofBlendMode(OF_BLENDMODE_ADD);
 //        triangulatedMesh.drawWireframe();
         player.getVideoPlayer().getTextureReference().unbind();
+
+        latticeMesh.drawWireframe();
+//        glBegin(GL_POINTS);
+//        glColor3f(1.0,0,0);
+//        for(int i = 0; i < innerPoints.size(); i++) glVertex3f(innerPoints[i].x, innerPoints[i].y, innerPoints[i].z);
+//        glEnd();
         
 //        //draw face normals
 //        ofSetLineWidth(1);
@@ -341,9 +350,89 @@ void testApp::createTriangulation(){
     }
     
     //Create a lattice structure
+    latticeMesh.clear();
+    
+    //copy the main vertices into the lattice mesh
+    for(int i = 0; i < triangulatedMesh.getNumVertices(); i++){
+        latticeMesh.addVertex(triangulatedMesh.getVertex(i));
+        latticeMesh.addNormal(triangulatedMesh.getNormal(i));
+    }
+    
+    innerPoints.clear();
+    backInnerPoints.clear();
+    backPoints.clear();
+
+    
+    
     
     //for each triangle, find the centroid and create 3 new vertices that move a fixed distane towards the center
-    //then
+    //then stitch them
+
+    for(int i = 0 ; i < triangulatedMesh.getNumIndices(); i+=3){
+        
+        ofIndexType o1 = triangulatedMesh.getIndex(i);
+        ofIndexType o2 = triangulatedMesh.getIndex(i+1);        
+        ofIndexType o3 = triangulatedMesh.getIndex(i+2);
+        
+        ofVec3f& va = triangulatedMesh.getVertices()[o1];
+        ofVec3f& vb = triangulatedMesh.getVertices()[o2];
+        ofVec3f& vc = triangulatedMesh.getVertices()[o3];
+        
+        ofVec3f& center = faceCenters[i/3];
+        ofVec3f& normal = faceNormals[i/3];
+        
+        ofVec3f innerA = va + (center - va).normalized() * 2;
+        ofVec3f innerB = vb + (center - vb).normalized() * 2;
+        ofVec3f innerC = vc + (center - vc).normalized() * 2;
+        
+        innerPoints.push_back(innerA);
+        innerPoints.push_back(innerB);
+        innerPoints.push_back(innerC);
+        
+    
+        backPoints.push_back(va - triangulatedMesh.getNormal(o1) * 2);
+        backPoints.push_back(vb - triangulatedMesh.getNormal(o2) * 2);
+        backPoints.push_back(vc - triangulatedMesh.getNormal(o3) * 2);
+
+        backInnerPoints.push_back(innerA - normal*2);
+        backInnerPoints.push_back(innerB - normal*2);
+        backInnerPoints.push_back(innerC - normal*2);
+
+        //get the indices of the inner points
+        ofIndexType i1 = latticeMesh.getNumVertices();
+        ofIndexType i2 = i1+1;
+        ofIndexType i3 = i1+2;
+        
+        //add the inner points to the mesh
+        latticeMesh.addVertex(innerA);
+        latticeMesh.addVertex(innerB);
+        latticeMesh.addVertex(innerC);
+        
+        latticeMesh.addNormal(normal);
+        latticeMesh.addNormal(normal);
+        latticeMesh.addNormal(normal);
+        
+        //stitch the 3 quads around the inner mesh
+        latticeMesh.addIndex(o1);latticeMesh.addIndex(o2);latticeMesh.addIndex(i2);
+        latticeMesh.addIndex(i2);latticeMesh.addIndex(i1);latticeMesh.addIndex(o1);
+        
+        latticeMesh.addIndex(o2);latticeMesh.addIndex(o3);latticeMesh.addIndex(i3);
+        latticeMesh.addIndex(i3);latticeMesh.addIndex(i2);latticeMesh.addIndex(o2);
+
+        latticeMesh.addIndex(o3);latticeMesh.addIndex(o1);latticeMesh.addIndex(i1);
+        latticeMesh.addIndex(i1);latticeMesh.addIndex(i3);latticeMesh.addIndex(o3);
+    
+        //add back vertices
+        ofIndexType bo1 = latticeMesh.getNumVertices();
+        ofIndexType bo2 = bo1+1;
+        ofIndexType bo3 = bo1+2;
+        
+        latticeMesh.addVertex(innerA);
+        latticeMesh.addVertex(innerB);
+        latticeMesh.addVertex(innerC);
+
+    }
+    
     
     
 }

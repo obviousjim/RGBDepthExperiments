@@ -62,11 +62,16 @@ class testApp : public ofBaseApp{
     ofFbo previewFBO;
     
     ofMesh triangulatedMesh;
-
+    ofMesh latticeMesh;
+    
     vector<cv::Point2f> featurePoints;
     vector<ofVec3f> faceNormals;	
     vector<ofVec3f> faceCenters;
-	
+	vector<ofVec3f> innerPoints;
+	vector<ofVec3f> backPoints;
+    vector<ofVec3f> backInnerPoints;
+    
+    
     ofxButton loadNew;
     ofxDelaunay triangulate;
 

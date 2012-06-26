@@ -44,7 +44,6 @@
 		E788F1B515960FEB0089EBC2 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E788F09B15960FE90089EBC2 /* Wrappers.cpp */; };
 		E788F1B615960FEB0089EBC2 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = E788F09C15960FE90089EBC2 /* readme.md */; };
 		E788F1B715960FEB0089EBC2 /* update-projects.py in Resources */ = {isa = PBXBuildFile; fileRef = E788F09F15960FE90089EBC2 /* update-projects.py */; };
-		E788F1F8159610140089EBC2 /* install.xml in Resources */ = {isa = PBXBuildFile; fileRef = E788F1EF159610140089EBC2 /* install.xml */; };
 		E788F1F9159610140089EBC2 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E788F1F1159610140089EBC2 /* tinyxml.cpp */; };
 		E788F1FA159610140089EBC2 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E788F1F3159610140089EBC2 /* tinyxmlerror.cpp */; };
 		E788F1FB159610140089EBC2 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E788F1F4159610140089EBC2 /* tinyxmlparser.cpp */; };
@@ -57,7 +56,6 @@
 		E788F28D1596130C0089EBC2 /* ofxRGBDPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E788F2521596130C0089EBC2 /* ofxRGBDPlayer.cpp */; };
 		E788F28F1596130C0089EBC2 /* ofxRGBDScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E788F2561596130C0089EBC2 /* ofxRGBDScene.cpp */; };
 		E788F2901596130C0089EBC2 /* ofxRGBDVideoDepthSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E788F2581596130C0089EBC2 /* ofxRGBDVideoDepthSequence.cpp */; };
-		E788F307159614710089EBC2 /* opencv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E788F2F9159614710089EBC2 /* opencv.a */; };
 		E788F308159614710089EBC2 /* opencv_calib3d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E788F2FA159614710089EBC2 /* opencv_calib3d.a */; };
 		E788F309159614710089EBC2 /* opencv_contrib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E788F2FB159614710089EBC2 /* opencv_contrib.a */; };
 		E788F30A159614710089EBC2 /* opencv_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E788F2FC159614710089EBC2 /* opencv_core.a */; };
@@ -167,7 +165,6 @@
 		E788F09C15960FE90089EBC2 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
 		E788F09E15960FE90089EBC2 /* ofxCv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCv.h; sourceTree = "<group>"; };
 		E788F09F15960FE90089EBC2 /* update-projects.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = "update-projects.py"; sourceTree = "<group>"; };
-		E788F1EF159610140089EBC2 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		E788F1F1159610140089EBC2 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
 		E788F1F2159610140089EBC2 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
 		E788F1F3159610140089EBC2 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
@@ -269,7 +266,6 @@
 		E788F2F4159614710089EBC2 /* background_segm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = background_segm.hpp; sourceTree = "<group>"; };
 		E788F2F5159614710089EBC2 /* tracking.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tracking.hpp; sourceTree = "<group>"; };
 		E788F2F6159614710089EBC2 /* video.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = video.hpp; sourceTree = "<group>"; };
-		E788F2F9159614710089EBC2 /* opencv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = opencv.a; sourceTree = "<group>"; };
 		E788F2FA159614710089EBC2 /* opencv_calib3d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = opencv_calib3d.a; sourceTree = "<group>"; };
 		E788F2FB159614710089EBC2 /* opencv_contrib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = opencv_contrib.a; sourceTree = "<group>"; };
 		E788F2FC159614710089EBC2 /* opencv_core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = opencv_core.a; sourceTree = "<group>"; };
@@ -309,7 +305,6 @@
 				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
 				E7121EE11549997400BA5A72 /* libz.dylib in Frameworks */,
-				E788F307159614710089EBC2 /* opencv.a in Frameworks */,
 				E788F308159614710089EBC2 /* opencv_calib3d.a in Frameworks */,
 				E788F309159614710089EBC2 /* opencv_contrib.a in Frameworks */,
 				E788F30A159614710089EBC2 /* opencv_core.a in Frameworks */,
@@ -568,7 +563,6 @@
 		E788F1EE159610140089EBC2 /* ofxXmlSettings */ = {
 			isa = PBXGroup;
 			children = (
-				E788F1EF159610140089EBC2 /* install.xml */,
 				E788F1F0159610140089EBC2 /* libs */,
 				E788F1F5159610140089EBC2 /* src */,
 			);
@@ -847,7 +841,6 @@
 		E788F2F8159614710089EBC2 /* osx */ = {
 			isa = PBXGroup;
 			children = (
-				E788F2F9159614710089EBC2 /* opencv.a */,
 				E788F2FA159614710089EBC2 /* opencv_calib3d.a */,
 				E788F2FB159614710089EBC2 /* opencv_contrib.a */,
 				E788F2FC159614710089EBC2 /* opencv_core.a */,
@@ -977,7 +970,6 @@
 				E788F1AC15960FEB0089EBC2 /* .gitignore in Resources */,
 				E788F1B615960FEB0089EBC2 /* readme.md in Resources */,
 				E788F1B715960FEB0089EBC2 /* update-projects.py in Resources */,
-				E788F1F8159610140089EBC2 /* install.xml in Resources */,
 				E788F2841596130C0089EBC2 /* README in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
