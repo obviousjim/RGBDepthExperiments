@@ -53,6 +53,9 @@ class testApp : public ofBaseApp{
     ofxFloatSlider featureQuality;
 	ofxFloatSlider minDistance;
     ofxToggle renderMode;
+    ofxFloatSlider lightX;
+    ofxFloatSlider lightY;
+    ofxFloatSlider lightZ;
     
     ofRectangle roi;
     ofFbo renderFBO;
@@ -61,7 +64,9 @@ class testApp : public ofBaseApp{
     ofMesh triangulatedMesh;
 
     vector<cv::Point2f> featurePoints;
-    
+    vector<ofVec3f> faceNormals;	
+    vector<ofVec3f> faceCenters;
+	
     ofxButton loadNew;
     ofxDelaunay triangulate;
 

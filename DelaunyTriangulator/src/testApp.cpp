@@ -45,7 +45,11 @@ void testApp::setup(){
     gui.add(xshift.setup("xshift", ofxParameter<float>(), -.15, .15));
     gui.add(yshift.setup("yshift", ofxParameter<float>(), -.15, .15));
     gui.add(farClip.setup("far clip", ofxParameter<float>(),1000, 4500));
-    
+
+    gui.add(lightX.setup("lightX", ofxParameter<float>(),-1000, 1000));
+    gui.add(lightY.setup("lightY", ofxParameter<float>(),-1000, 1000));
+    gui.add(lightZ.setup("lightZ", ofxParameter<float>(),400, 2000));
+
     gui.add(maxFeatures.setup("max features", ofxParameter<int>(),100, 5000));
     gui.add(featureQuality.setup("feature quality", ofxParameter<float>(),.0000001, .01));
     gui.add(minDistance.setup("min distance", ofxParameter<float>(), .0, 200));
@@ -173,6 +177,7 @@ void testApp::draw(){
         
         renderFBO.begin();
         ofClear(0,0,0,0);
+        
         //draw triangulated mesh
         cam.begin();
         ofPushMatrix();
@@ -181,19 +186,44 @@ void testApp::draw(){
         glEnable(GL_DEPTH_TEST);
         player.getVideoPlayer().getTextureReference().bind();
         ofEnableAlphaBlending();
-        ofSetColor(255, 255, 255, 100);
+        ofSetColor(255, 255, 255, 255);
+        glShadeModel(GL_FLAT);
+        ofEnableLighting();
+        ofLight l;
+        l.setPosition(lightX,lightY,lightZ);
+        l.setAttenuation(0,.01,0);
+        l.enable();
         triangulatedMesh.draw();
+        ofDisableLighting();
+        
         ofSetLineWidth(4);
         ofBlendMode(OF_BLENDMODE_ADD);
-        triangulatedMesh.drawWireframe();
+//        triangulatedMesh.drawWireframe();
         player.getVideoPlayer().getTextureReference().unbind();
+        
+//        //draw face normals
+//        ofSetLineWidth(1);
+//        for(int i = 0; i < faceNormals.size(); i++){
+//            ofSetColor( (faceNormals[i].x*.5+.5) * 255,
+//                        (faceNormals[i].y*.5+.5) * 255,
+//                        (faceNormals[i].z*.5+.5) * 255);
+//                       
+//            ofLine(faceCenters[i], faceCenters[i] + faceNormals[i]*6);
+//        }
+
         glDisable(GL_DEPTH_TEST);
+
         ofPopStyle();
         ofPopMatrix();
+        
         cam.end();
+        
+
         renderFBO.end();
         
         renderFBO.getTextureReference().draw(triangulatedRect);
+//        cam.setPosition(cam.getPosition() + cam.getSideDir().normalized() * .5);
+
         if(renderMode){
             ofImage saveImage;
             renderFBO.getTextureReference().readToPixels(saveImage.getPixelsRef());
@@ -230,6 +260,7 @@ void testApp::createTriangulation(){
                         maxFeatures,
                         featureQuality,
                         minDistance);
+    
     cout << "found " << featurePoints.size() << " features" << endl;
     
     //2 triangulated the features
@@ -262,6 +293,10 @@ void testApp::createTriangulation(){
     }
     
     //copy indices across
+    faceNormals.clear();	
+    faceCenters.clear();
+
+	map<ofIndexType, vector<int> > vertexIndexToFaceIndex;
     for(int i = 0 ; i < triangulate.triangleMesh.getNumIndices(); i+=3){
         ofIndexType a,b,c;
         a = triangulate.triangleMesh.getIndex(i);
@@ -273,11 +308,44 @@ void testApp::createTriangulation(){
         c = triangulate.triangleMesh.getIndex(i+2);
         if(!validVertIndeces[c]) continue;
         
-        triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i));
+        triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i  ));
         triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i+1));
         triangulatedMesh.addIndex(triangulate.triangleMesh.getIndex(i+2));
+
+        //keep track of which faces belong to which vertices
+    	vertexIndexToFaceIndex[a].push_back(faceNormals.size());
+        vertexIndexToFaceIndex[b].push_back(faceNormals.size());
+        vertexIndexToFaceIndex[c].push_back(faceNormals.size());
         
+        //calculate the face normal
+        ofVec3f& va = triangulatedMesh.getVertices()[a];
+        ofVec3f& vb = triangulatedMesh.getVertices()[b];
+        ofVec3f& vc = triangulatedMesh.getVertices()[c];
+        ofVec3f faceNormal = (vb-va).getCrossed(vc-va).normalized();
+        faceNormals.push_back( faceNormal );
+        faceCenters.push_back( (va + vb + vc) / 3.);
+
     }
+    
+    //now go through and average the normals into the vertices
+    triangulatedMesh.getNormals().resize(triangulatedMesh.getNumVertices());
+    map<ofIndexType, vector<int> >::iterator it;
+    for(it = vertexIndexToFaceIndex.begin(); it != vertexIndexToFaceIndex.end(); it++) {
+        ofVec3f average(0,0,0);
+		vector<int>& faceNormalIndices = it->second;
+        for(int i = 0 ; i < faceNormalIndices.size(); i++){
+            average += faceNormals[ faceNormalIndices[i] ];
+        }
+        average.normalize();
+        triangulatedMesh.setNormal(it->first, average); 
+    }
+    
+    //Create a lattice structure
+    
+    //for each triangle, find the centroid and create 3 new vertices that move a fixed distane towards the center
+    //then
+    
+    
 }
 
 //--------------------------------------------------------------
